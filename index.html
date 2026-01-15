@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <title>Sai Vidyasri a Product Designer and Developer</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -40,8 +41,8 @@
                     
                     <header class="major">
                         <h3>Hi!</h3>
-                        <h2>I'm Sai Vidyasri Giridharan,<br />
-                        a Product/UX Designer with technical edge</h2>
+                        <h3>I'm Sai Vidyasri Giridharan,<br />
+                        a Product/UX Designer with technical edge</h3>
                     </header>
                     
                     <div class="badges" style="margin: 1.5em 0;">
@@ -55,30 +56,54 @@
 
             <section id="projects">
                 <div class="container">                    
-                    <article class="project-card theme-pink">
+                    <article class="project-card">
                         <div class="card-image">
                             <img src="images/project1.png" alt="Two Wheeler Vehicle Service App">
                         </div>
                         <div class="card-content">
                             <div class="card-tags">
-                                <span class="pill-highlight pill-red">Enterprise Design</span>
-                                <span class="pill-highlight pill-red">Service Design</span>
+                                <span class="pill-highlight pill-grey">Enterprise Design</span>
+                                <span class="pill-highlight pill-grey">Service Design</span>
                             </div>
-                            <h3>Integrating Two-Wheeler Vehicle Service Workflows for Optimal Operations and Faster Delivery</h3>
+                            <h3>Hero Motor Vehicle Service Management Tool</h3>
+                            <p>Integrating Two-Wheeler Vehicle Service Workflows for Optimal Operations and Faster Delivery</p>
                             <p class="project-meta"> Shipped • 2023</p>
                         </div>
                     </article>
 
-                    <article class="project-card theme-blue">
+                    <article class="project-card">
                         <div class="card-image">
-                            <img src="images/project2.png" alt="Car Rental Website">
+                            <lottie-player
+                            class="play-on-scroll"
+                            src="images/project2.json"
+                            background="transparent" 
+                            speed="1" 
+                            style="width: 100%; height: 100%;"  
+                            mode="normal">
+                            </lottie-player>
                         </div>
                         <div class="card-content">
                             <div class="card-tags">
-                                <span class="pill-highlight pill-blue">Responsive Design</span>
-                                <span class="pill-highlight pill-blue">B2C</span>
+                                <span class="pill-highlight pill-grey">Responsive Design</span>
+                                <span class="pill-highlight pill-grey">B2C</span>
                             </div>
-                            <h3>Empowering Users with Targeted Information to Accelerate Car Rental Bookings</h3>
+                            <h3>Car Rental Website</h3>
+                            <p>Empowering Users with Targeted Information to Accelerate Car Rental Bookings</p>
+                            <p class="project-meta">Delivered • 2024</p>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="card-image">
+                            <img src="images/project3.png" alt="Builder Marketplace Platform">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-tags">
+                                <span class="pill-highlight pill-grey">Growth Design</span>
+                                <span class="pill-highlight pill-grey">B2C</span>
+                            </div>
+                            <h3>Hero Motor Vehicle Service Management Tool</h3>
+                            <p>Increasing conversions of professionals in the Builder Market Tool</p>
                             <p class="project-meta">Delivered • 2024</p>
                         </div>
                     </article>
@@ -162,6 +187,58 @@
             avatarObserver.observe(heroImage);
         }
     }
+</script>
+
+<script>
+    // 1. Select the element we want to watch
+    const projectSection = document.querySelector('#projects');
+
+    // 2. Set up the "Observer" (The Watcher)
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            // If the section is in view (isIntersecting is true)
+            if (entry.isIntersecting) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        });
+    }, {
+        threshold: 0.2, // Trigger when 20% of the section is visible
+        rootMargin: "-100px" // Triggers slightly before it hits the very edge
+    });
+
+    // 3. Start watching
+    observer.observe(projectSection);
+</script>
+<script>
+    // 1. Create the Scroll Watcher (Observer)
+    const lottieObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // When it enters the screen...
+                console.log("👀 Animation entered view. Playing now.");
+                
+                // Play the animation
+                entry.target.play();
+                
+                // Stop watching it (so it doesn't play again)
+                lottieObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 }); // Trigger when 50% visible
+
+    // 2. Select the player
+    const lottieElements = document.querySelectorAll('.play-on-scroll');
+
+    // 3. Initialize ONLY when the Lottie is ready
+    lottieElements.forEach(player => {
+        // Listen for the 'ready' event from the component
+        player.addEventListener('ready', () => {
+            console.log("✅ Lottie File Loaded & Ready");
+            lottieObserver.observe(player);
+        });
+    });
 </script>
 
 </body>
