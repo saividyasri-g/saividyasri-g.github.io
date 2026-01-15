@@ -17,7 +17,7 @@ body {
 /* --- 2. TYPOGRAPHY (The "Tech" Vibe) --- */
 h1, h2, h3, h4, h5 { color: #111; margin: 0 0 0.5em 0; line-height: 1.2; }
 
-h1, h2 { font-weight: 600; letter-spacing: -0.03em; } /* Bold & Tight */
+h1, h2 { font-weight: 600; letter-spacing: 0.01em; } /* Bold & Tight */
 h3     { font-weight: 500; letter-spacing: -0.01em; font-size: 1.5em; }
 
 a { color: #555; text-decoration: none; transition: color 0.2s; }
@@ -37,38 +37,43 @@ a:hover { color: #000; }
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    z-index: 100;
 }
 
-/* Sidebar Avatar - Fixed Size & Circle */
+/* Sidebar Avatar - Smooth Fade */
 #header .avatar {
-    display: block;           /* Forces it to respect width/height */
-    width: 120px;             /* Fixed width */
-    height: 120px;            /* Fixed height */
-    margin: 0 0 2rem auto;    /* 'auto' on left pushes it to the right */
-    border-radius: 50%;       /* Makes it a perfect circle */
-    overflow: hidden;         /* Crops the square image */
-    background: #eee;         /* Grey background while loading */
-    
-    /* Animation Styles (keep these for your scroll effect) */
-    opacity: 0; 
-    transition: opacity 0.4s ease;
+    display: block;
+    width: 120px;
+    height: 120px;
+    margin: 0 0 2rem auto;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #eee;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
 }
 
-/* Ensure the image inside fits the circle without stretching */
 #header .avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-/* The class JavaScript adds to show it */
 #header .avatar.is-visible {
     opacity: 1;
 }
 
-/* Sidebar Name & Title */
-#header h1 { font-size: 1.4rem; margin-bottom: 0.2em; }
-#header p  { font-size: 0.9rem; color: #888; margin-bottom: 2rem; }
+/* Sidebar Name - Smooth Fade (hidden initially) */
+#header header p {
+    font-size: 1rem;
+    margin-bottom: 0.2em;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+#header header p.is-visible {
+    opacity: 1;
+}
 
 /* Sidebar Navigation */
 #header nav ul { list-style: none; padding: 0; margin: 0; }
@@ -117,25 +122,40 @@ a:hover { color: #000; }
     max-width: 1200px;
 }
 
+/* Hero Image - Smooth Fade */
+.hero-image {
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: 0 0 2rem 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #eee;
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-image.fading {
+    opacity: 0;
+}
+
+/* Projects Section - Full viewport height initially */
 #projects {
+    min-height: 100vh;
     padding: 4rem 6rem;
+    padding-top: 100vh; /* This pushes the content down by full viewport */
 }
 
 #projects .container {
     width: 100%;
     max-width: 1200px;
 }
-
-/* About Section Image */
-#about .avatar {
-    display: block;
-    width: 24%;
-    margin: 0 0 2rem 0;
-    border-radius: 50%;
-    overflow: hidden;
-    background: #eee;
-}
-#about .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Hero Section Layout */
 .hero-grid {
@@ -171,8 +191,7 @@ body {
 
 #wrapper {
     margin-left: 300px;
-    padding: 4rem 6rem;
-    max-width: 1200px;
+    padding: 0;
     
     /* STICKY FOOTER RULES */
     min-height: 100vh;      /* 1. Force wrapper to be full screen height */
@@ -182,10 +201,11 @@ body {
 
 #footer {
     margin-top: auto;       /* 4. Auto margin pushes it to the bottom */
-    padding-top: 2rem;      /* Optional: space above it */
-    color: #ccc;            /* Keep your grey styling */
+    padding: 2rem 6rem;
+    color: #ccc;
     font-size: 0.8rem;
 }
+
 #footer .copyright {
     list-style: none;
     padding: 0;
@@ -251,6 +271,7 @@ body {
     #wrapper { margin-left: 0; padding: 2rem; }
     #footer { margin-left: 0; }
 }
+
 /* --- PROJECT CARD STYLES --- */
 
 /* The Card Container */
@@ -295,16 +316,15 @@ body {
 }
 
 /* Title Override for Cards */
-.card-content h2 {
+.card-content h3 {
     font-size: 1.8rem;
     line-height: 1.3;
     margin-bottom: 1rem;
-    font-weight: 700;
 }
 
 .project-meta {
-    font-size: 0.9rem;
-    color: #999;
+    font-size: 0.8rem;
+    color: #2c2c2c;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.05em;

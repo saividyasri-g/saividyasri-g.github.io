@@ -10,9 +10,8 @@
 
     <section id="header">
         <header>
-            <span class="hero-image"><img src="images/profile.jpg" alt="" /></span>
-            
-            <h3 id="logo"><a href="#">Sai Vidyasri Giridharan</a></h3>
+            <span class="avatar"><img src="images/profile.jpg" alt="" /></span>
+            <p id="logo"><a href="#">Sai Vidyasri Giridharan</a></p>
         </header>
         
         <nav id="nav">
@@ -37,15 +36,17 @@
 
             <section id="about">
                 <div class="container">
+                    <span class="hero-image"><img src="images/profile.jpg" alt="" /></span>
+                    
                     <header class="major">
                         <h3>Hi!</h3>
-                        <h2>I’m Sai Vidyasri Giridharan,<br />
+                        <h2>I'm Sai Vidyasri Giridharan,<br />
                         a Product/UX Designer with technical edge</h2>
                     </header>
                     
                     <div class="badges" style="margin: 1.5em 0;">
                         <span class="pill-highlight pill-grey">4+ years</span>
-                        <span class="pill-highlight pill-blue">20+ projects</span>
+                        <span class="pill-highlight pill-grey">20+ projects</span>
                     </div>
 
                     <p>who is very much into the intersections of tech, design, and data.</p>
@@ -85,7 +86,9 @@
             </section>
 
 
-        </div> <section id="footer">
+        </div> 
+        
+        <section id="footer">
             <div class="container">
                 <ul class="copyright">
                     <li>&copy; Untitled. All rights reserved.</li><li>Design: HTML5 UP</li>
@@ -94,15 +97,33 @@
         </section>
 
     </div> 
+    
 <script>
     {
         // --- 1. SETUP VARIABLES ---
         const sections = document.querySelectorAll('section');
         const navLi = document.querySelectorAll('#nav ul li a');
         const heroImage = document.querySelector('.hero-image');      
-        const sidebarImage = document.querySelector('#header .avatar'); 
+        const sidebarAvatar = document.querySelector('#header .avatar'); 
+        const sidebarName = document.querySelector('#header header p');
 
-        // --- 2. SCROLL SPY (Sidebar Links) ---
+        // --- 2. SMOOTH SCROLL FOR NAVIGATION ---
+        navLi.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // --- 3. SCROLL SPY (Sidebar Links) ---
         const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
@@ -119,25 +140,28 @@
 
         sections.forEach((section) => { sectionObserver.observe(section); });
 
-        // --- 3. STICKY AVATAR (Image Swap) ---
-        if (heroImage && sidebarImage) {
+        // --- 4. AVATAR & NAME FADE IN/OUT ---
+        if (heroImage && sidebarAvatar && sidebarName) {
             const avatarObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    // Logic: If hero image is NOT visible, show sidebar image
                     if (!entry.isIntersecting) {
-                        sidebarImage.classList.add('is-visible');
+                        // Hero scrolled past - fade it out, fade sidebar in
+                        heroImage.classList.add('fading');
+                        sidebarAvatar.classList.add('is-visible');
+                        sidebarName.classList.add('is-visible');
                     } else {
-                        sidebarImage.classList.remove('is-visible');
+                        // Hero back in view - fade it in, fade sidebar out
+                        heroImage.classList.remove('fading');
+                        sidebarAvatar.classList.remove('is-visible');
+                        sidebarName.classList.remove('is-visible');
                     }
                 });
             }, {
-                // IMPORTANT: This triggers the swap as soon as the image touches the top
-                rootMargin: "-100px 0px 0px 0px" 
+                rootMargin: "-100px 0px 0px 0px",
+                threshold: 0
             });
 
             avatarObserver.observe(heroImage);
-        } else {
-            console.error("Gemini Error: Could not find .hero-image or #header .avatar in your HTML.");
         }
     }
 </script>
