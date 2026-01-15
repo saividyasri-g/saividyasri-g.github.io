@@ -65,10 +65,11 @@ a:hover { color: #000; }
 
 /* Sidebar Name - Smooth Fade (hidden initially) */
 #header header p {
-    font-size: 1rem;
-    margin-bottom: 0.2em;
+    font-size: 0.8rem;
+    margin-bottom: 0.1em;
     opacity: 0;
     transition: opacity 0.4s ease-in-out;
+    color: #111;
 }
 
 #header header p.is-visible {
@@ -79,16 +80,24 @@ a:hover { color: #000; }
 #header nav ul { list-style: none; padding: 0; margin: 0; }
 #header nav ul li { margin-bottom: 0.5em; }
 #header nav ul li a {
-    font-weight: 500;
-    font-size: 0.95rem;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: block;
-    padding: 0.5em 0;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #c7c7c7;
+    /*text-transform: uppercase; */
+    letter-spacing: 0.06em;
+    display: block; 
+    padding: 0.4em 0;
 }
-#header nav ul li a:hover, 
-#header nav ul li a.active { color: #000; }
+
+/* 1. Style for Hover (Mouse over) */
+#header nav ul li a:hover {
+    color: #111; /
+}
+
+/* 2. Style for Active (Selected/Current Page) */
+#header nav ul li a.active {
+    color: #111; /* Make this a different color (e.g., Black or Dark Grey) */
+}
 
 /* Sidebar Footer (Icons) */
 #header footer .icons { list-style: none; padding: 0; margin-top: 2rem; }
@@ -149,7 +158,9 @@ a:hover { color: #000; }
 #projects {
     min-height: 100vh;
     padding: 4rem 6rem;
-    padding-top: 100vh; /* This pushes the content down by full viewport */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #projects .container {
@@ -298,14 +309,19 @@ body {
 .card-image {
     flex: 1; /* Takes up 1 share of space */
     min-width: 300px;
+    overflow: hidden; /* This hides the overflow when zooming */
+    border-radius: 12px;
 }
 .card-image img {
     width: 100%;
     height: auto;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08); /* Soft shadow on image */
+    transition: transform 0.4s ease; /* Smooth zoom transition */
 }
 
+.card-image img:hover {
+    transform: scale(1.05); /* Zoom in slightly on hover */
+}
 /* The Text Side */
 .card-content {
     flex: 1.2; /* Takes up slightly more space than image */
