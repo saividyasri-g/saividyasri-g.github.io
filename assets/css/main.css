@@ -184,7 +184,7 @@ a:hover { color: #000; }
     font-weight: 500;
     font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.06em;
     margin-right: 0.5em;
 }
 .pill-grey { background: #f3f3f3; color: #555; }
@@ -339,10 +339,10 @@ body {
 }
 
 .project-meta {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     color: #2c2c2c;
-    font-weight: 400;
-    text-transform: uppercase;
+    font-weight: 500;
+    /*text-transform: uppercase;*/
     letter-spacing: 0.05em;
     margin-bottom: 1rem;
 }
