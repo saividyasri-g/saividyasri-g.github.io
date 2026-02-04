@@ -1,32 +1,41 @@
 /* --- 1. IMPORTS & RESET --- */
 @import url("fontawesome-all.min.css");
-@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;800&display=swap");
-
-@font-face {
-    font-family: 'Cal Sans';
-    src: url('../fonts/CalSans-SemiBold.woff2') format('woff2'); /* Adjust path to match your folder */
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
+/* ONLY IMPORT: Barlow (Body) and Plus Jakarta Sans (Headers/UI) */
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 * { box-sizing: border-box; }
+
+html {
+    /* Sets the base so we are sure what 16px looks like */
+    font-size: 16px; 
+}
 
 body {
     margin: 0;
     padding: 0;
     background: #efefec;
+    
+    /* BODY TEXT = BARLOW */
     font-family: 'Barlow', sans-serif;
-    font-size: 1.1rem;
-    line-height: 1.7;
+    font-size: 16px;      /* Multiple of 4 */
+    line-height: 28px;    /* Multiple of 4 */
     color: #555;
+    transition: background-color 0.6s ease, color 0.6s ease;
 }
 
-/* --- 2. TYPOGRAPHY (The "Tech" Vibe) --- */
-h1, h2, h3, h4, h5 { color: #111; margin: 0 0 0.5em 0; line-height: 1.2; }
-
-h1, h2 { font-weight: 600; letter-spacing: 0.01em; } /* Bold & Tight */
-h3     { font-family: 'Cal Sans', sans-serif; letter-spacing: -0.02em;}          /* Cal Sans looks great tight */
+/* --- 2. TYPOGRAPHY (Global Pixel-Perfect System) --- */
+h1, h2, h3, h4, h5, h6 { 
+    color: #111; 
+    margin: 0 0 16px 0;   /* Multiple of 4 */
+    line-height: 1.2;     
+    
+    /* HEADERS = PLUS JAKARTA SANS */
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700; 
+    
+    /* Fixed pixel letter spacing to avoid decimals */
+    letter-spacing: -0.5px; 
+}
 
 a { color: #555; text-decoration: none; transition: color 0.2s; }
 a:hover { color: #000; }
@@ -36,11 +45,14 @@ a:hover { color: #000; }
     position: fixed;
     top: 0;
     left: 0;
-    width: 300px; /* Fixed width */
+    width: 300px;
     height: 100vh;
     background: #efefec;
-    padding: 3rem 2rem;
-    text-align: right; /* Right align as requested */
+    
+    /* Spacing: 48px Top/Bottom, 32px Left/Right */
+    padding: 48px 32px;
+    
+    text-align: right;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -48,401 +60,2549 @@ a:hover { color: #000; }
     z-index: 100;
 }
 
-/* Sidebar Avatar - Smooth Fade */
+/* Sidebar Avatar */
 #header .avatar {
     display: block;
     width: 120px;
     height: 120px;
-    margin: 0 0 2rem auto;
+    margin: 0 0 32px auto; /* 32px bottom margin */
     border-radius: 50%;
     overflow: hidden;
     background: #eee;
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
 }
+#header .avatar img { width: 100%; height: 100%; object-fit: cover; }
+#header .avatar.is-visible { opacity: 1; }
 
-#header .avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-#header .avatar.is-visible {
-    opacity: 1;
-}
-
-/* Sidebar Name - Smooth Fade (hidden initially) */
+/* Sidebar Name */
 #header header p {
-    font-size: 0.8rem;
-    margin-bottom: 0.1em;
+    font-size: 12px;       /* Multiple of 4 */
+    margin-bottom: 4px;    /* Multiple of 4 */
     opacity: 0;
     transition: opacity 0.4s ease-in-out;
     color: #111;
 }
-
-#header header p.is-visible {
-    opacity: 1;
-}
+#header header p.is-visible { opacity: 1; }
 
 /* Sidebar Navigation */
 #header nav ul { list-style: none; padding: 0; margin: 0; }
-#header nav ul li { margin-bottom: 0.5em; }
+#header nav ul li { margin-bottom: 8px; } /* Multiple of 4 */
+
 #header nav ul li a {
-    font-family: 'Cal Sans', sans-serif;
+    /* NAV LINKS = PLUS JAKARTA SANS */
+    font-family: 'Plus Jakarta Sans', sans-serif;
     color: #c7c7c7;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: -0.5px;
+    
     display: block;
-    font-size: 1.1em;                     /* Adjust size if needed */
-    padding: 0.4em 0;
+    font-size: 16px;       /* Multiple of 4 */
+    padding: 8px 0;        /* Multiple of 4 */
 }
 
-/* 1. Style for Hover (Mouse over) */
-#header nav ul li a:hover {
-    color: #111; /
-}
+#header nav ul li a:hover { color: #111; }
+#header nav ul li a.active { color: #111; }
 
-/* 2. Style for Active (Selected/Current Page) */
-#header nav ul li a.active {
-    color: #111; /* Make this a different color (e.g., Black or Dark Grey) */
-}
-
-/* Sidebar Footer (Icons) */
-#header footer .icons { list-style: none; padding: 0; margin-top: 2rem; }
-#header footer .icons li { display: inline-block; margin-left: 10px; }
-#header footer .icons a { font-size: 1.2rem; color: #ccc; }
+/* Sidebar Footer */
+#header footer .icons { list-style: none; padding: 0; margin-top: 32px; }
+#header footer .icons li { display: inline-block; margin-left: 12px; }
+#header footer .icons a { font-size: 20px; color: #ccc; }
 #header footer .icons a:hover { color: #555; }
 
 
 /* --- 4. MAIN CONTENT AREA --- */
-#wrapper {
-    margin-left: 300px; /* Must match Sidebar width */
-    padding: 0;
-    max-width: none;
-}
+#wrapper { margin-left: 300px; padding: 0; max-width: none; }
+#main { display: flex; flex-direction: column; }
 
-#main {
-    display: flex;
-    flex-direction: column;
-}
-
+/* Page Sections */
 #about {
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem 6rem;
+    display: flex; align-items: center; justify-content: center;
+    /* Top/Bottom: 96px | Left/Right: 8vw (Fluid but safe) */
+    padding: 96px max(8vw, 64px); 
 }
+#about .container { width: 100%; max-width: 1200px; }
 
-#about .container {
-    width: 100%;
-    max-width: 1200px;
-}
-
-/* Hero Image - Smooth Fade */
-.hero-image {
-    display: block;
-    width: 200px;
-    height: 200px;
-    margin: 0 0 2rem 0;
-    border-radius: 50%;
-    overflow: hidden;
-    background: #eee;
-    opacity: 1;
-    transition: opacity 0.8s ease-in-out;
-}
-
-.hero-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.hero-image.fading {
-    opacity: 0;
-}
-
-/* Projects Section - Full viewport height initially */
 #projects {
     min-height: 100vh;
-    padding: 4rem 6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 96px max(8vw, 64px);
+    display: flex; align-items: center; justify-content: center;
 }
-
 
 #projects .container {
-    width: 100%;
-    max-width: 1200px;
+    display: flex; flex-direction: column;
+    justify-content: flex-start; align-items: center;
+    
+    /* STRICT GAP: 120px */
+    row-gap: 120px;
+    
+    width: 100%; max-width: 1400px;
 }
 
-/* Hero Section Layout */
+/* Hero Image */
+.hero-image {
+    display: block; width: 200px; height: 200px;
+    margin: 0 0 32px 0; border-radius: 50%;
+    overflow: hidden; background: #eee;
+    opacity: 1; transition: opacity 0.8s ease-in-out;
+}
+.hero-image img { width: 100%; height: 100%; object-fit: cover; }
+.hero-image.fading { opacity: 0; }
+
 .hero-grid {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 4rem;
+    display: flex; align-items: center; gap: 32px; margin-bottom: 64px;
 }
 
-/* --- 5. COMPONENTS (Pills, etc) --- */
+/* --- 5. COMPONENTS --- */
+
+/* Pill Highlight - BARLOW */
 .pill-highlight {
-    display: inline-block;
-    border-radius: 8px;
-    padding: 0.3em 1.2em;
-    font-weight: 500;
-    font-size: 0.85rem;
+    font-family: 'barlow', sans-serif;
+    font-size: 12px;       /* Multiple of 4 */
+    font-weight: 400;
+    letter-spacing: 0.6px;
+    line-height: 16px;     /* Multiple of 4 */
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-right: 0.5em;
+    
+    display: inline-flex; align-items: center;
+    
+    /* Height: 36px (Multiple of 4) */
+    height: 36px;
+    
+    margin-top: 20px;      /* Multiple of 4 */
+    margin-bottom: 20px;   /* Multiple of 4 */
+    padding: 0 24px;       /* Multiple of 4 */
+    border-radius: 8px;
+    cursor: pointer;
 }
-.pill-grey { background: #f3f3f3; color: #555; }
-.pill-blue { background: #D1EEFF; color: #0892D4; }
-.pill-red { background: #FFEBEB; color: #BD0505; }
-.pill-green { background: #aeefdb; color: #00AA74; }
+
+.pill-grey { background: #333; color: #efefec; }
+.pill-blue { background: #0892D4; color: #efefec; }
+.pill-red { background: #BD0505; color: #efefec; }
+.pill-green { background: #00AA74; color: #efefec; }
+.pill-lightgrey {background: #3E4950 ; color: #efefec }
+
 
 /* --- 5.5 FOOTER --- */
 html, body { height: 100%; }
-
-body {
-    display: flex;
-    flex-direction: column;
-}
-
-#wrapper {
-    margin-left: 300px;
-    padding: 0;
-    
-    /* STICKY FOOTER RULES */
-    min-height: 100vh;      /* 1. Force wrapper to be full screen height */
-    display: flex;          /* 2. Enable flexbox */
-    flex-direction: column; /* 3. Stack content vertically */
-}
+body { display: flex; flex-direction: column; }
+#wrapper { min-height: 100vh; display: flex; flex-direction: column; }
 
 #footer {
-    margin-top: auto;       /* 4. Auto margin pushes it to the bottom */
-    padding: 2rem 6rem;
-    color: #ccc;
-    font-size: 0.8rem;
+    margin-top: auto; 
+    padding: 32px 96px; /* Pixel spacing */
+    color: #ccc; 
+    font-size: 12px;
 }
-
 #footer .copyright {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    font-size: 0.85rem;
-    color: #999;
+    list-style: none; padding: 0; margin: 0;
+    text-align: center; font-size: 12px; color: #999;
 }
+#footer .copyright li { display: inline; margin: 0 8px; }
+#footer .copyright li:after { content: " | "; margin: 0 8px; }
+#footer .copyright li:last-child:after { content: ""; }
 
-#footer .copyright li {
-    display: inline;
-    margin: 0 0.5em;
-}
-
-#footer .copyright li:after {
-    content: " | "; 
-    margin: 0 0.5em;
-}
-
-#footer .copyright li:last-child:after {
-    content: "";
-}
-
-/* --- 6. MOBILE RESPONSIVENESS --- */
-@media screen and (max-width: 900px) {
-    #header {
-        position: relative;
-        width: 100%;
-        height: auto;
-        text-align: center;
-        border-right: none;
-        border-bottom: 1px solid #eaeaea;
-    }
-    
-    #header .avatar { 
-        display: none;
-        margin: 0 auto 1rem auto;
-    }
-    
-    /* Show sidebar avatar on mobile for projects and experiments */
-    .projects-active #header .avatar,
-    .experiments-active #header .avatar {
-        display: block;
-    }
-    
-    #about .container {
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-    
-    .about-avatar {
-        width: 150px;
-        height: 150px;
-        order: 1;
-        margin: 0 auto;
-    }
-    
-    #about header.major {
-        order: 2;
-        text-align: center;
-    }
-    
-    #wrapper { margin-left: 0; padding: 2rem; }
-    #footer { margin-left: 0; }
-}
 
 /* =========================================
-   CONSOLIDATED PROJECT CARD STYLES
-   (Floating, Uniform Size, Cal Sans)
+   PROJECT CARD STYLES (Strict Pixels)
    ========================================= */
 
-/* 1. The Container (Floating Row Layout) */
 #projects .project-card {
-    display: flex;                /* Image left, Text right */
-    align-items: center;          /* Center vertically */
-    gap: 4em;                     /* Space between image and text */
-    margin-bottom: 6em;           /* Space between different projects */
-    
-    /* Ensure transparency so your Dark Mode background shows through */
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    padding: 0;
+    display: flex; align-items: center; 
+    gap: 64px; /* Multiple of 8 */
+    margin-bottom: 0; background: transparent;
+    border: none; padding: 0;
+    width: 100%; max-width: 1200px;
 }
 
-/* 2. The Image (Forces exact 16:9 shape) */
 #projects .project-card .card-image {
-    flex: 1;                      /* Takes up 1 share of width */
-    min-width: 300px;             /* Prevents squishing on small screens */
-    aspect-ratio: 3 / 4;          /* Forces square shape */
-    border-radius: 24px;
-    overflow: hidden;             /* Hides zoom overflow */
+    flex: 1; min-width: 300px; aspect-ratio: 3 / 4;
+    border-radius: 24px; overflow: hidden;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
 }
-
-/* Make sure the Lottie Player fills the card just like an image would */
 #projects .project-card .card-image lottie-player {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Keeps the aspect ratio correct */
-    display: block;
-    transform: scale(1.02); /* Slight scale to prevent tiny white edges */
+    width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.02);
 }
-
-
 #projects .project-card .card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;            /* Crops image perfectly to fit 16:9 */
-    object-position: center;
-    transition: transform 0.5s ease; 
+    width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
 }
 
-/* 3. The Text Content */
-#projects .project-card .card-content {
-    flex: 1.2;                    /* Text takes slightly more width than image */
-}
+#projects .project-card .card-content { flex: 1.2; }
 
+/* H3 - PLUS JAKARTA SANS */
 #projects .project-card h3 {
-    font-family: 'Cal Sans', sans-serif;
-    font-size: 2em;
-    letter-spacing: 0.01em;
-    color: #ffffff;               /* Default to white (pops on dark bg) */
-    margin-bottom: 1rem;
-    line-height: 1.1;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 36px;       /* Multiple of 4 */
+    font-weight: 700;
+    line-height: 48px;     /* Multiple of 8 */
+    
+    letter-spacing: -0.5px;
+    
+    text-transform: capitalize;
+    color: #efefec;
+    display: block; margin: 0; width: 100%; cursor: pointer;
 }
 
-/* 1. Space below the Pills (Grey/Blue tags) */
-#projects .project-card .card-tags {
-    margin-bottom: 1.5rem; /* Adjust this number to increase/decrease space */
-    display: block;        /* Ensures the margin pushes the title down */
-}
-
+/* P - BARLOW (Body) */
 #projects .project-card p {
-    color: #cccccc;               /* Light grey for description */
-    font-size: 1.1em;
-    letter-spacing: 0.01em;
-    margin-bottom: 1.5rem; /* Adds gap before the 'Shipped' date */
-    line-height: 1.6;      /* Improves readability */
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;       /* Multiple of 4 */
+    font-weight: 300; 
+    line-height: 28px;     /* Multiple of 4 */
+    color: rgb(124, 124, 122);
+    text-align: left;
+    display: block; 
+    margin-top: 0px; 
+    margin-bottom: 16px;   /* Multiple of 4 */
+    width: 100%; max-width: 600px;
 }
 
 #projects .project-card .project-meta {
-    font-size: 0.9rem;
-    color: #888;                  /* Darker grey for metadata */
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px; /* Exception: Small text often needs to be 14px */
+    color: #888;
     font-weight: 500;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.5px;
 }
 
-/* 4. Interactions (Hover Effects) */
-/* Lift the image and add shadow */
 #projects .project-card:hover .card-image {
     transform: translateY(-5px);
     box-shadow: 0 20px 40px rgba(3, 3, 3, 0.4);
     transition: all 0.3s ease;
 }
-
-/* Zoom the photo inside */
-#projects .project-card:hover .card-image img {
-    transform: scale(1.03);
-}
+#projects .project-card:hover .card-image img { transform: scale(1.03); }
 
 
-/* 5. Mobile Responsiveness */
-@media screen and (max-width: 900px) {
-    #projects .project-card {
-        flex-direction: column;   /* Stack Top to Bottom */
-        gap: 2em;
-    }
-    
-    #projects .project-card .card-image {
-        width: 100%;              /* Full width on phone */
-        min-width: 0;
-    }
-}
-
-
-/* 1. Smooth Transition for the whole page */
+/* --- DARK THEME & TRANSITIONS --- */
 body, #main, h1, h2, h3, h4, p {
     transition: background-color 0.4s ease, color 0.6s ease;
 }
+body.dark-mode { background-color: #121212; color: #e0e0e0; }
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode strong { color: #ffffff; }
+body.dark-mode #main { background-color: #1c2124; }
+#header { transition: background-color 0.6s ease, color 0.6s ease; }
+body.dark-mode #header { background-color: #1c2124; color: #e0e0e0; }
+body.dark-mode #header nav ul li a { color: #bbbbbb; }
+body.dark-mode #header nav ul li a.active { color: #efefec; }
 
-/* 2. The Dark Theme Class */
-body.dark-mode {
-    background-color: #121212; /* Deep dark grey/black */
-    color: #e0e0e0;            /* Light grey text */
+
+/* =========================================
+   CASE STUDY PAGE LAYOUT (Global)
+   ========================================= */
+
+.cs-header.container, 
+.cs-body-layout.container {
+    max-width: 1400px;
+    margin: 0;
+    /* Using max() to ensure minimum pixel safety */
+    margin-left: max(8vw, 64px);
+    margin-right: max(8vw, 64px);
+    padding: 0;
 }
 
-/* Optional: Invert headers to white when in dark mode */
-body.dark-mode h1, 
-body.dark-mode h2, 
-body.dark-mode h3, 
-body.dark-mode strong {
+/* HERO */
+.cs-hero-visual {
+    width: 100%; height: 60vh; overflow: hidden;
+    background: #f4f4f4; margin-bottom: 32px;
+}
+.cs-hero-visual img, 
+.cs-hero-visual lottie-player {
+    width: 100%; height: 100%; display: block; object-fit: cover;
+}
+
+/* HEADER */
+.cs-header { display: flex; align-items: flex-start; gap: 64px; }
+
+/* H1 - PLUS JAKARTA SANS */
+.cs-title-block { flex: 1.2; }
+.cs-title-block h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 40px;       /* Multiple of 8 */
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 48px;
+    color: #111;
+}
+
+.cs-subtitle {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 400; /* Regular weight */
+    color: #7c7c7a;
+    line-height: 1.4;
+    margin-bottom: 48px;
+    max-width: 90%;
+}
+
+.cs-meta-block {
+    flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+}
+.meta-group h5 {
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px; 
+    text-transform: uppercase;
+    color: #999; letter-spacing: 1px; margin-bottom: 8px;
+}
+.meta-group p { 
+    font-family: 'Barlow', sans-serif; 
+    font-size: 16px; 
+    line-height: 24px; 
+    color: #333; 
+}
+
+.cs-divider {
+    border: 0; border-top: 1px solid #eaeaea;
+    margin: 64px max(8vw, 64px); 
+    max-width: 1200px;
+}
+
+/* BODY LAYOUT */
+.cs-body-layout {
+    display: grid; grid-template-columns: 180px 1fr;
+    gap: 48px; padding-bottom: 96px; max-width: 1200px;
+    position: relative;
+}
+
+.cs-local-sidebar {
+    /* 1. Make it Stick */
+    position: sticky;
+    position: -webkit-sticky; /* Safari support */
+    top: calc(50vh - 80px);
+    /* 2. Layout Control */
+    /* This is critical: prevents the sidebar from stretching to full height */
+    align-self: start; 
+    height: auto;
+}
+
+/* Sticky Nav */
+.cs-sticky-nav { position: sticky; top: 64px; align-self: start; }
+.cs-local-sidebar ul { list-style: none; padding: 0; margin: 0; }
+.cs-local-sidebar li { margin-bottom: 16px; }
+
+.cs-local-sidebar a {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    font-size: 16px;
+    color: #c7c7c7;
+    text-decoration: none; display: block; padding: 8px 0;
+    transition: color 0.2s ease;
+}
+.cs-local-sidebar a:hover, .cs-local-sidebar a.active { color: #111; }
+
+/* Content Headings */
+.cs-section { margin-bottom: 96px; scroll-margin-top: 64px; }
+.cs-section h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
+    margin-bottom: 16px;
+}
+
+.cs-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-bottom: 32px; }
+
+/* Background Section */
+.cs-section-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px; letter-spacing: -0.5px;
+    margin-bottom: 16px; text-transform: lowercase; color: #111;
+}
+
+.cs-location {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 24px;
+    font-family: 'Barlow', sans-serif; font-weight: 600; font-size: 16px; color: #111;
+}
+
+.cs-text-intro { font-size: 20px; line-height: 32px; color: #7c7c7a; margin-bottom: 40px; }
+
+/* Gallery */
+.cs-gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 32px; 
+    width: 100%;
+    align-items: start;
+    margin-bottom: 48px;
+}
+
+/* Reset the figure tag */
+.gallery-item {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* 1. The Wrapper Forces the Shape */
+.image-wrapper {
+    width: 100%;
+    /* This forces both images to be exactly the same rectangular shape */
+    aspect-ratio: 3 / 2; 
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f0f0f0;
+    margin-bottom: 16px; /* Space between image and caption */
+}
+
+.gallery-item img {
+    width: 100%;
+    
+    /* This is the magic line. It forces the image into a 3:2 box.
+       You can change this to '4 / 3' if you want them taller, 
+       or '16 / 9' if you want them wider. */
+    aspect-ratio: 3 / 2; 
+    
+    /* This ensures the image fills that box without stretching */
+    object-fit: cover; 
+    
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 16px; /* Space between image and caption */
+}
+
+/* Caption Styles */
+.gallery-item figcaption {
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    color: #7c7c7a;
+    text-align: left;
+}
+
+/* Dark Mode Support */
+body.dark-mode .gallery-item figcaption {
+    color: #bbbbbb;
+}
+
+
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 900px) {
+    .cs-gallery-grid {
+        grid-template-columns: 1fr; /* Stack vertically on mobile */
+    }
+}
+
+/* DARK MODE (Case Study) */
+body.dark-mode .cs-header h1,
+body.dark-mode .cs-section h3,
+body.dark-mode .cs-section-title,
+body.dark-mode .cs-location,
+body.dark-mode .meta-group p { color: #e0e0e0; }
+body.dark-mode .cs-local-sidebar a { color: #666; }
+body.dark-mode .cs-local-sidebar a:hover, body.dark-mode .cs-local-sidebar a.active { color: #ffffff; }
+body.dark-mode .cs-hero-visual { background: #2a2a2a; }
+body.dark-mode .cs-divider { border-top: 1px solid #333; }
+
+/* Dark mode trigger for problem section on this page */
+body.dark-mode-active .cs-local-sidebar a { color: #bdbdbd; }
+body.dark-mode-active .cs-local-sidebar a:hover,
+body.dark-mode-active .cs-local-sidebar a.active { color: #ffffff; }
+
+
+/* =========================================
+   SINGLE PROJECT OVERRIDES
+   ========================================= */
+body.single-project #wrapper { margin-left: 0 !important; width: 100%; padding: 0; }
+body.single-project #header { display: none; }
+
+.top-back-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 32px max(8vw, 64px); 
+    padding-right: 64px; 
+    width: 100%; max-width: 1400px;
+}
+.nav-brand { display: flex; align-items: center; gap: 16px; text-decoration: none; transition: opacity 0.2s; }
+.nav-brand:hover { opacity: 0.6; }
+
+.nav-avatar {
+    width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Nav Links - PLUS JAKARTA SANS */
+.nav-name, .nav-next {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    font-size: 16px; color: #333; text-decoration: none;
+}
+
+.nav-next { transition: color 0.2s ease; }
+.nav-next:hover { color: #000; }
+
+body.dark-mode .nav-name { color: #ffffff; }
+body.dark-mode .nav-next { color: #cccccc; }
+body.dark-mode .nav-next:hover { color: #ffffff; }
+
+
+/* =========================================
+   6. MOBILE RESPONSIVENESS (Breakpoints)
+   ========================================= */
+
+@media screen and (max-width: 900px) {
+    /* 1. Header Changes */
+    #header {
+        position: relative; width: 100%; height: auto;
+        text-align: center; border-right: none; border-bottom: 1px solid #eaeaea;
+        padding: 24px;
+    }
+    #header .avatar { display: none; margin: 0 auto 16px auto; }
+    
+    .projects-active #header .avatar,
+    .experiments-active #header .avatar { display: block; }
+    
+    /* 2. Main Layout Changes */
+    #wrapper { margin-left: 0; padding: 0; }
+    
+    /* 3. Section Padding (Reduced for Mobile) */
+    #about, #projects {
+        padding: 48px 24px;
+    }
+    
+    #about .container { flex-direction: column; gap: 32px; width: 100%; }
+    
+    .about-avatar { width: 150px; height: 150px; order: 1; margin: 0 auto; }
+    #about header.major { order: 2; text-align: center; }
+
+    /* 4. Project Card Stacking */
+    #projects .project-card { 
+        flex-direction: column; 
+        gap: 32px; 
+    }
+    #projects .project-card .card-image { width: 100%; min-width: 0; }
+    
+    /* Reduce large gap between projects */
+    #projects .container { row-gap: 64px; }
+    
+    /* 5. Case Study Adjustments */
+    .cs-header { flex-direction: column; gap: 32px; }
+    .cs-meta-block { width: 100%; gap: 24px; }
+    .cs-body-layout { grid-template-columns: 1fr; gap: 32px; }
+    .cs-sticky-nav { display: none; }
+    .cs-grid-2col, .cs-gallery-grid { grid-template-columns: 1fr; }
+    
+    .cs-header.container, .cs-body-layout.container, .cs-divider {
+        padding: 0 24px; margin-left: 0; margin-right: 0;
+    }
+    
+    #footer { margin-left: 0; padding: 32px 24px; }
+}
+
+/* --- IMPACT CARDS SECTION --- */
+
+.impact-section {
+    margin-bottom: 96px; /* Spacing below this section */
+    width: 100%;
+}
+
+.impact-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;       /* Header size */
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 20px;   /* Space between text and cards */
+    max-width: 900px;
+}
+
+/* The Grid Layout */
+.impact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 32px;             /* 32px gap between cards */
+    width: 100%;
+}
+
+/* Individual Card Styling */
+.impact-card {
+    background: #E6E5E3;   /* The Grey Background from image */
+    border-radius: 12px;   /* Rounded corners */
+    padding: 20px;         /* Internal spacing */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 160px;     /* Ensures cards are substantial height */
+}
+
+/* White Icon Square */
+.icon-box {
+    background: #efefec;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;   /* Space below icon */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.icon-box i {
+    font-size: 20px;
+    color: #111;
+}
+
+/* Descriptive Text */
+.impact-text {
+    font-family: 'Barlow', sans-serif;
+    font-size: 20px;       
+    line-height: 28px;
+    color: #111;
+    margin: 0 0 24px 0; /* Space below text */
+    font-weight: 400;
+}
+
+/* UPDATED: Matches "My Role" Label Exactly */
+.impact-tag {
+    /* Typography matches .meta-group h5 */
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 500;      /* Standard metadata weight */
+    text-transform: uppercase;
+    color: #999;           /* Standard metadata grey */
+    letter-spacing: 0.08em; /* Wide letter spacing */
+    
+    margin: 0;
+    margin-top: auto;      /* Pushes this tag to the bottom of the card */
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 900px) {
+    .impact-grid {
+        grid-template-columns: 1fr; /* Stack cards on mobile */
+        gap: 24px;
+    }
+    
+    .impact-title {
+        font-size: 20px;
+    }
+}
+
+/* --- IDENTIFIED PROBLEM SECTION (Dark Mode) --- */
+
+.problem-dark-mode {
+    /* 1. Breakout to Full Screen Width */
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    
+    /* 2. Visuals */
+    background-color: #000000; /* Pitch Black */
+    padding: 96px 0;
+    margin-bottom: 120px;
+    color: #ffffff;
+    
+    /* 3. Centering Content */
+    display: flex;
+    justify-content: center;
+}
+
+.problem-content-wrapper {
+    width: 100%;
+    max-width: 1200px; /* Align with your grid */
+    padding: 0 32px;
+}
+
+/* Header Text */
+.problem-header-block {
+    margin-bottom: 64px;
+    max-width: 800px;
+}
+
+.problem-main-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 24px;
+}
+
+.problem-main-desc {
+    font-family: 'Barlow', sans-serif;
+    font-size: 20px;
+    line-height: 1.5;
+    color: #999999; /* Grey text */
+    max-width: 700px;
+}
+
+/* GRID LAYOUT */
+.problem-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+/* CARD STYLING */
+.prob-card {
+    background-color: #0A0A0A; /* Slightly lighter black for card bg if desired, or keep transparent */
+    border: 1px solid #333333; /* Dark Grey Border */
+    border-radius: 12px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 320px;
+    
+    transition: all 0.3s ease; /* Smooth hover transition */
+}
+
+.card-top-info {
+    margin-bottom: 24px;
+}
+
+.pc-number {
+    display: block;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.pc-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #888; /* Dimmed Title */
+}
+
+.pc-body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #cccccc;
+    margin-bottom: 48px;
+    flex-grow: 1;
+}
+
+/* Bold Text Styling (Default) */
+.pc-body strong {
+    color: #efefec; /* White highlight initially */
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+/* TAGS (Pills) */
+.pc-tags {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.pc-pill {
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #efefec;
+    background-color: #333;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+/* --- HOVER EFFECTS --- */
+
+/* 1. Border turns Red */
+.prob-card:hover {
+    border-color: #D63031; 
+    box-shadow: 0 0 20px rgba(214, 48, 49, 0.1); /* Subtle red glow */
+}
+
+/* 2. Highlighted text turns Red */
+.prob-card:hover .pc-body strong {
+    color: #D63031;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 900px) {
+    .problem-cards-grid {
+        grid-template-columns: 1fr; /* Stack vertically */
+    }
+    
+    .pc-body {
+        font-size: 20px;
+    }
+}
+
+
+/* --- FINAL SOLUTION SECTION --- */
+
+.solution-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 48px;
+    margin-bottom: 96px;
+    align-items: stretch;
+}
+
+/* 1. SINGLE COUNTER LABEL (SOLUTION 01/04) */
+.solution-counter {
+    display: block;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    
+    margin-bottom: 24px; /* Space before the grid starts */
+}
+
+/* 1. Metadata Numbers (01/04) - Matches "My Role" */
+.meta-number {
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;           /* Standard Grey */
+    letter-spacing: 1px;   /* Wide spacing */
+    display: block;
+    margin-bottom: 8px;
+}
+
+
+
+/* 2. Labels (BEFORE / AFTER) - Matches "My Role" font */
+.meta-label {
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 700;      /* Bold */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 16px 0;
+}
+
+/* Specific Colors */
+.label-before { color: #C0392B; } /* Brick Red */
+.label-after  { color: #6AB04C; } /* Green */
+
+.solution-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;       
+    line-height: 28px;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    
+    /* CRITICAL: Forces equal height so descriptions align */
+    /* 28px line-height * 3 lines = 84px */
+    min-height: 84px;      
+    display: flex;
+    align-items: start; /* Ensures short text stays at the top */
+}
+
+.solution-col {
+    display: flex;
+    flex-direction: column; /* Stacks items vertically */
+    height: 100%;           /* Fills the grid cell height */
+}
+
+/* Description Text (Below Heading, Above Image) */
+.solution-desc {
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    line-height: 26px;     /* Comfortable reading height */
+    font-weight: 400;      /* Regular weight */
+    
+    margin-top: 16px;     /* Pulls it closer to the heading */
+    margin-bottom: 32px;   /* Pushes the image down */
+    
+    /* Optional: Limit width for better readability */
+    max-width: 90%;
+    /* Optional: Ensure descriptions also align their bottoms if needed */
+    /* min-height: 104px; */
+}
+
+/* SPECIFIC COLORS FOR BEFORE vs AFTER */
+
+/* The First Column (Before) -> Grey Text */
+.solution-col:first-child .solution-heading {
+    color: #999; 
+}
+
+.solution-col:first-child .solution-desc {
+    color: #999; 
+} 
+
+/* The Second Column (After) -> Black Text */
+.solution-col:last-child .solution-heading {
+    color: #111; 
+}
+
+.solution-col:last-child .solution-desc {
+    color: #111; 
+} 
+/* 4. The Grey Visual Box */
+.solution-visual {
+    width: 100%;
+    aspect-ratio: 1 / 1;   /* Square box as shown in image */
+    background: #e0e0e0;   /* Placeholder Grey */
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: auto;
+}
+
+.solution-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* Fix for Cropped GIF/Video */
+.solution-visual .fit-content {
+    width: 100%;
+    height: 100%;
+    
+    /* CHANGE THIS: 'contain' ensures the whole image/video is visible */
+    object-fit: contain; 
+    
+    /* Optional: Adds a specific background color if the video doesn't fill the box */
+    background-color: #f4f4f4; 
+}
+
+/* Ensure the video tag behaves like an image block */
+.solution-visual video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain; /* Prevents video cropping */
+}
+
+/* Dark Mode Adjustments */
+body.dark-mode .solution-heading { color: #fff; }
+body.dark-mode .meta-number { color: #666; }
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 900px) {
+    .solution-grid {
+        grid-template-columns: 1fr; /* Stack vertically */
+        gap: 64px;
+    }
+    .solution-heading {
+        min-height: auto; /* Remove height alignment on mobile */
+    }
+}
+
+/* --- IMPACT SECTION --- */
+
+/* Three Column Grid */
+.impact-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 Equal Columns */
+    gap: 24px;
+    margin-top: 32px;
+    margin-bottom: 96px;
+}
+
+/* The Grey Card */
+.impact-metric-card {
+    background-color: #111517; /* Light Grey Background */
+    border-radius: 8px;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 320px; /* Ensures consistent height */
+}
+
+/* Big Number (5-10%) */
+.metric-number {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 36px;       /* Large display size */
+    font-weight: 700;      /* Bold */
+    color: #efefec;
+    margin: 0 0 16px 0;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+/* Description Text */
+.metric-desc {
+    font-family: 'Barlow', sans-serif;
+    font-size: 18px;
+    line-height: 26px;
+    color: #7c7c7a;
+    font-weight: 400;
+    margin-bottom: 32px;
+    flex-grow: 1; /* Pushes the tags to the bottom */
+}
+
+/* Tag Container */
+.metric-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 6px;
+    margin-top: 32px; /* Aligns to bottom of card */
+    align-content: flex-start;
+}
+
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 900px) {
+    .impact-grid-3 {
+        grid-template-columns: 1fr; /* Stack vertically on phone */
+    }
+    .impact-metric-card {
+        min-height: auto;
+    }
+}
+/* --- DEEP DIVE: NESTED CARD LAYOUT --- */
+
+/* 1. The Outer Grey Frame */
+.deep-dive-wrapper {
+    background-color: #E6E5E3; /* Light Grey */
+    border-radius: 16px;       /* Soft corners for the outer box */
+    padding: 64px;             /* The spacing between Grey edge and White card */
+    margin-bottom: 96px;
+}
+
+/* 2. The Inner White Box */
+.deep-dive-card {
+    background-color: #EFEFEC; /* Page Background Color */
+    border-radius: 12px;
+    overflow: hidden;
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Vertically centers the text relative to image */
+}
+
+/* LEFT: Diagram Area */
+.dd-visual {
+    flex: 1.1; /* Takes slightly more than half width (55%) */
+    padding: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Optional: Divider line if you want separation like the first design */
+    /* border-right: 1px solid rgba(0,0,0,0.05); */
+}
+
+.dd-visual img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* Ensures the diagram scales nicely */
+    max-width: 550px; 
+}
+
+/* RIGHT: Text Content */
+.dd-content {
+    flex: 0.9; /* Takes remaining width (45%) */
+    padding: 64px 64px 64px 32px; /* Pad Right heavily for balance */
+    text-align: left;
+}
+
+/* Typography Matches */
+.dd-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
+    line-height: 1.3;
+    font-weight: 700;      /* Bold Heading */
+    color: #111;
+    margin-bottom: 32px;
+    letter-spacing: -0.5px;
+}
+
+.dd-text {
+    font-family: 'Barlow', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #7C7C7A;           /* Grey text */
+    margin-bottom: 24px;
+}
+
+.dd-text strong {
+    color: #111;           /* Highlighted text is darker */
+    font-weight: 600;
+}
+
+.dd-text:last-child {
+    margin-bottom: 0;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 900px) {
+    .deep-dive-wrapper {
+        padding: 24px; /* Less grey padding on mobile */
+    }
+    
+    .deep-dive-card {
+        flex-direction: column; /* Stack vertically */
+    }
+    
+    .dd-visual {
+        padding: 32px;
+    }
+    
+    .dd-content {
+        padding: 0 32px 48px 32px;
+    }
+}
+
+/* --- ECOSYSTEM GRID (Updated Structure) --- */
+
+.ecosystem-layout-grid {
+    margin-top: 96px; 
+    display: grid;
+    /* Keeps the 55% / 45% split */
+    grid-template-columns: 1.3fr 1fr; 
+    column-gap: 64px;
+    row-gap: 48px;
+    align-items: start;
+}
+
+/* Re-use existing Title/Intro/Visual styles... */
+.eco-title {
+    grid-column: 1;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #7C7C7A;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.eco-intro-text {
+    grid-column: 2;
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #7C7C7A;
+    margin: 0;
+}
+
+.eco-visual-card {
+    grid-column: 1;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- NEW RIGHT COLUMN STACK --- */
+.eco-right-stack {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 64px; /* Space between the List and the Insight */
+}
+
+/* 1. ZONES LIST STYLING */
+.zone-list-header {
+    font-family: 'barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #7C7C7A;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+.zone-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* The Pink Number Badge */
+.zone-badge {
+    background-color: #E06969; /* Light Pink BG */
+    color: #FFEBE6;            /* Salmon Red Text */
+    
+    font-family: 'barlow', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    
+    /* Square shape with rounded corners */
+    min-width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -2px; /* Optical alignment with text */
+}
+
+.zone-text {
+    font-family: 'barlow', sans-serif;
+    font-size: 16px;
+    color: #111;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.zone-text strong {
+    font-weight: 500;
+    color: #111;
+}
+
+/* 2. INSIGHT BLOCK STYLING */
+.eco-insight-block {
+    /* No grid column needed here, it's inside the stack */
+    padding-left: 0;
+}
+
+/* (Keep existing insight typography styles) */
+.insight-label {
+    font-family: 'Barlow', sans-serif;
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 24px;
+}
+
+.insight-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px; 
+    line-height: 1.3;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+}
+
+.insight-desc {
+    font-family: 'barlow', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 1100px) {
+    .ecosystem-layout-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .eco-title, .eco-intro-text, .eco-visual-card, .eco-right-stack {
+        grid-column: auto;
+    }
+}
+
+/* --- PART 3: ACTORS SECTION --- */
+
+.actors-section {
+    margin-top: 120px; /* Separation from previous section */
+}
+
+/* 1. HEADER (Reusing eco-title/text styles) */
+.actors-header {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    margin-bottom: 48px;
+    align-items: start;
+}
+
+/* --- PART 3: ACTORS SECTION (Refined) --- */
+
+.actors-section {
+    margin-top: 120px; 
+}
+
+/* 1. HEADER */
+.actors-header {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    margin-bottom: 48px;
+    align-items: start;
+}
+
+/* 2. LEGEND BAR (Updated for Image Icons) */
+.actors-legend {
+    margin-bottom: 64px;
+}
+.legend-label {
+    display: block;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #999;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+.legend-items {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.actor-item {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111;
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Space between icon and text */
+}
+/* Style for the Actor Icons (Circle avatars) */
+.actor-item img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%; /* Makes them circular */
+    object-fit: cover;
+    display: block;
+}
+
+/* 3. THE MAIN GRID */
+.actors-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr; /* 55% / 45% split */
+    gap: 64px;
+    align-items: start;
+}
+
+/* Left Column */
+.flow-diagram-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 64px; 
+}
+
+/* Right Column: Handoff Stack */
+.handoff-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    
+    /* CRITICAL ALIGNMENT: 
+       Adjust this value to match where the dotted line ends in your image.
+       Based on the screenshot, it starts lower than the diagram top. */
+    margin-top: 180px; 
+}
+
+/* --- THE RED HANDOFF CARDS (Preserved Style) --- */
+.handoff-card {
+    background-color: #FFEBE6; /* Pink BG */
+    border: 1px solid #EACBCB; 
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    
+    /* Ensure cards have a white shadow/stack effect if needed */
+    box-shadow: 0 4px 12px rgba(214, 48, 49, 0.05);
+}
+
+.handoff-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.handoff-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    color: #D63031; /* Red Text */
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.red-dot {
+    width: 12px;
+    height: 12px;
+    background-color: #D63031;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(214, 48, 49, 0.2); 
+}
+
+.handoff-icons {
+    display: flex;
+    gap: -8px; /* Negative margin for overlap look if desired, or 4px for space */
+}
+.handoff-icons img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.handoff-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #111;
+}
+
+/* --- FINAL STACKED CARD EFFECT (3 Layers Match) --- */
+
+.card-stacked-effect {
+    position: relative;
+    z-index: 1; 
+    /* Increased margin so the bottom of the stack doesn't hit the next section */
+    margin-bottom: 32px; 
+}
+
+/* Shared style for both underlying layers */
+.card-stacked-effect::before,
+.card-stacked-effect::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* Exact match of the main card style */
+    background-color: #FFEBE6; 
+    border: 1px solid #EACBCB;
+    border-radius: 12px;
+    
+    /* Anchors scaling to the top center */
+    transform-origin: top center;
+    transition: transform 0.3s ease;
+}
+
+/* LAYER 2 (Middle): Down 10px, 96% width */
+.card-stacked-effect::before {
+    z-index: -1;
+    transform: translateY(10px) scaleX(0.96);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Adds depth */
+}
+
+/* LAYER 3 (Bottom): Down 20px, 92% width */
+.card-stacked-effect::after {
+    z-index: -2;
+    transform: translateY(20px) scaleX(0.92);
+    /* Optional: slightly lower opacity for the furthest card */
+    opacity: 0.9; 
+}
+
+/* Hover Animation: Fans the cards out slightly */
+.card-stacked-effect:hover::before {
+    transform: translateY(12px) scaleX(0.96);
+}
+.card-stacked-effect:hover::after {
+    transform: translateY(24px) scaleX(0.92);
+}
+/* Mobile Responsiveness */
+@media screen and (max-width: 1100px) {
+    .actors-header, .actors-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .handoff-stack {
+        margin-top: 0; /* Remove offset on mobile so it stacks naturally */
+    }
+}
+
+/* --- PART 4: USER PERCEPTION (Insights) --- */
+
+.perception-section {
+    margin-top: 120px;
+    margin-bottom: 120px;
+}
+
+.perception-header {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    margin-bottom: 48px;
+    align-items: start;
+}
+
+/* White Insight Cards */
+.insight-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.insight-card-white {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 48px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.insight-label-small {
+    display: block;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #999;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+}
+
+.insight-title-main {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #111; /* Grey Title */
+    margin-bottom: 16px;
+    line-height: 1.4;
+}
+
+.insight-body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #666;
+    max-width: 900px;
+}
+
+/* --- PART 5: IDEATION & STRATEGY --- */
+
+.ideation-section {
+    margin-bottom: 96px;
+}
+
+.ideation-header {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    margin-bottom: 48px;
+    align-items: start;
+}
+
+/* Dark Dashboard Container */
+.strategy-dashboard {
+    background-color: #1A1C1E; /* Dark Grey/Black */
+    border-radius: 16px;
+    padding: 64px;
+    
+    display: flex;
+    gap: 64px;
+    align-items: stretch;
+}
+
+/* Left Side: Efficiency & Keywords */
+.strat-left {
+    flex: 1; /* Approx 30-35% */
+    border-right: 1px solid rgba(255,255,255,0.1); /* Subtle divider */
+    padding-right: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.strat-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 48px;
+    line-height: 1.2;
+}
+
+.text-accent-red {
+    color: #E06969; /* Salmon/Red Accent */
+}
+
+.strat-sublabel {
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+/* Dark Pills */
+.strat-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pill-dark {
+    background-color: #33363A; /* Slightly lighter than bg */
+    color: #ccc;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+/* Right Side: HMW Statements */
+.strat-right {
+    flex: 2; /* Approx 65% */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hmw-item {
+    display: flex;
+    gap: 24px;
+    padding: 24px 0;
+}
+
+.hmw-icon {
+    width: 24px;
+    padding-top: 4px; /* Align icon with text top */
+}
+
+.hmw-label {
+    font-family: 'Barlow', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.9;
+}
+
+.hmw-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #aaa; /* Softer grey text */
+}
+
+.hmw-divider {
+    height: 1px;
+    background-color: rgba(255,255,255,0.1);
+    width: 100%;
+    margin: 8px 0;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 1000px) {
+    .perception-header, .ideation-header {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    
+    .strategy-dashboard {
+        flex-direction: column;
+        padding: 40px;
+        gap: 48px;
+    }
+    
+    .strat-left {
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-right: 0;
+        padding-bottom: 48px;
+    }
+}
+
+/* --- EVALUATION SECTION (Grey Noise Box) --- */
+
+.evaluation-header {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    margin-bottom: 48px;
+    align-items: start;
+}
+
+/* The Grey Container */
+.eval-container {
+    background-color: #7C7C7A; /* Dark Grey Base */
+    /* Add noise image here if you have it: */
+    /* background-image: url('images/noise-texture.png'); */
+    
+    border-radius: 16px;
+    padding: 64px;
+    margin-bottom: 96px;
+    color: #fff;
+}
+
+.eval-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 Columns: Text, Phone, Notes */
+    gap: 48px;
+    align-items: center;
+}
+
+/* 1. Left: Info */
+.eval-info {
+    text-align: left;
+}
+
+.eval-item-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff; /* Primary White */
+    line-height: 1.3;
+    margin-bottom: 16px;
+}
+
+.eval-label {
+    display: inline-block;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #EFEFEC; /* Old Design Label Color */
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.8;
+}
+
+.eval-desc {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #111111; /* Black Description */
+    max-width: 300px;
+}
+
+/* 2. Center: UI Image */
+.eval-ui {
+    display: flex;
+    justify-content: center;
+}
+.eval-ui img {
+    max-width: 100%;
+    height: auto;
+    /* Optional shadow to pop off the grey bg */
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)); 
+}
+
+/* 3. Right: Notes */
+.eval-notes {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    border-left: 1px dashed rgba(0,0,0,0.2); /* Dotted line simulation */
+    padding-left: 24px;
+}
+
+.note-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #111111; /* Black Notes */
+}
+
+.note-text strong {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+/* Divider inside grey box */
+.eval-divider {
+    height: 1px;
+    background-color: rgba(0,0,0,0.1);
+    margin: 64px 0;
+    width: 100%;
+}
+
+/* --- INSIGHT 3 SECTION --- */
+
+.insight-3-section {
+    margin-bottom: 120px;
+}
+
+.insight-3-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 48px;
+    margin-bottom: 48px;
+    align-items: baseline;
+}
+
+.insight-3-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #999;
+}
+
+.insight-3-intro {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    color: #888;
+    line-height: 1.5;
+}
+
+/* Insight 3 Card (White with Red Border/Shadow effect) */
+.insight-card-highlight {
+    background-color: #ffffff;
+    border: 1px solid #FFEBE6; /* Subtle pink border */
+    border-radius: 12px;
+    padding: 48px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add the red line on left if desired, or keep clean */
+.insight-card-highlight::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #E06969; /* Hero Red */
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.insight-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 1100px) {
+    .eval-row {
+        grid-template-columns: 1fr; /* Stack evaluation items */
+        text-align: left;
+    }
+    .eval-notes {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px dashed rgba(0,0,0,0.2);
+        padding-top: 24px;
+    }
+    
+    .insight-3-header {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+/* --- PART 6: FOUNDATIONS & WORKFLOWS --- */
+
+.foundations-header {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    margin-bottom: 64px;
+    align-items: start;
+}
+
+.workflow-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 32px; /* Space between cards */
+    margin-bottom: 120px;
+}
+
+/* GENERAL CARD STYLING */
+.workflow-card {
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 48px;
+    position: relative;
+}
+
+/* 1. DARK CARD (Before) */
+.card-dark {
+    background-color: #666666; /* Grey from image */
     color: #ffffff;
 }
 
-/* Optional: Make sure the main container matches */
-body.dark-mode #main {
-    background-color: #1c2124;
+.wf-title-white {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #ffffff;
+    max-width: 800px;
+    margin-bottom: 16px;
 }
 
-/* 1. Ensure the sidebar transitions smoothly */
-#header {
-    transition: background-color 0.6s ease, color 0.6s ease;
+.label-before-white {
+    color: rgba(255,255,255,0.7);
 }
 
-/* 2. Change Sidebar Background & Text */
-body.dark-mode #header {
-    background-color: #1c2124; /* Slightly lighter than the body for contrast */
-    color: #e0e0e0;
+/* 2. LIGHT CARD (After) */
+.card-light {
+    background-color: #ffffff;
+    border: 1px solid #E5E5E5;
+    /* Optional shadow to lift it */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
 }
 
-/* 3. Change the Links (since Grey/Black might be hard to see) */
-body.dark-mode #header nav ul li a {
-    color: #bbbbbb; /* Light grey for inactive links */
+.wf-title-dark {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #111111;
+    max-width: 800px;
+    margin-bottom: 16px;
 }
 
-/* 4. Change the "Active" link (It was black, now needs to be white) */
-body.dark-mode #header nav ul li a.active {
-    color: #efefec; /* Bright white for the selected link */
+.label-after-green {
+    color: #6AB04C; /* Success Green */
+}
+
+/* SHARED ELEMENTS */
+.card-content-top {
+    margin-bottom: 32px;
+}
+
+.wf-label {
+    display: inline-block;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.wf-visual img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+/* RATIONALE SECTION (Only in Light Cards) */
+.wf-rationale {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px dashed #ddd; /* Dotted separation line */
+}
+
+.rationale-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    max-width: 900px;
+}
+
+.rationale-text strong {
+    color: #999; /* Label color for "Rationale?" */
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 900px) {
+    .foundations-header {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .workflow-card {
+        padding: 32px;
+    }
+    .wf-title-white, .wf-title-dark {
+        font-size: 20px;
+    }
+}
+
+/* --- PART 7: INTERFACE STRATEGY --- */
+
+.interface-header {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    margin-bottom: 64px;
+    align-items: start;
+}
+
+/* DASHBOARD CONTAINER */
+.env-dashboard {
+    background-color: #1A1C1E; /* Dark Grey/Black */
+    border-radius: 16px;
+    padding: 64px;
+    
+    display: flex;
+    gap: 64px;
+    align-items: center; /* Vertically center content */
+}
+
+/* LEFT COL */
+.env-left {
+    flex: 0.8; /* Takes up about 35% space */
+    padding-right: 32px;
+}
+
+.env-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 32px;
+    line-height: 1.3;
+}
+
+.env-desc {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #888; /* Grey text */
+}
+
+/* RIGHT COL (The Stack) */
+.env-right-stack {
+    flex: 1.2; /* Takes up about 65% space */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* INDIVIDUAL ROWS */
+.role-row {
+    background-color: #25282B; /* Lighter dark grey for cards */
+    border-radius: 8px;
+    padding: 24px 32px;
+    
+    display: grid;
+    /* Grid: Role (25%) | Device (35%) | Context (40%) */
+    grid-template-columns: 1.2fr 1.5fr 2fr; 
+    align-items: center;
+    gap: 24px;
+}
+
+/* Role Identity */
+.role-id {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.role-icon-small {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    /* Optional: white border circle */
+    border: 1px solid rgba(255,255,255,0.2); 
+}
+.role-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    color: #ccc;
+    font-weight: 500;
+}
+
+/* Device Info */
+.role-device {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-left: 1px solid rgba(255,255,255,0.1); /* Divider */
+    padding-left: 24px;
+}
+.device-icon {
+    width: 20px;
+    opacity: 0.8; /* Make white icons slightly subtle */
+}
+.device-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    color: #888;
+}
+
+/* Context Info */
+.role-context {
+    border-left: 1px solid rgba(255,255,255,0.1);
+    padding-left: 24px;
+}
+.context-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #888;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 1100px) {
+    .env-dashboard {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 40px;
+    }
+    
+    .env-left {
+        width: 100%;
+        margin-bottom: 32px;
+        padding-right: 0;
+    }
+    
+    .env-right-stack {
+        width: 100%;
+    }
+    
+    /* Stack content inside the row on mobile */
+    .role-row {
+        grid-template-columns: 1fr; /* Stack vertically */
+        gap: 16px;
+        padding: 24px;
+    }
+    
+    .role-device, .role-context {
+        border-left: none; /* Remove vertical dividers */
+        padding-left: 0;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255,255,255,0.05); /* Add horizontal dividers */
+    }
+}
+
+/* --- PART 8: SKETCHES & WIREFRAMES --- */
+
+#sketches-wireframes {
+    margin-top: 120px;
+    margin-bottom: 120px;
+}
+
+/* Re-using the grid header layout */
+.sketch-header {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    margin-bottom: 64px;
+    align-items: start;
+}
+
+/* Container for the side-by-side flow */
+.design-evolution-flow {
+    display: flex;
+    align-items: center; /* Vertically center the arrow */
+    gap: 32px;
+    margin-bottom: 24px;
+}
+
+/* Common Card Styling */
+.evolution-card {
+    background-color: #ffffff;
+    border: 1px solid #E5E5E5; /* Subtle border */
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.evolution-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Specific Sizes to match image proportions */
+.sketch-card {
+    flex: 0.8; /* Smaller width (~40%) */
+    aspect-ratio: 4/3; /* Keeps it boxy */
+}
+
+.wireframe-card {
+    flex: 1.2; /* Larger width (~60%) */
+    /* Let height define itself based on image, or set aspect ratio */
+}
+
+/* The Arrow */
+.evolution-arrow {
+    flex-shrink: 0; /* Prevents arrow from squishing */
+    opacity: 0.6;
+}
+
+/* Caption Styling */
+.media-caption {
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    color: #888;
+    text-align: center;
+    margin-top: 16px;
+    letter-spacing: 0.5px;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 900px) {
+    .sketch-header {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    
+    .design-evolution-flow {
+        flex-direction: column; /* Stack images vertically */
+        gap: 24px;
+    }
+    
+    .evolution-arrow {
+        transform: rotate(90deg); /* Point arrow down */
+    }
+    
+    .sketch-card, .wireframe-card {
+        width: 100%;
+        flex: auto;
+        aspect-ratio: auto;
+    }
+}
+
+/* --- PART 9: ITERATIONS & VALIDATION --- */
+
+#iterations {
+    margin-top: 120px;
+    margin-bottom: 120px;
+}
+
+/* 1. HEADER (Standard Grid) */
+.iter-header {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    margin-bottom: 64px;
+    align-items: start;
+}
+
+/* 2. METHODOLOGY ROW (3 Cards) */
+.method-row {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 96px;
+}
+
+.method-card {
+    flex: 1;
+    background-color: #ffffff;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+    padding: 24px;
+}
+
+.method-label {
+    display: block;
+    font-family: 'Barlow', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #999;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.method-value {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #444;
+}
+
+/* 3. ITERATION 1 BLOCK */
+.iter-focus-block {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* Text left, Image wider right */
+    gap: 64px;
+    align-items: start;
+    margin-bottom: 96px;
+}
+
+.iter-subtitle {
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.iter-heading-small {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 24px;
+    line-height: 1.3;
+}
+
+.iter-desc {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+}
+
+.iter-image-col img {
+    width: 100%;
+    max-width: 400px; /* Limits phone size */
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    /* Optional shadow for the UI screen */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* 4. FINDINGS SECTION */
+.findings-container {
+    margin-bottom: 96px;
+    /* Optional background band behind findings if desired, 
+       otherwise white cards sit on page bg */
+}
+
+.findings-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.findings-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #999; /* Grey title */
+}
+
+.aha-moment {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #D63031; /* Red Accent */
+}
+
+.findings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+}
+
+.find-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 32px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.find-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #444;
+}
+
+.find-text strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #111;
+    font-weight: 700;
+}
+
+/* 5. COMPARISON SECTION */
+.comp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+}
+
+.comp-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.comp-visual {
+    background-color: #ffffff; /* Frame for the image */
+    padding: 48px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+    border: 1px solid #eee;
+}
+
+.comp-visual img {
+    width: 100%;
+    max-width: 300px; /* Phone width constraint */
+    height: auto;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.comp-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.comp-desc {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #666;
+    text-align: center;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.iter-footer-note {
+    margin-top: 64px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #777;
+    max-width: 800px;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 1000px) {
+    .iter-header, .iter-focus-block, .comp-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    
+    .method-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .findings-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .iter-image-col {
+        justify-self: center; /* Center image on mobile */
+    }
+}
+
+/* --- PART 10: FINAL DESIGNS --- */
+
+#final-designs {
+    margin-top: 120px;
+    margin-bottom: 160px; /* Extra space at bottom of page */
+}
+
+.final-header {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 64px;
+    margin-bottom: 80px;
+    align-items: start;
+}
+
+.final-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 48px; /* Space between big cards */
+}
+
+/* Base Card Style */
+.final-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    /* Optional: Subtle border */
+    border: 1px solid #F0F0F0;
+    
+    display: flex;
+    align-items: center; /* Vertically center content */
+    min-height: 480px; /* Ensures substantial height */
+}
+
+/* LAYOUT VARIATIONS */
+
+/* Left: Image First */
+.layout-left {
+    flex-direction: row;
+}
+
+/* Right: Image Second */
+.layout-right {
+    flex-direction: row-reverse; /* Flips the order */
+}
+
+/* CONTENT AREAS */
+.final-visual {
+    flex: 1.2; /* Image takes 60% width */
+    background-color: #F5F5F5; /* Grey placeholder background */
+    height: 100%;
+    min-height: 480px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.final-visual img {
+    max-width: 90%;
+    height: auto;
+    display: block;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08); /* Nice shadow for UI */
+    border-radius: 8px;
+}
+
+.final-content {
+    flex: 0.8; /* Text takes 40% width */
+    padding: 64px;
+}
+
+.final-heading {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #111;
+    margin-bottom: 24px;
+}
+
+.final-desc {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Green Label "NEW DESIGN" */
+.new-design-tag {
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #6AB04C; /* Green */
+    background-color: rgba(255,255,255,0.9);
+    padding: 8px 12px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 1000px) {
+    .final-header {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    /* Force Vertical Stack on Mobile */
+    .final-card, .layout-left, .layout-right {
+        flex-direction: column;
+        height: auto;
+        min-height: auto;
+    }
+
+    .final-visual {
+        width: 100%;
+        min-height: 300px;
+        padding: 40px;
+    }
+
+    .final-content {
+        width: 100%;
+        padding: 40px 32px;
+    }
+
+    .final-heading {
+        font-size: 24px;
+    }
 }
