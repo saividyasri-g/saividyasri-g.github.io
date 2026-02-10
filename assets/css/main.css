@@ -107,8 +107,8 @@ a:hover { color: #000; }
 /* Sidebar Footer */
 #header footer .icons { list-style: none; padding: 0; margin-top: 32px; }
 #header footer .icons li { display: inline-block; margin-left: 12px; }
-#header footer .icons a { font-size: 20px; color: #ccc; }
-#header footer .icons a:hover { color: #555; }
+#header footer .icons a { font-size: 16px; color: #7c7c7a; }
+#header footer .icons a:hover { color: #7c7c7a; }
 
 
 /* --- 4. MAIN CONTENT AREA --- */
