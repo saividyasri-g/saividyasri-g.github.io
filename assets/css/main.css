@@ -433,6 +433,17 @@ body.dark-mode #header nav ul li a.active { color: #efefec; }
 
 .cs-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-bottom: 32px; }
 
+.overview-image {
+    margin: 24px 0 32px;
+}
+
+.overview-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+}
+
 /* Background Section */
 .cs-section-title {
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -784,7 +795,7 @@ body.dark-mode .nav-next:hover { color: #ffffff; }
 /* GRID LAYOUT */
 .problem-cards-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 32px;
 }
 
@@ -815,18 +826,33 @@ body.dark-mode .nav-next:hover { color: #ffffff; }
 }
 
 .pc-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    color: #efefec;
+}
+
+.pc-number-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background-color: #3E4950;
+    color: #efefec;
     font-family: 'Barlow', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 1px;
-    color: #7c7c7a; /* Dimmed Title */
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .pc-body {
     font-family: 'Barlow', sans-serif;
-    font-size: 24px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 1.4;
+    line-height: 1.5;
     color: #7c7c7a;
     margin-bottom: 20px;
     flex-grow: 1;
