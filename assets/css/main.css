@@ -438,7 +438,7 @@ body.dark-mode #header nav ul li a.active { color: #efefec; }
 }
 
 .overview-image img {
-    width: 100%;
+    width: 90%;
     height: auto;
     display: block;
     border-radius: 12px;
