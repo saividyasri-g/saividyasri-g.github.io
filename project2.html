@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Service Marketplace Platform - Case Study</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" /> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+
+<body class="is-preload single-project">
+
+    <nav class="top-back-nav">
+        <a href="index.html" class="nav-brand">
+            <img src="images/profile.jpg" alt="Sai Vidyasri Giridharan" class="nav-avatar">
+            <span class="nav-name">sai vidyasri giridharan</span>
+        </a>
+        <a href="project-hmc.html" class="nav-next">Prev Project &larr;</a>
+    </nav>
+
+    <div id="wrapper">
+        <div id="main">
+
+            <section class="cs-hero-visual">
+                <img src="images/project2-hero.jpg" alt="Hero Image">
+            </section>
+
+            <section class="cs-header container">
+                <div class="cs-title-block">
+                    <h1>Home Service Marketplace Platform</h1>
+                    <h2 class="cs-subtitle">Increasing conversions of home service professionals in the Builder Market Platform</h2>
+                </div>
+                
+                <div class="cs-meta-block">
+                    <div class="meta-group">
+                        <h5>My Role</h5>
+                        <p>UX Design Intern</p>
+                    </div>
+                    <div class="meta-group">
+                        <h5>Immediate Team</h5>
+                        <p>2 UX Designers</p>
+                    </div>
+                    <div class="meta-group">
+                        <h5>Duration</h5>
+                        <p>9 weeks (2025)</p>
+                    </div>
+                    <div class="meta-group">
+                        <h5>tools</h5>
+                        <p>Competitive Research, UX Audit, Web Analytics, Wireframing & Prototyping</p>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="cs-divider">
+
+            <div class="cs-body-layout container">
+                
+                <aside class="cs-local-sidebar">
+                    <div class="sticky-wrapper">
+                        <ul>
+                            <li><a href="#overview" class="active">overview</a></li>
+                            <li><a href="#problem">problem</a></li>
+                            <li><a href="#solution">final solution</a></li>
+                            <li><a href="#impact">impact</a></li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <main class="cs-content">
+                    
+                    <section id="overview" class="cs-section">
+                        <h3>Overview</h3>
+                        <p class="cs-text-intro">[Placeholder: Provide a concise background of the marketplace, target users, and business context.]</p>
+                    </section>
+
+                    <section id="problem" class="cs-section">
+                        <h3>Problem</h3>
+                        <p class="cs-text-intro">[Placeholder: Summarize the primary conversion issues or bottlenecks discovered.]</p>
+                        <ul class="cs-bullets">
+                            <li>[Placeholder: Problem point 1]</li>
+                            <li>[Placeholder: Problem point 2]</li>
+                            <li>[Placeholder: Problem point 3]</li>
+                        </ul>
+                    </section>
+
+                    <section id="solution" class="cs-section">
+                        <h3>Final Solution</h3>
+                        <p class="cs-text-intro">[Placeholder: Summarize the core solution direction and experience improvements.]</p>
+                        <div class="solution-grid">
+                            <div class="solution-col">
+                                <h5 class="meta-label label-before">BEFORE</h5>
+                                <h3 class="solution-heading">[Placeholder: Old experience]</h3>
+                                <p class="solution-desc">[Placeholder: What was broken or unclear]</p>
+                            </div>
+                            <div class="solution-col">
+                                <h5 class="meta-label label-after">AFTER</h5>
+                                <h3 class="solution-heading">[Placeholder: New experience]</h3>
+                                <p class="solution-desc">[Placeholder: What improved and why it matters]</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="impact" class="cs-section">
+                        <h5 class="meta-label">PROJECTED IMPACT</h5>
+                        <div class="impact-grid-3">
+                            <div class="impact-metric-card">
+                                <h2 class="metric-number">[Placeholder]</h2>
+                                <p class="metric-desc">[Placeholder: Impact metric description]</p>
+                            </div>
+                            <div class="impact-metric-card">
+                                <h2 class="metric-number">[Placeholder]</h2>
+                                <p class="metric-desc">[Placeholder: Impact metric description]</p>
+                            </div>
+                            <div class="impact-metric-card">
+                                <h2 class="metric-number">[Placeholder]</h2>
+                                <p class="metric-desc">[Placeholder: Impact metric description]</p>
+                            </div>
+                        </div>
+                    </section>
+
+                </main> 
+            </div> 
+        </div> 
+    </div> 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const body = document.body;
+            const sidebarLinks = document.querySelectorAll('.cs-local-sidebar a');
+            const observerOptions = {
+                root: null,
+                threshold: 0,
+                rootMargin: "-45% 0px -45% 0px"
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        if (id) {
+                            sidebarLinks.forEach(link => link.classList.remove('active'));
+                            const activeLink = document.querySelector(`.cs-local-sidebar [href="#${id}"]`);
+                            if (activeLink) {
+                                activeLink.classList.add('active');
+                            }
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            sidebarLinks.forEach(link => {
+                const id = link.getAttribute('href').substring(1);
+                const section = document.getElementById(id);
+                if (section) {
+                    observer.observe(section);
+                }
+            });
+        });
+    </script>       
+
+</body>
+</html>
