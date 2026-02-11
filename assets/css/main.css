@@ -801,10 +801,9 @@ body.dark-mode .nav-next:hover { color: #ffffff; }
 
 /* CARD STYLING */
 .prob-card {
-    background-color: #0A0A0A; /* Slightly lighter black for card bg if desired, or keep transparent */
-    border: 1px solid #333333; /* Dark Grey Border */
-    border-radius: 12px;
-    padding: 40px;
+    border: 1px solid #111; /* Dark Grey Border */
+    border-radius: 8px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -827,9 +826,8 @@ body.dark-mode .nav-next:hover { color: #ffffff; }
 
 .pc-title {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: -0.2px;
+    font-size: 20px;
+    font-weight: 500;
     color: #efefec;
 }
 
@@ -845,7 +843,7 @@ body.dark-mode .nav-next:hover { color: #ffffff; }
     font-family: 'Barlow', sans-serif;
     font-size: 12px;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 20px;
 }
 
 .pc-body {
@@ -916,6 +914,11 @@ body.dark-mode .nav-next:hover { color: #ffffff; }
     gap: 48px;
     margin-bottom: 96px;
     align-items: stretch;
+}
+
+.project2-solution .solution-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
 }
 
 /* 1. SINGLE COUNTER LABEL (SOLUTION 01/04) */
