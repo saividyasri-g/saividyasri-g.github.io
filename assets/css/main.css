@@ -4036,3 +4036,15 @@ body.dark-mode .meta-number { color: #666; }
 .project-tbm.dark-mode-active .cs-section {
     background: transparent;
 }
+.project-hmc .cs-content img,
+.project-hmc .cs-content video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.project-hmc .cs-content .cs-hero-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
