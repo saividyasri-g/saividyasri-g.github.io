@@ -1353,6 +1353,10 @@ body.dark-mode .nav-next:hover { color: #ffffff; }
     gap: 32px;
 }
 
+.project-hmc .problem-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 /* CARD STYLING */
 .prob-card {
     border: 1px solid #111; /* Dark Grey Border */
@@ -1402,7 +1406,7 @@ body.dark-mode .nav-next:hover { color: #ffffff; }
 
 .pc-body {
     font-family: 'Barlow', sans-serif;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 400;
     line-height: 1.5;
     color: #7c7c7a;
@@ -1811,7 +1815,6 @@ body.dark-mode .meta-number { color: #666; }
 }
 
 .deep-dive-toptext {
-    max-width: 520px;
     margin-top: 16px;
 }
 
@@ -1991,18 +1994,21 @@ body.dark-mode .meta-number { color: #666; }
 }
 
 .deep-dive-flow-image {
-    width: 100%;
-    max-width: 300px;
-    height: 220px;
+    width: 180px;
+    height: 260px;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: auto;
     display: block;
     border-radius: 12px;
-    margin-bottom: 16px;
-    object-fit: cover;
+    margin-bottom:20px;
+    object-fit: contain;
 }
 
 .deep-dive-zone-meta {
     display: grid;
     gap: 8px;
+    margin-top: 16px;
 }
 
 .flow-badge {
@@ -2109,7 +2115,7 @@ body.dark-mode .meta-number { color: #666; }
 .eco-intro-text {
     grid-column: 2;
     font-family: 'Barlow', sans-serif;
-    font-size: 16px;
+    font-size: 20px;
     line-height: 1.5;
     color: #7C7C7A;
     margin: 0;
@@ -2263,11 +2269,10 @@ body.dark-mode .meta-number { color: #666; }
 }
 .legend-label {
     display: block;
-    font-family: 'Barlow', sans-serif;
-    font-size: 12px;
-    letter-spacing: 1px;
-    color: #999;
-    text-transform: uppercase;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
     margin-bottom: 16px;
 }
 .legend-items {
@@ -2280,7 +2285,7 @@ body.dark-mode .meta-number { color: #666; }
 }
 .actor-item {
     font-family: 'Barlow', sans-serif;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 500;
     color: #111;
     display: flex;
@@ -4047,4 +4052,70 @@ body.dark-mode .meta-number { color: #666; }
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+.project-hmc .solution-grid {
+    align-items: start;
+}
+
+.project-hmc .solution-visual {
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 4 / 3;
+    background: #efefec;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 16px;
+    align-self: start;
+}
+
+.project-hmc .solution-heading {
+    min-height: 64px;
+}
+
+.project-hmc .solution-desc {
+    min-height: 104px;
+}
+
+.project-hmc .solution-col:last-child .solution-visual {
+    max-width: 100%;
+    aspect-ratio: auto;
+    height: auto;
+}
+
+.project-hmc .solution-visual img,
+.project-hmc .solution-visual video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    background: #efefec;
+}
+
+.project-hmc .solution-visual .fit-lottie,
+.project-hmc .solution-visual lottie-player {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.project-hmc .solution-col:last-child .solution-visual img,
+.project-hmc .solution-col:last-child .solution-visual video,
+.project-hmc .solution-col:last-child .solution-visual .fit-lottie,
+.project-hmc .solution-col:last-child .solution-visual lottie-player {
+    width: 100%;
+    height: auto;
+    transform: none;
+}
+.project-hmc .solution-col {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.project-hmc .solution-visual {
+    margin-top: 24px;
+}
+
+.project-hmc .meta-label {
+    margin-bottom: 12px;
 }
