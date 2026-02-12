@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 
-<body class="is-preload single-project">
+<body class="is-preload single-project project-tbm">
 
     <nav class="top-back-nav">
         <a href="index.html" class="nav-brand">
@@ -23,10 +23,10 @@
         <div id="main">
 
             <section class="cs-hero-visual">
-                <img src="images/project2-hero.jpg" alt="Hero Image">
+                <img src="images/project_tbm/tbm-hero.png" alt="Hero Image">
             </section>
 
-            <section class="cs-header container">
+            <section id="overview" class="cs-header container">
                 <div class="cs-title-block">
                     <h1>Home Service Marketplace Platform</h1>
                     <h2 class="cs-subtitle">Increasing conversions of home service professionals in the Builder Market Platform</h2>
@@ -60,148 +60,345 @@
                     <div class="sticky-wrapper">
                         <ul>
                             <li><a href="#overview" class="active">overview</a></li>
-                            <li><a href="#problem-section">problem</a></li>
+                            <li><a href="#problem-framing">problem</a></li>
+                            <li><a href="#design-strategy">ideation</a></li>
                             <li><a href="#solution">solution</a></li>
-                            <li><a href="#impact">impact</a></li>
+                            <li><a href="#next-steps">next steps</a></li>
+                            <li><a href="#reflection">reflection</a></li>
                         </ul>
                     </div>
                 </aside>
 
                 <main class="cs-content">
                     
-                    <section id="overview" class="cs-section">
+                    <section id="overview-section" class="cs-section">
                         <h3>What is Builder Market?</h3>
                         <p class="cs-text-intro">Builder Market is two-sided marketplace that connects homeowners seeking home services with professionals who provide them. 
                             Homeowners can easily find and book trusted professionals for their home improvement needs, while service providers can expand their customer base and grow their businesses through the platform.
                         </p>
                         <div class="overview-image">
-                            <img src="images/project_2/tbm-overview.png" alt="Builder Market platform overview">
+                            <img src="images/project_tbm/tbm-overview.png" alt="Builder Market platform overview">
+                        </div>                                           
+                    </section>
+
+                    <section id="problem-framing" class="cs-section">
+                        <div class="pf-header">
+                            <h3>Problem Framing</h3>
+                            <p class="pf-desc">
+                                As a design intern at an early-stage startup, I proposed structuring my internship around measurable business impact rather than isolated design deliverables.
+                            </p>
                         </div>
 
-                        <div class="impact-section">
-                            <p class="cs-text-intro">
-                                Despite attracting a lot of monthly visitors, the platform faced heavy user bounce rate during onboarding.
-                            </p>
-                            <div class="impact-grid">
-                                <div class="impact-card">
-                                    <div class="icon-box">
-                                        <i class="fa-solid fa-arrow-trend-up"></i>
-                                    </div>
-                                    <p class="impact-text">Daily Monthly Visitors</p>
-                                    <h5 class="impact-tag">Good SEO</h5>
+                        <div class="pf-timeline">
+                            <div class="pf-row pf-row-center">
+                                <div class="pf-center-text">Initial business ask was, “We need a redesign”</div>
+                            </div>
+
+                            <div class="pf-connector" aria-hidden="true"></div>
+
+                            <div class="pf-row pf-row-qa">
+                                <div class="pf-left">
+                                    <p class="pf-label">I asked</p>
+                                    <p class="pf-question">“What is the most pressing business problem right now?”</p>
                                 </div>
-                                <div class="impact-card">
-                                    <div class="icon-box">
-                                        <i class="fa-solid fa-arrow-trend-down"></i>
+                                <div class="pf-right">
+                                    <div class="pf-card">
+                                        <span class="pf-icon"><i class="fa-solid fa-user"></i></span>
+                                        High monthly traffic, but few business listings created by professionals.
                                     </div>
-                                    <p class="impact-text">Drop-off Rate</p>
-                                    <h5 class="impact-tag">INDICATOR: HIGH BOUNCE RATE, LISTING CONVERSION RATE</h5>
+                                    <div class="pf-card">
+                                        <span class="pf-icon"><i class="fa-solid fa-hand-pointer"></i></span>
+                                        Multiple features for professionals, but without business listings, those were rarely used.
+                                    </div>
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
+                        <p class="pf-desc">
+                            <br> <br> Like any marketplace, its success depends on balance: demand from homeowners and supply from professionals. Without enough active professionals, the platform’s value collapses.
+                        </p>
+
+                        <div class="pf-timeline">
+                            <div class="pf-connector" aria-hidden="true"></div>
+
+                            <div class="pf-row pf-row-focus">
+                                <div class="pf-left pf-left-align-left">Reframed the problem to</div>
+                                <div class="pf-right">
+                                    <div class="pf-card">
+                                        <span class="pf-icon"><i class="fa-solid fa-bullseye"></i></span>
+                                        Why are professionals abondoning thr platform before creating business listings? 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="investigating-problem" class="cs-section">
+                        <div class="investigating-header">
+                            <h3 class="eco-title">Investigating the Problem</h3>
+                            <p class="eco-intro-text">
+                                To learn where professionals were disengaging in the onboarding flow, I started with examining website analytics, session recordings and click behavior during the signup flow to identify early friction signals.
+                            </p>
+                        </div>
+
+                        <div class="investigating-grid">
+                            <div class="investigating-left">
+                                <div class="investigating-tags">
+                                    <span class="pc-pill">Heat maps</span>
+                                    <span class="pc-pill">Web Analytics</span>
+                                    <span class="pc-pill">Session recordings</span>
+                                </div>
+                                <p class="investigating-highlight">
+                                    Session recordings showed repeated rage clicks on onboarding overlays. Users were trying to move forward, but the interface was blocking them.
+                                </p>
+                            </div>
+                            <div class="investigating-right">
+                                <video autoplay loop muted playsinline class="investigating-video">
+                                    <source src="images/project_tbm/Marketing Rageclicks.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                        </div>
+
+                        <div class="investigating-findings">
+                            <div class="investigating-tags">
+                                <span class="pc-pill">Heuristic Evaluation</span>
+                                <span class="pc-pill">UX Audit</span>
+                            </div>
+                            <p class="investigating-copy">
+                                With limited funnel tracking for post-login listing creation, I used heuristic evaluation to uncover structural friction within the flow.
+                                Here’s what I found about listing creation flow,
+                            </p>
+                            <div class="investigating-cards">
+                                <div class="investigating-card">
+                                    <span class="finding-label">FINDING #1</span>
+                                    <p class="finding-text">
+                                        Lacked visible progress indicators, making <strong>effort</strong> difficult to estimate.
+                                    </p>
+                                </div>
+                                <div class="investigating-card">
+                                    <span class="finding-label">FINDING #2</span>
+                                    <p class="finding-text">
+                                        Data collection over <strong>value</strong> demonstration
+                                    </p>
+                                </div>
+                                <div class="investigating-card">
+                                    <span class="finding-label">FINDING #3</span>
+                                    <p class="finding-text">
+                                        Marketing communicated value, but the <strong>product did not demonstrate</strong> it during onboarding.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="competitor-analysis" class="cs-section">
+                        <div class="comp-header">
+                            <h3 class="eco-title">Competitor Analysis</h3>
+                            <p class="eco-intro-text">
+                                To contextualize the findings, I analyzed how competitor marketplaces onboard professionals.
+                            </p>
+                        </div>
+
+                        <div class="comp-grid">
+                            <div class="comp-left">
+                                <div class="comp-sticky">
+                                    <p class="comp-intro">I observed that,</p>
+                                    <p class="comp-highlight">
+                                        competitors introduced users to dashboards and management tools early in onboarding, allowing professionals to experience potential value before committing to detailed configuration.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="comp-right">
+                                <div class="comp-card">
+                                    <img class="comp-logo-img" src="images/project_tbm/angilogo.png" alt="Angi">
+                                    <p class="comp-caption">Angi previously “Angie’s List”</p>
+                                </div>
+                                <div class="comp-card">
+                                    <img class="comp-logo-img" src="images/project_tbm/jobberlogo.png" alt="Jobber">
+                                    <p class="comp-caption">Jobber</p>
+                                </div>
+                                <div class="comp-card">
+                                    <img class="comp-logo-img" src="images/project_tbm/houzzprologo.png" alt="Houzz Pro">
+                                    <p class="comp-caption">Houzz Pro</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="design-strategy" class="cs-section">
+                        <div class="strategy-header">
+                            <h3 class="eco-title">Design Strategy</h3>
+                            <p class="eco-intro-text">
+                                Competitor analysis revealed that our onboarding emphasized setup before demonstrating value. This insight led to a reframing of the problem before exploring solutions.
+                            </p>
+                        </div>
+
+                        <div class="strategy-panel">
+                            <div class="strategy-card">
+                                <p class="strategy-label">Design Goals:</p>
+                                <div class="strategy-tags">
+                                    <span class="pc-pill">Incremental commitment</span>
+                                    <span class="pc-pill">Early value demonstration</span>
+                                    <span class="pc-pill">Transparent effort</span>
+                                    <span class="pc-pill">Visible progress</span>
+                                </div>
+                            </div>
+                            <div class="strategy-card strategy-highlight">
+                                <p class="strategy-question">
+                                    How might we <strong>reduce friction in onboarding flow</strong> while helping professionals <strong>experience value earlier</strong> in the journey?
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="concepts-iterations" class="cs-section">
+                        <div class="concepts-header">
+                            <h3 class="eco-title">Concepts, Iterations &amp; Prioritisation</h3>
+                        </div>
+
+                        <div class="concepts-top">
+                            <p class="eco-intro-text concepts-intro">
+                                Wireframes were reviewed collaboratively with engineering and the product owner, focusing on feasibility and business requirements. Input and user flows were refined through these discussions.
+                            </p>
+                            <div class="concepts-visual">
+                                <img src="images/project_tbm/concepts.png" alt="Concepts and iterations overview">
+                            </div>
+                        </div>
+
+                        <div class="concepts-details">
+                            <div class="concepts-row">
+                                <div class="concepts-label">Balancing <br> Technology Constraints</div>
+                                <div class="concepts-text">
+                                    Some UX ideas such as consolidating structured inputs into a single dynamic field conflicted with existing backend search architecture. To preserve data integrity and system reliability, these changes were deprioritized.
+                                </div>
+                            </div>
+                            <div class="concepts-divider" aria-hidden="true"></div>
+                            <div class="concepts-row">
+                                <div class="concepts-label">Prioritizing <br>  High-Impact Friction</div>
+                                <div class="concepts-text">
+                                    <video autoplay loop muted playsinline class="concepts-video">
+                                        <source src="images/project_tbm/Service Scrolling.mp4" type="video/mp4">
+                                    </video>
+                                    I prioritized addressing service selection friction as it was the most significant friction point where users spent extended time scrolling and navigating categories before disengaging. I introduced dynamic search for services to reduce cognitive load and interaction cost where it mattered most.
+                                </div>
+                            </div>
+                        </div>
                     </section>
                     
 
-                    <section id="problem-section" class="problem-dark-mode">
-                        <div class="problem-content-wrapper">
-                            <div class="problem-header-block">
-                                <h3 class="problem-main-title">Identified Challenges</h3>
-                                <p class="problem-main-desc">
-                                    Through research and funnel analysis, we identified a set of challenges that contributed to early drop-off during onboarding.
-                                </p>
-                            </div>
-
-                            <div class="problem-cards-grid">
-                                <div class="prob-card">
-                                    <div class="card-top-info">
-                                        <span class="pc-number-box">1</span>
-                                        <h4 class="pc-title">No early value demonstration</h4>
-                                    </div>
-                                    <p class="pc-body">
-                                        Users were asked to invest significant time completing forms before experiencing any tangible benefit, creating a high-effort, low-reward perception that drove early drop-off.
-                                    </p>
-                                    <div class="pc-tags">
-                                        <span class="pc-pill">Competitor Analysis</span>
-                                    </div>
-                                </div>
-
-                                <div class="prob-card">
-                                    <div class="card-top-info">
-                                        <span class="pc-number-box">2</span>
-                                        <h4 class="pc-title">Unclear progress and time commitment</h4>
-                                    </div>
-                                    <p class="pc-body">
-                                        The absence of clear progress indicators made it difficult for users to gauge how long listing creation would take, creating uncertainty and making the process feel endless.
-                                    </p>
-                                    <div class="pc-tags">
-                                        <span class="pc-pill">Heuristic Analysis</span>
-                                    </div>
-                                </div>
-
-                                <div class="prob-card">
-                                    <div class="card-top-info">
-                                        <span class="pc-number-box">3</span>
-                                        <h4 class="pc-title">Poor visual hierarchy amplified perceived effort</h4>
-                                    </div>
-                                    <p class="pc-body">
-                                        Oversized input fields and dense form layouts exaggerated the perceived length of the process, discouraging users before they even began.
-                                    </p>
-                                    <div class="pc-tags">
-                                        <span class="pc-pill">Heuristic Analysis</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
 
                     <section id="solution" class="cs-section project2-solution">
                         <h3>Solution Overview</h3>
-                        <p class="cs-text-intro">[Placeholder: Summarize the core solution direction and experience improvements.]</p>
-                        <div class="solution-grid">
-                            <div class="solution-col">
-                                <h5 class="meta-label label-before">BEFORE</h5>
-                                <h3 class="solution-heading">Onboarding assumes user commitment before clearly demonstrating value.</h3>
-                                <p class="solution-desc">[Placeholder: What was broken or unclear]</p>
-                            </div>
-                            <div class="solution-col">
-                                <h5 class="meta-label label-after">AFTER</h5>
-                                <h3 class="solution-heading">[Placeholder: New experience 1]</h3>
-                                <p class="solution-desc">[Placeholder: What improved and why it matters]</p>
+                        <div class="solution-pair-block">
+                            <div class="solution-grid">
+                                <div class="solution-col">
+                                    <h5 class="meta-label label-before"><span class="solution-num">1</span>BEFORE</h5>
+                                    <h3 class="solution-heading">High effort, low value</h3>
+                                    <p class="solution-desc">Business listing page emphasized data collection over value discovery—assuming high commitment before earning user confidence.</p>
+                                    <div class="solution-visual">
+                                        <img src="images/project_tbm/solution-before-1.png" alt="Before solution 1">
+                                    </div>
+                                </div>
+                                <div class="solution-col">
+                                    <h5 class="meta-label label-after"><span class="solution-num">1</span>AFTER</h5>
+                                    <h3 class="solution-heading">Shift from effort to value</h3>
+                                    <p class="solution-desc">The redesigned dashboard reframes onboarding around value discovery rather than form completion.</p>
+                                    <div class="solution-visual">
+                                        <img src="images/project_tbm/solution-after-1.png" alt="After solution 1">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="solution-grid">
-                            <div class="solution-col">
-                                <h5 class="meta-label label-before">BEFORE</h5>
-                                <h3 class="solution-heading">[Placeholder: Old experience 2]</h3>
-                                <p class="solution-desc">[Placeholder: What was broken or unclear]</p>
-                            </div>
-                            <div class="solution-col">
-                                <h5 class="meta-label label-after">AFTER</h5>
-                                <h3 class="solution-heading">[Placeholder: New experience 2]</h3>
-                                <p class="solution-desc">[Placeholder: What improved and why it matters]</p>
+                        <div class="solution-pair-block">
+                            <div class="solution-grid">
+                                <div class="solution-col">
+                                    <h5 class="meta-label label-before"><span class="solution-num">2</span>BEFORE</h5>
+                                    <h3 class="solution-heading">Too many decisions too early</h3>
+                                    <p class="solution-desc">Users are asked to fully define their services before understanding the platform’s value or payoff.</p>
+                                    <div class="solution-visual">
+                                        <img src="images/project_tbm/solution-before-2.png" alt="Before solution 2">
+                                    </div>
+                                </div>
+                                <div class="solution-col">
+                                    <h5 class="meta-label label-after"><span class="solution-num">2</span>AFTER</h5>
+                                    <h3 class="solution-heading">Incremental commitment over upfront definition</h3>
+                                    <p class="solution-desc">The redesigned input field aligns user effort with readiness, reducing cognitive load at the highest drop-off point.</p>
+                                    <div class="solution-visual">
+                                        <img src="images/project_tbm/solution-after-2.png" alt="After solution 2">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                     </section>
 
-                    <section id="impact" class="cs-section">
-                        <h5 class="meta-label">PROJECTED IMPACT</h5>
-                        <div class="impact-grid-3">
-                            <div class="impact-metric-card">
-                                <h2 class="metric-number">[Placeholder]</h2>
-                                <p class="metric-desc">[Placeholder: Impact metric description]</p>
+                    <section id="outcome" class="cs-section">
+                        <h3>Outcome</h3>
+                        <p class="cs-text-intro">
+                            The redesigned onboarding structure was finalised and implementation began during my time on the project. While visual refinements continued beyond my internship, the core structural shifts were established.
+                        </p>
+                    </section>
+
+                    <section id="next-steps" class="cs-section">
+                        <h3>Next steps</h3>
+                        <p class="cs-text-intro">
+                            Following implementation, I reviewed session recordings of the production design to evaluate real-world interaction patterns. While the structural improvements reduced major friction points, new interaction inefficiencies surfaced.
+                        </p>
+
+                        <div class="next-steps-grid">
+                            <div class="next-steps-left">
+                                <div class="next-steps-card">
+                                    <span class="next-steps-num">1</span>
+                                    <p>
+                                        The service selection dropdown closed after each selection. The repetitive interaction pattern created visible hesitation and rapid re-click behavior.
+                                    </p>
+                                </div>
+                                <div class="next-steps-card">
+                                    <span class="next-steps-num">2</span>
+                                    <p>
+                                        The search functionality was not immediately discoverable, leading some users to default to scrolling instead of typing.
+                                    </p>
+                                </div>
+                                <div class="next-steps-card">
+                                    <span class="next-steps-num">3</span>
+                                    <p>
+                                        During production refinement, the clear icon and dropdown toggle were positioned adjacent to each other, creating interaction ambiguity and increasing the likelihood of mis-clicks.
+                                    </p>
+                                </div>
                             </div>
-                            <div class="impact-metric-card">
-                                <h2 class="metric-number">[Placeholder]</h2>
-                                <p class="metric-desc">[Placeholder: Impact metric description]</p>
+                            <div class="next-steps-right">
+                                <video autoplay loop muted playsinline class="next-steps-video">
+                                    <source src="images/project_tbm/nextsteps.mp4" type="video/mp4">
+                                </video>
                             </div>
-                            <div class="impact-metric-card">
-                                <h2 class="metric-number">[Placeholder]</h2>
-                                <p class="metric-desc">[Placeholder: Impact metric description]</p>
+                        </div>
+
+                        <p class="cs-text-intro next-steps-note">
+                            I communicated these minor refinements to the team, would further reduce interaction cost and strengthen onboarding momentum.
+                        </p>
+                    </section>
+
+                    <section id="reflection" class="cs-section">
+                        <h3>Reflection</h3>
+                        <div class="reflection-grid">
+                            <div class="reflection-card">
+                                <p>
+                                    Working within startup constraints sharpened my ability to prioritize high-leverage friction points rather than attempting to optimize every interaction. It also highlighted the importance of validating interaction details early.
+                                </p>
+                            </div>
+                            <div class="reflection-card">
+                                <p>
+                                    Proposing structure in startup environments proved essential. It ensured my design decisions connected to measurable outcomes.
+                                </p>
+                            </div>
+                            <div class="reflection-card">
+                                <p>
+                                    If revisiting the project, I would incorporate structured usability testing before implementation to validate interaction efficiency and reduce micro-friction before launch.
+                                </p>
                             </div>
                         </div>
                     </section>
+
 
                 </main> 
             </div> 
@@ -239,6 +436,34 @@
                     observer.observe(section);
                 }
             });
+
+            const darkSections = [
+                document.getElementById('next-steps'),
+                document.getElementById('reflection')
+            ].filter(Boolean);
+
+            if (darkSections.length) {
+                const updateDarkMode = () => {
+                    const anyActive = darkSections.some(section => {
+                        const rect = section.getBoundingClientRect();
+                        return rect.top < window.innerHeight * 0.55 && rect.bottom > window.innerHeight * 0.45;
+                    });
+                    body.classList.toggle('dark-mode-active', anyActive);
+                };
+
+                const darkObserver = new IntersectionObserver(() => {
+                    updateDarkMode();
+                }, {
+                    root: null,
+                    threshold: 0,
+                    rootMargin: "-20% 0px -60% 0px"
+                });
+
+                darkSections.forEach(section => darkObserver.observe(section));
+                window.addEventListener('scroll', updateDarkMode, { passive: true });
+                window.addEventListener('resize', updateDarkMode);
+                updateDarkMode();
+            }
         });
     </script>       
 
