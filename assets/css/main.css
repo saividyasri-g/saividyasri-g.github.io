@@ -3668,6 +3668,10 @@ body.dark-mode .meta-number { color: #666; }
     color: #111; /* Grey title */
 }
 
+.project-hmc .findings-title {
+    margin-bottom: 24px;
+}
+
 .aha-moment {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 18px;
@@ -3836,6 +3840,14 @@ body.dark-mode .meta-number { color: #666; }
 
 .final-card + .final-card {
     border-top: 1px solid #efefec;
+}
+
+.project-hmc .final-card {
+    padding: 48px 64px;
+}
+
+.project-hmc .final-card + .final-card {
+    margin-top: 40px;
 }
 
 /* LAYOUT VARIATIONS */
