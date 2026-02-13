@@ -12,11 +12,11 @@
     <link rel="stylesheet" href="assets/css/main.css?v=1.1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
-<body class="is-preload">
+<body class="is-preload home-page about-active">
 
     <section id="header">
         <header>
-            <span class="avatar"><img src="images/profile.jpg" alt="" /></span>
+            <span class="avatar"><img src="images/about/profile.jpg" alt="" /></span>
             <p id="logo"><a href="#">sai vidyasri giridharan</a></p>
         </header>
         
@@ -40,21 +40,44 @@
 
         <div id="main">
 
-            <section id="about">
-                <div class="container">
-                    <span class="hero-image"><img src="images/profile.jpg" alt="" /></span>                 
-                    <header class="major">
-                        <h3>Hi!</h3>
-                        <h3>I'm Sai Vidyasri Giridharan,<br />
-                        a Product/UX Designer with technical edge</h3>
-                    </header>
-                    
-                    <div class="badges" style="margin: 1.5em 0;">
-                        <span class="pill-highlight pill-grey">4+ years</span>
-                        <span class="pill-highlight pill-grey">20+ projects</span>
+            <section id="about" class="about-hero">
+                <div class="container about-hero-inner">
+                    <div class="about-hero-content">
+                        <div class="about-hero-location">
+                            <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                            <span>San Francisco, CA</span>
+                        </div>
+                        <h1 class="about-hero-title about-hero-animate">
+                            <span class="about-hero-greeting">Hello,</span>
+                            <span class="about-hero-name-wrap">
+                                <span class="about-hero-name" data-text="I’m Sai Vidyasri"></span>
+                                <span class="about-hero-avatar-wrap">
+                                    <img src="images/about/myface.png" alt="Sai Vidyasri" class="about-hero-avatar">
+                                </span>
+                            </span>
+                        </h1>
+                        <p class="about-hero-copy">
+                            I’m a product + ux designer with an <span class="about-hero-underline about-hover" data-hover-image="images/about/engineering.png" data-hover-nobg="true">engineering</span> background.
+                            <br>I love numbers, art, design and bioinformatics.
+                        </p>
+                        <div class="about-hero-stats">
+                            <div class="about-hero-stat">
+                                <img src="images/about/cmubw.png" alt="Carnegie Mellon University" class="about-hero-stat-icon">
+                                <p>graduated from <br>Carnegie Mellon University</p>
+                            </div>
+                            <div class="about-hero-stat">
+                                <h4>5+ years</h4>
+                                <p>designing &amp; building products</p>
+                            </div>
+                            <div class="about-hero-stat">
+                                <h4>21394+</h4>
+                                <p>sketches, cartoons &amp; doodles</p>
+                            </div>
+                        </div>
                     </div>
-
-                    <p>who is very much into the intersections of tech, design, and data.</p>
+                    <div class="about-hover-preview" aria-hidden="true">
+                        <img src="" alt="" class="about-hover-image">
+                    </div>
                 </div>
             </section>
 
@@ -151,12 +174,18 @@
 </script>
 <script>
     {
+        window.addEventListener('load', () => {
         // --- 1. SETUP VARIABLES ---
         const sections = document.querySelectorAll('section');
         const navLi = document.querySelectorAll('#nav ul li a');
         const heroImage = document.querySelector('.hero-image');      
         const sidebarAvatar = document.querySelector('#header .avatar'); 
         const sidebarName = document.querySelector('#header header p');
+        const aboutSection = document.querySelector('#about');
+        const hoverPreview = document.querySelector('.about-hover-preview');
+        const hoverImage = document.querySelector('.about-hover-image');
+        const hoverTargets = document.querySelectorAll('.about-hover');
+        const aboutStats = document.querySelector('.about-hero-stats');
 
         // --- 2. SMOOTH SCROLL FOR NAVIGATION ---
         navLi.forEach(link => {
@@ -214,6 +243,79 @@
 
             avatarObserver.observe(heroImage);
         }
+
+        if (aboutSection) {
+            document.body.classList.add('about-active');
+            const aboutObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    document.body.classList.toggle('about-active', entry.isIntersecting);
+                });
+            }, { threshold: 0.2 });
+            aboutObserver.observe(aboutSection);
+        }
+
+        if (aboutStats) {
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    document.body.classList.toggle('dark-mode', !entry.isIntersecting);
+                });
+            }, { threshold: 0.15 });
+            statsObserver.observe(aboutStats);
+        }
+
+        if (hoverPreview && hoverImage && hoverTargets.length) {
+            hoverTargets.forEach(target => {
+                target.addEventListener('mouseenter', () => {
+                    const src = target.getAttribute('data-hover-image');
+                    if (src) {
+                        hoverImage.src = src;
+                        hoverPreview.classList.add('is-visible');
+                        if (target.hasAttribute('data-hover-nobg')) {
+                            hoverPreview.classList.add('no-bg');
+                        } else {
+                            hoverPreview.classList.remove('no-bg');
+                        }
+                    }
+                });
+                target.addEventListener('mouseleave', () => {
+                    hoverPreview.classList.remove('is-visible');
+                    hoverPreview.classList.remove('no-bg');
+                });
+            });
+        }
+
+        const heroTitle = document.querySelector('.about-hero-animate');
+        const heroName = document.querySelector('.about-hero-name');
+        const heroAvatar = document.querySelector('.about-hero-avatar-wrap');
+        const heroContent = document.querySelector('.about-hero-content');
+        if (heroTitle && heroName && heroAvatar && heroContent) {
+            const fullText = heroName.getAttribute('data-text') || '';
+            let index = 0;
+            heroTitle.classList.add('is-typing');
+            heroName.textContent = '';
+
+            const updateAvatarPos = () => {
+                const offset = heroName.offsetWidth + 8;
+                heroAvatar.style.transform = `translate(${offset}px, -50%)`;
+            };
+
+            const typeNext = () => {
+                if (index <= fullText.length) {
+                    heroName.textContent = fullText.slice(0, index);
+                    updateAvatarPos();
+                    index += 1;
+                    window.setTimeout(typeNext, 70);
+                } else {
+                    heroTitle.classList.remove('is-typing');
+                    heroName.style.borderRight = '0';
+                    updateAvatarPos();
+                    heroContent.classList.add('is-revealed');
+                }
+            };
+
+            window.setTimeout(typeNext, 800);
+        }
+        });
     }
 </script>
 
@@ -232,7 +334,7 @@
             }
         });
     }, {
-        threshold: 0.2, // Trigger when 20% of the section is visible
+        threshold: 0.16, // Trigger when 20% of the section is visible
         rootMargin: "-100px" // Triggers slightly before it hits the very edge
     });
 
