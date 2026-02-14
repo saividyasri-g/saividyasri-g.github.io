@@ -7,6 +7,8 @@
 <head>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <title>Sai Vidyasri - Product/UX Designer</title>
+    <link rel="icon" type="image/svg+xml" href="images/about/logo.svg" />
+    <link rel="icon" type="image/png" href="images/about/logo.png" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css?v=1.1" />
@@ -16,7 +18,7 @@
 
     <section id="header">
         <header>
-            <span class="avatar"><img src="images/about/profile.jpg" alt="" /></span>
+            <span class="avatar"><img src="images/about/logo.svg" alt="" /></span>
             <p id="logo"><a href="#">sai vidyasri giridharan</a></p>
         </header>
         
@@ -50,7 +52,8 @@
                         <h1 class="about-hero-title about-hero-animate">
                             <span class="about-hero-greeting">Hello,</span>
                             <span class="about-hero-name-wrap">
-                                <span class="about-hero-name" data-text="I’m Sai Vidyasri"></span>
+                            <span class="about-hero-name" data-text="I’m Sai Vidyasri"></span>
+                            <span class="about-hero-dot" aria-hidden="true">.</span>
                                 <span class="about-hero-avatar-wrap">
                                     <img src="images/about/myface.png" alt="Sai Vidyasri" class="about-hero-avatar">
                                 </span>
@@ -286,6 +289,7 @@
 
         const heroTitle = document.querySelector('.about-hero-animate');
         const heroName = document.querySelector('.about-hero-name');
+        const heroDot = document.querySelector('.about-hero-dot');
         const heroAvatar = document.querySelector('.about-hero-avatar-wrap');
         const heroContent = document.querySelector('.about-hero-content');
         if (heroTitle && heroName && heroAvatar && heroContent) {
@@ -293,9 +297,12 @@
             let index = 0;
             heroTitle.classList.add('is-typing');
             heroName.textContent = '';
+            if (heroDot) {
+                heroDot.classList.remove('is-visible');
+            }
 
             const updateAvatarPos = () => {
-                const offset = heroName.offsetWidth + 8;
+                const offset = heroName.offsetWidth + 24;
                 heroAvatar.style.transform = `translate(${offset}px, -50%)`;
             };
 
@@ -310,6 +317,9 @@
                     heroName.style.borderRight = '0';
                     updateAvatarPos();
                     heroContent.classList.add('is-revealed');
+                    if (heroDot) {
+                        heroDot.classList.add('is-visible');
+                    }
                 }
             };
 
