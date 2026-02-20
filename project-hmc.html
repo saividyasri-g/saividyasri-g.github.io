@@ -16,7 +16,12 @@
         <a href="index.html" class="nav-brand">
             <img src="images/about/logo.svg" alt="Sai Vidyasri Giridharan" class="nav-avatar">
         </a>
-        <a href="project-tbm.html" class="nav-next">Next Project &rarr;</a>
+        <div class="nav-center">
+            <a href="images/resume.pdf" class="nav-resume" target="_blank" rel="noopener noreferrer">resume</a>
+        </div>
+        <div class="nav-actions">
+            <a href="project-tbm.html" class="nav-next">next project &rarr;</a>
+        </div>
     </nav>
 
     <div id="wrapper">
@@ -125,7 +130,7 @@
                         <div class="problem-content-wrapper">
                             
                             <div class="problem-header-block">
-                                <h3 class="problem-main-title">Identified problem</h3>
+                                <h3 class="problem-main-title">Identified Problem</h3>
                                 <p class="problem-main-desc">
                                     Through a combination of primary and secondary research methods, we identified that root cause of workflow dependencies and late service deliveries,
                                 </p>
@@ -1255,6 +1260,30 @@
             const probSection = document.getElementById('problem-section');
             if (probSection) {
                 observer.observe(probSection);
+            }
+
+            const topNav = document.querySelector('.top-back-nav');
+            if (topNav) {
+                let lastScroll = window.pageYOffset || 0;
+                let ticking = false;
+                const handleScroll = () => {
+                    const current = window.pageYOffset || 0;
+                    if (current <= 0) {
+                        topNav.classList.remove('nav-hidden');
+                    } else if (current > lastScroll && current > 80) {
+                        topNav.classList.add('nav-hidden');
+                    } else {
+                        topNav.classList.remove('nav-hidden');
+                    }
+                    lastScroll = current;
+                    ticking = false;
+                };
+                window.addEventListener('scroll', () => {
+                    if (!ticking) {
+                        window.requestAnimationFrame(handleScroll);
+                        ticking = true;
+                    }
+                }, { passive: true });
             }
         });
     </script>       

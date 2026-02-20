@@ -16,7 +16,12 @@
         <a href="index.html" class="nav-brand">
             <img src="images/about/logo.svg" alt="Sai Vidyasri Giridharan" class="nav-avatar">
         </a>
-        <a href="project-hmc.html" class="nav-next">Prev Project &larr;</a>
+        <div class="nav-center">
+            <a href="images/resume.pdf" class="nav-resume" target="_blank" rel="noopener noreferrer">resume</a>
+        </div>
+        <div class="nav-actions">
+            <a href="project-fid.html" class="nav-next">next project &rarr;</a>
+        </div>
     </nav>
 
     <div id="wrapper">
@@ -125,7 +130,7 @@
                                 <div class="pf-right">
                                     <div class="pf-card">
                                         <span class="pf-icon"><i class="fa-solid fa-bullseye"></i></span>
-                                        Why are professionals abondoning thr platform before creating business listings? 
+                                        Why are professionals abondoning the Builder market platform before creating business listings? 
                                     </div>
                                 </div>
                             </div>
@@ -463,6 +468,30 @@
                 window.addEventListener('scroll', updateDarkMode, { passive: true });
                 window.addEventListener('resize', updateDarkMode);
                 updateDarkMode();
+            }
+
+            const topNav = document.querySelector('.top-back-nav');
+            if (topNav) {
+                let lastScroll = window.pageYOffset || 0;
+                let ticking = false;
+                const handleScroll = () => {
+                    const current = window.pageYOffset || 0;
+                    if (current <= 0) {
+                        topNav.classList.remove('nav-hidden');
+                    } else if (current > lastScroll && current > 80) {
+                        topNav.classList.add('nav-hidden');
+                    } else {
+                        topNav.classList.remove('nav-hidden');
+                    }
+                    lastScroll = current;
+                    ticking = false;
+                };
+                window.addEventListener('scroll', () => {
+                    if (!ticking) {
+                        window.requestAnimationFrame(handleScroll);
+                        ticking = true;
+                    }
+                }, { passive: true });
             }
         });
     </script>       
