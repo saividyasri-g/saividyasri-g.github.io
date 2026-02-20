@@ -315,21 +315,12 @@
 
         sections.forEach((section) => { sectionObserver.observe(section); });
 
-        const firstProjectCard = document.querySelector('#projects .project-card');
-        if (firstProjectCard) {
-            let sidebarVisible = false;
+        const projectsSection = document.querySelector('#projects');
+        if (projectsSection) {
             const updateSidebarVisibility = () => {
-                const rect = firstProjectCard.getBoundingClientRect();
-                const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
-                const ratio = visibleHeight / rect.height;
-
-                if (rect.top > window.innerHeight) {
-                    sidebarVisible = false;
-                } else if (ratio >= 0.8) {
-                    sidebarVisible = true;
-                }
-
-                document.body.classList.toggle('sidebar-visible', sidebarVisible);
+                const triggerPoint = projectsSection.offsetTop - 80;
+                const shouldShow = window.scrollY >= triggerPoint;
+                document.body.classList.toggle('sidebar-visible', shouldShow);
             };
 
             window.addEventListener('scroll', updateSidebarVisibility, { passive: true });
