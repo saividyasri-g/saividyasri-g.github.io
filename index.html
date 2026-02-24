@@ -299,23 +299,34 @@
             });
         });
 
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    const current = entry.target.getAttribute('id');
-                    navLinks.forEach((link) => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href').includes(current)) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
-            });
-        }, { threshold: 0.3 });
-
-        sections.forEach((section) => { sectionObserver.observe(section); });
-
         const projectsSection = document.querySelector('#projects');
+        const experimentsSection = document.querySelector('#experiments');
+
+        const setActiveLink = (targetId) => {
+            navLinks.forEach((link) => {
+                link.classList.toggle('active', link.getAttribute('href') === `#${targetId}`);
+            });
+        };
+
+        const updateActiveNav = () => {
+            const scrollY = window.scrollY || window.pageYOffset;
+            const offset = 160;
+            const experimentsTop = experimentsSection ? experimentsSection.offsetTop - offset : Infinity;
+            const projectsTop = projectsSection ? projectsSection.offsetTop - offset : Infinity;
+
+            if (scrollY >= experimentsTop) {
+                setActiveLink('experiments');
+            } else if (scrollY >= projectsTop) {
+                setActiveLink('projects');
+            } else {
+                navLinks.forEach((link) => link.classList.remove('active'));
+            }
+        };
+
+        window.addEventListener('scroll', updateActiveNav, { passive: true });
+        window.addEventListener('resize', updateActiveNav);
+        updateActiveNav();
+
         if (projectsSection) {
             const updateSidebarVisibility = () => {
                 const triggerPoint = projectsSection.offsetTop - 80;
