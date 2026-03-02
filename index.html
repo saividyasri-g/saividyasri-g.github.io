@@ -21,32 +21,12 @@
             <img src="images/about/logo.svg" alt="Sai Vidyasri logo">
         </a>
         <div class="top-site-links">
+            <a href="index.html#projects" class="active">work</a>
+            <a href="about.html">about</a>
             <a href="images/resume.pdf" target="_blank" rel="noopener noreferrer">resume</a>
         </div>
         <div class="top-site-spacer"></div>
     </nav>
-
-    <section id="header">
-        <header>
-            <span class="avatar"><img src="images/about/logo.svg" alt="" /></span>
-            <p id="logo"><a href="#">sai vidyasri giridharan</a></p>
-        </header>
-        
-        <nav id="nav">
-            <ul>
-                <li><a href="#projects" class="active">work</a></li>
-                <li><a href="#experiments">experiments</a></li>
-            </ul>
-        </nav>
-        
-        <footer>
-            <ul class="icons">
-                <li><a href="https://www.linkedin.com/in/sai-vidyasri-giridharan-a98270146/" class="icon fa-brands fa-linkedin" target="_blank" rel="noopener noreferrer"></a></li>
-                <li><a href="mailto:vidya1997@gmail.com" class="icon fa-solid fa-envelope"></a></li>
-            </ul>
-            <p class="sidebar-connect">Let’s connect.</p>
-        </footer>
-    </section>
 
     <div id="wrapper">
 
@@ -70,21 +50,14 @@
                             </span>
                         </h1>
                         <p class="about-hero-copy">
-                            I’m a product + ux designer with an <span class="about-hero-underline about-hover" data-hover-image="images/about/engineering.png" data-hover-nobg="true">engineering</span> background.
+                            I’m a product + ux designer [5+years] with an <span class="about-hero-underline about-hover" data-hover-image="images/about/engineering.png" data-hover-nobg="true">engineering</span> background.
                             <br>I love numbers, art, design and bioinformatics.
                         </p>
                         <div class="about-hero-stats">
                             <div class="about-hero-stat">
-                                <img src="images/about/cmubw.png" alt="Carnegie Mellon University" class="about-hero-stat-icon">
-                                <p>graduated from <br>Carnegie Mellon University</p>
-                            </div>
-                            <div class="about-hero-stat">
-                                <h4>5+ years</h4>
-                                <p>designing &amp; building products</p>
-                            </div>
-                            <div class="about-hero-stat">
-                                <h4>21394+</h4>
-                                <p>sketches, cartoons &amp; doodles</p>
+                                <img src="images/degree.png" alt="Degree" class="about-hero-stat-icon">
+                                <p>MS Product & Service Innovation | CMU</p>
+                                <p>M.Des Human-centered Design | SMI</p>
                             </div>
                         </div>
                     </div>
@@ -95,7 +68,8 @@
             </section>
 
             <section id="projects">
-                <div class="container">                    
+                <div class="container">
+                    <h2 class="projects-title">Featured Projects<span class="site-footer-dot">.</span></h2>                    
                     <article class="project-card project-card-clickable" data-href="project-hmc.html">
                         <div class="card-image">
                             <lottie-player
@@ -136,7 +110,7 @@
                             </div>
                             <h3>Home Service Marketplace Platform</h3>
                             <p>Increasing conversions of professionals in the Builder Market Platform</p>
-                            <p class="project-meta">Shipped • 2024</p>
+                            <p class="project-meta">Shipped • 2025</p>
                         </div>
                     </article>
 
@@ -166,6 +140,30 @@
                         <div class="card-image">
                             <lottie-player
                             class="play-on-scroll"
+                            src="images/project_ccomp/project_ccomp.json"
+                            background="transparent" 
+                            speed="1" 
+                            style="width: 100%; height: 100%;"  
+                            mode="normal">
+                            </lottie-player>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-tags">
+                                <span class="pill-highlight pill-grey">Gen AI</span>
+                                <span class="pill-highlight pill-grey">Vibe coding</span>
+                                <span class="pill-highlight pill-grey">RAG - LLM</span>
+                            </div>
+                            <h3>Course Compass</h3>
+                            <p>AI Course Recommender System</p>
+                            <p class="project-meta">Concept Design • 2025</p>
+                        </div>
+                        <span class="coming-soon-tooltip">Coming soon</span>
+                    </article>
+
+                    <article class="project-card coming-soon">
+                        <div class="card-image">
+                            <lottie-player
+                            class="play-on-scroll"
                             src="images/project_avis/project2.json"
                             background="transparent" 
                             speed="1" 
@@ -188,41 +186,21 @@
                 </div>
             </section>
 
-            <section id="experiments" class="experiments-section">
-                <div class="container">
-                    <div class="experiments-scroll">
-                        <article class="experiment-card experiment-card-tight experiment-card-soon">
-                            <div class="experiment-media">
-                                <lottie-player
-                                    class="play-on-scroll"
-                                    src="images/exp-coursecompass/exp-card.json"
-                                    background="transparent" 
-                                    speed="1" 
-                                    style="width: 100%; height: 100%;"  
-                                    mode="normal">
-                                </lottie-player>
-                            </div>
-                            <div class="experiment-meta">
-                                <div class="experiment-tags">
-                                    <span class="pill-highlight pill-grey">Vibe coding</span>
-                                    <span class="pill-highlight pill-grey">Gen AI</span>
-                                </div>
-                                <h3>Course Compass</h3>
-                                <p>AI Course Recommender System</p>
-                                <p class="experiment-sub">Concept Design • 2025</p>
-                                
-                            </div>
-                            <span class="experiment-tooltip">Coming soon</span>
-                        </article>
-                    </div>
-                </div>
-            </section>
-
             <section id="footer" class="site-footer">
                 <div class="container">
                     <div class="site-footer-grid">
-                        <p class="site-footer-note">This site is designed &amp; coded by me. <br> Built with AI-assisted development tools (Codex &amp; Claude Pro).</p>
-                        <p class="site-footer-copy">&copy; 2026 Sai Vidyasri Giridharan</p>
+                        <div class="site-footer-connect">
+                            <p class="site-footer-title">Let’s connect<span class="site-footer-dot">.</span></p>
+                            <div class="site-footer-icons">
+                                <a href="https://www.linkedin.com/in/sai-vidyasri-giridharan-a98270146/" target="_blank" rel="noopener noreferrer" class="icon fa-brands fa-linkedin">
+                                </a>
+                                <a href="mailto:vidya1997@gmail.com" class="icon fa-solid fa-envelope">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="site-footer-meta">
+                            <p class="site-footer-note">The site design &amp; content <span class="site-footer-copy">&copy; 2026 Sai Vidyasri Giridharan</span></p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -262,93 +240,7 @@
     });
 </script>
 <script>
-    document.querySelectorAll('.experiment-card-soon').forEach(card => {
-        const tooltip = card.querySelector('.experiment-tooltip');
-        if (!tooltip) return;
-
-        card.addEventListener('mouseenter', () => {
-            tooltip.style.opacity = '1';
-        });
-
-        card.addEventListener('mouseleave', () => {
-            tooltip.style.opacity = '0';
-        });
-
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            tooltip.style.left = `${x}px`;
-            tooltip.style.top = `${y}px`;
-        });
-    });
-</script>
-<script>
     window.addEventListener('load', () => {
-        const sections = document.querySelectorAll('#projects, #experiments');
-        const navLinks = document.querySelectorAll('#nav ul li a');
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href');
-                const targetSection = document.querySelector(targetId);
-                if (targetSection) {
-                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        const projectsSection = document.querySelector('#projects');
-        const experimentsSection = document.querySelector('#experiments');
-
-        const setActiveLink = (targetId) => {
-            navLinks.forEach((link) => {
-                link.classList.toggle('active', link.getAttribute('href') === `#${targetId}`);
-            });
-        };
-
-        const updateActiveNav = () => {
-            const scrollY = window.scrollY || window.pageYOffset;
-            const offset = 160;
-            const experimentsTop = experimentsSection ? experimentsSection.offsetTop - offset : Infinity;
-            const projectsTop = projectsSection ? projectsSection.offsetTop - offset : Infinity;
-
-            if (scrollY >= experimentsTop) {
-                setActiveLink('experiments');
-            } else if (scrollY >= projectsTop) {
-                setActiveLink('projects');
-            } else {
-                navLinks.forEach((link) => link.classList.remove('active'));
-            }
-        };
-
-        window.addEventListener('scroll', updateActiveNav, { passive: true });
-        window.addEventListener('resize', updateActiveNav);
-        updateActiveNav();
-
-        if (projectsSection) {
-            const updateSidebarVisibility = () => {
-                const triggerPoint = projectsSection.offsetTop - 80;
-                const shouldShow = window.scrollY >= triggerPoint;
-                document.body.classList.toggle('sidebar-visible', shouldShow);
-            };
-
-            window.addEventListener('scroll', updateSidebarVisibility, { passive: true });
-            window.addEventListener('resize', updateSidebarVisibility);
-            updateSidebarVisibility();
-        }
-
-        const footerSection = document.querySelector('#footer');
-        if (footerSection) {
-            const footerObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    document.body.classList.toggle('footer-visible', entry.isIntersecting);
-                });
-            }, { threshold: 0.3, rootMargin: "-10% 0px -40% 0px" });
-            footerObserver.observe(footerSection);
-        }
-
         const topNav = document.querySelector('.top-site-nav');
         if (topNav) {
             let lastScroll = window.pageYOffset || 0;

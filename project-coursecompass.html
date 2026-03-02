@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Compass - Case Study</title>
+    <link rel="icon" type="image/svg+xml" href="images/about/logo.svg" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" /> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+
+<body class="is-preload single-project project-coursecompass">
+
+    <nav class="top-back-nav">
+        <a href="index.html" class="nav-brand">
+            <img src="images/about/logo.svg" alt="Sai Vidyasri Giridharan" class="nav-avatar">
+        </a>
+        <div class="nav-center">
+            <a href="index.html#projects" class="nav-link">work</a>
+            <a href="about.html" class="nav-link">about</a>
+            <a href="images/resume.pdf" class="nav-resume" target="_blank" rel="noopener noreferrer">resume</a>
+        </div>
+        <div class="nav-actions">
+            <a href="project-hmc.html" class="nav-next">next project &rarr;</a>
+        </div>
+    </nav>
+
+    <div id="wrapper">
+        <div id="main">
+
+            <section class="cs-hero-visual">
+                <lottie-player 
+                    src="images/exp-coursecompass/exp-card.json" 
+                    background="transparent" 
+                    speed="1" 
+                    style="width: 100%; height: 100%;" 
+                    mode="normal">
+                </lottie-player>
+            </section>
+
+            <section class="cs-header container">
+                <div class="cs-title-block">
+                    <h1>Course Compass</h1>
+                    <h2 class="cs-subtitle">An AI‑assisted course discovery concept that helps students identify relevant paths based on goals, constraints, and prior knowledge.</h2>
+                </div>
+                <div class="cs-meta-block">
+                    <div class="meta-group">
+                        <h5>My Role</h5>
+                        <p>User Researcher, Product Thinker/Designer</p>
+                    </div>
+                    <div class="meta-group">
+                        <h5>Worked with</h5>
+                        <p>Maitreyi Agarwal</p>
+                    </div>
+                    <div class="meta-group">
+                        <h5>Duration</h5>
+                        <p>2025</p>
+                    </div>
+                    <div class="meta-group">
+                        <h5>Tools</h5>
+                        <p>Gen AI, Vibe coding, RAG - LLM</p>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="cs-divider">
+
+            <div class="cs-body-layout container">
+                <aside class="cs-local-sidebar">
+                    <div class="sticky-wrapper">
+                        <ul>
+                            <li><a href="#overview" class="active">overview</a></li>
+                            <li><a href="#problem">problem</a></li>
+                            <li><a href="#solution">solution</a></li>
+                            <li><a href="#nextsteps">next steps</a></li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <main class="cs-content">
+                    <section id="overview" class="cs-section">
+                        <h3>Background</h3>
+                        <p class="cs-text-intro">Carnegie Mellon University offers a massive catalog of 8,000+ courses across undergraduate and graduate programs. <br> This abundance while it is empowering, it also creates significant cognitive overload during course selection. With limited guidance to navigate the course selection process, students fall into the trap of 'unawareness', missing the very opportunities they came here to find.</p>
+
+                        <div class="course-background-media">
+                            <div class="course-mac-frame">
+                                <div class="course-mac-topbar">
+                                    <span></span><span></span><span></span>
+                                </div>
+                                <div class="course-mac-screen">
+                                    <video src="images/project_ccomp/old.mp4" muted autoplay loop playsinline></video>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-selection-block">
+                            <h4 class="course-selection-title">Course Selection Process</h4>
+                            <div class="course-selection-copy">
+                                <p>The current tool allows students to narrow their course options using filters such as credits, course duration, keywords. </p>
+                            </div>
+                            <div class="course-selection-media">
+                                <video src="images/project_ccomp/oldcourse1.mp4" muted autoplay loop playsinline></video>
+                            </div>
+                            <div class="course-selection-copy">
+                            <p>While these filters help with logistics, it doesn’t really help the students with decision-making.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="problem" class="cs-section">
+                        <h3>Identified Problem</h3>
+                        <p class="course-identified-intro">Through interviews with students, program advisors, and educators, we explored how course decisions are actually made and <span class="text-highlight">where the friction lies</span>.</p>
+                        <div class="course-identified-block">
+                            <div class="course-identified-cards">
+                                <div class="course-identified-card">
+                                    <span class="course-identified-num">1</span>
+                                    <h5>Decision-making is socially distributed</h5>
+                                    <p>Course selection is heavily influenced by student's network. The trust flows through peers (seniors, alumni) who’ve had taken the course. Hence, students without strong networks are disproportionately disadvantaged.</p>
+                                </div>
+
+                                <div class="course-identified-card">
+                                    <span class="course-identified-num">2</span>
+                                    <h5>Students seek trajectory and not just enrolment.</h5>
+                                    <p>We learnt from program advisors that students make decisions following two behavioural models - Exploratory and Strategic. Exploratory students experiment with electives to discover interests.  Strategic students intentionally target towards a skill, role or industry.</p>
+                                </div>
+
+                                <div class="course-identified-card">
+                                    <span class="course-identified-num">3</span>
+                                    <h5>Academic advisors capacity is structurally limited.</h5>
+                                    <p>Academic or program advisors manage about 300 students. This limits their bandwidth to provide personalized trajectory planning to students at scale.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-problem-statement">
+                            <h3 class="cs-section">Problem Statement</h3>
+                            <div class="course-problem-panel">
+                                <div class="course-problem-question">
+                                    <p>How might we design an AI course recommendation system that supports both exploratory and trajectory-driven students while earning trust, promoting equity, and delivering reliable guidance?</p>
+                                </div>
+
+                                <div class="course-problem-divider"></div>
+
+                                <div class="course-problem-grid">
+                                    <div class="course-problem-card">
+                                        <div class="course-problem-card-header">
+                                            <img src="images/project_ccomp/trust.png" alt="Trust icon">
+                                            <span>Trust</span>
+                                        </div>
+                                        <div class="course-problem-copy">
+                                            <p>Students rely on peers and alumni recommendations because they look for credibility and relevance.</p>
+                                        </div>
+                                        <div class="course-problem-feature">
+                                            <span>FEATURE</span>
+                                            <strong>Explainable recommendations</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="course-problem-card">
+                                        <div class="course-problem-card-header">
+                                            <img src="images/project_ccomp/equity.png" alt="Equity icon">
+                                            <span>Equity</span>
+                                        </div>
+                                        <div class="course-problem-copy">
+                                            <p>The recommendations must not perpetuate the existing bias by just promoting the most-enrolled courses. </p>
+                                        </div>
+                                        <div class="course-problem-feature">
+                                            <span>FEATURE</span>
+                                            <strong>Algorithm-level equity</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="course-problem-card">
+                                        <div class="course-problem-card-header">
+                                            <img src="images/project_ccomp/reliable.png" alt="Reliability icon">
+                                            <span>Reliability</span>
+                                        </div>
+                                        <div class="course-problem-copy">
+                                            <p>The recommendations should reflect students' intent and real constraints (prerequisites, workload, timing).</p>
+                                        </div>
+                                        <div class="course-problem-feature">
+                                            <span>FEATURE</span>
+                                            <strong>Intent + Constraints‑aware logic</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="solution" class="cs-section">
+                        <h3>Introducing Course Compass</h3>
+                        <p class="cs-text-intro">The experience centers on a short diagnostic flow and a ranked, explainable recommendation list.</p>
+                    </section>
+
+                    <section id="nextsteps" class="cs-section">
+                        <h3>Next Steps</h3>
+                        <p class="cs-text-intro">Documentation in progress. More details will be added as the concept evolves.</p>
+                    </section>
+                </main>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
