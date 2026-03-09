@@ -2937,7 +2937,6 @@ body.project-hmc.dark-mode-active .nav-resume.active {
     color: #efefec;
 }
 
-body.project-hmc.dark-mode-active .nav-dot,
 body.project-hmc.dark-mode-active .nav-project-label,
 body.project-hmc.dark-mode-active .nav-arrow-prev,
 body.project-hmc.dark-mode-active .nav-arrow-next {
@@ -2998,7 +2997,7 @@ body.single-project #header { display: none; }
 .nav-left {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 40px;
     min-width: 0;
 }
 
@@ -3042,12 +3041,6 @@ body.single-project #header { display: none; }
 .nav-brand:hover .scan-track,
 .nav-brand.clicked .scan-track {
     animation: logo-scan-hover 1.2s linear infinite;
-}
-
-.nav-dot {
-    color: rgba(124, 124, 122, 0.52);
-    font-size: 18px;
-    line-height: 1;
 }
 
 .nav-center {
@@ -3147,10 +3140,6 @@ body.single-project #header { display: none; }
     .nav-brand {
         width: 34px;
         height: 34px;
-    }
-
-    .nav-dot {
-        display: none;
     }
 
     .nav-center {
