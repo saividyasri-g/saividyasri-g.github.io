@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volumetric Hologram</title>
+<link rel="stylesheet" href="hologramtest.css">
+</head>
+<body>
+
+<!-- Upload screen hidden — auto-loads from hologram.webm -->
+<div id="upload-screen" style="display:none"></div>
+
+<div id="scene">
+  <div id="avatar-wrapper">
+
+    <!-- Face -->
+    <div id="face-section">
+      <div id="face-halftone"></div>
+      <div id="face-pivot">
+        <div id="head-stack" class="avatar__head"></div>
+      </div>
+      <div id="face-tint"></div>
+      <div id="face-scanlines"></div>
+      <div id="face-mask"></div>
+    </div>
+
+    <!-- Emitter trapezoid beam -->
+    <div id="emitter-section">
+      <div id="emitter">
+        <canvas id="emitter-canvas" width="260" height="210"></canvas>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<button id="reset-btn" onclick="doReset()">↩ NEW VIDEO</button>
+
+<script src="hologramtest.js"></script>
+</body>
+</html>

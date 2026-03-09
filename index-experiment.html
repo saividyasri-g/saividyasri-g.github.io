@@ -1,363 +1,1323 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Hanken+Grotesk:wght@900&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
-
 <!DOCTYPE HTML>
 <html>
 <head>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <title>Sai Vidyasri - Product/UX Designer</title>
-    <link rel="icon" type="image/svg+xml" href="images/about/logo.svg" />
-    <link rel="icon" type="image/png" href="images/about/logo.png" />
+    <link rel="icon" type="image/svg+xml" href="images/about/newlogo.svg" />
+    <link rel="icon" type="image/png" href="images/about/newlogo.png" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css?v=1.1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Hanken+Grotesk:wght@900&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <link rel="stylesheet" href="assets/css/main.css?v=20260309p" />
 
-    <!-- Hologram styles (scoped) -->
-    <style>
-      /* ── Hologram host — sits inside .landing-hero-holo ── */
-      .holo-root {
-        width: 100%;
-        height: 100%;
-        position: relative;
-      }
-
-
-  * { margin:0; padding:0; box-sizing:border-box; }
-
-  body {
-    background: #e8e8e8;
-    width:100vw; height:100vh;
-    overflow:hidden;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Courier New', monospace;
-  }
-
-  /* ── Upload ── */
-  #holo-upload-screen {
-    position:fixed; inset:0; background:#e8e8e8;
-    display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    z-index:300; gap:20px;
-  }
-  #holo-upload-screen h1 { color:rgba(40,30,10,0.5); font-size:11px; letter-spacing:6px; text-transform:uppercase; }
-  #drop-zone {
-    width:360px; height:190px;
-    border:1px solid rgba(40,30,10,0.2);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:12px; cursor:pointer; color:rgba(40,30,10,0.35); font-size:10px;
-    letter-spacing:3px; text-align:center; position:relative; transition:all 0.2s;
-    background:rgba(255,255,255,0.2);
-  }
-  #drop-zone:hover, #drop-zone.over { border-color:rgba(40,30,10,0.4); background:rgba(255,255,255,0.3); }
-  #drop-zone .icon { font-size:36px; opacity:0.2; }
-  #file-input { position:absolute; inset:0; opacity:0; cursor:pointer; }
-  #prog-wrap { width:360px; height:1px; background:rgba(40,30,10,0.1); display:none; }
-  #prog-bar  { height:100%; width:0%; background:rgba(40,30,10,0.4); transition:width 0.2s; }
-  #hint { color:rgba(40,30,10,0.25); font-size:8px; letter-spacing:3px; }
-  #err-msg { color:#800; font-size:9px; letter-spacing:2px; display:none; text-align:center; max-width:360px; }
-
-  /* ── Scene ── */
-  #holo-scene {
-    position:relative;
-    width:100vw; height:100vh;
-    display:none;
-  }
-
-  /* ── Avatar wrapper — face + emitter together ── */
-  #holo-avatar-wrapper {
-    position:absolute;
-    width:460px; height:700px;
-    left:50%; top:50%;
-    transform:translate(-50%, -50%);
-    display:flex; flex-direction:column;
-    align-items:center;
-  }
-
-  /* ── Face section ── */
-  #holo-face-section {
-    position:relative;
-    width:460px; height:500px;
-    flex-shrink:0;
-  }
-
-  /* Perspective container for 3D stack */
-  #holo-face-pivot {
-    position:absolute; inset:0;
-    perspective:550px;
-    perspective-origin:50% 42%;
-  }
-
-  #holo-head-stack {
-    position:absolute; inset:0;
-    transform-style:preserve-3d;
-    transform-origin:50% 42%;
-    will-change:transform;
-  }
-
-  .layer {
-    position:absolute; inset:0;
-    transform-style:preserve-3d;
-  }
-
-  .layer video {
-    position:absolute; inset:0;
-    width:100%; height:100%;
-    object-fit:contain;
-    pointer-events:none;
-    display:block;
-    filter: contrast(1.3) brightness(1.1) saturate(1) sepia(0.25) hue-rotate(340deg);
-    mix-blend-mode: multiply;
-  }
-
-  /* Face scanlines */
-  #holo-face-scanlines {
-    position:absolute; inset:0; pointer-events:none; z-index:20;
-    background: repeating-linear-gradient(
-      to bottom,
-      transparent            0px, transparent            3px,
-      rgba(180,180,180,0.55) 3px, rgba(180,180,180,0.55) 4px
-    );
-  }
-
-  /* Face oval mask */
-  #holo-face-mask {
-    position:absolute; inset:-60px;
-    pointer-events:none; z-index:30;
-    background: radial-gradient(
-      ellipse 44% 46% at 50% 44%,
-      transparent            26%,
-      rgba(232,232,232,0.55) 50%,
-      rgba(232,232,232,0.88) 66%,
-      #e8e8e8                80%
-    );
-  }
-
-  /* ── Emitter section — matches reference CSS exactly ── */
-  #holo-emitter-section {
-    position:relative;
-    width:460px; height:180px;
-    flex-shrink:0;
-    margin-top:-20px;
-    display:flex; align-items:flex-start; justify-content:center;
-  }
-
-  #holo-emitter {
-    position:relative;
-    /* Reference: width:100px but we scale up proportionally */
-    width:160px; height:260px;
-    will-change:transform;
-    /* Reference: transform-origin 50% 100% — pivots from BOTTOM */
-    transform-origin: 50% 100%;
-    /* Reference: scaleY(0.65) — squished vertically */
-    transform: scaleY(0.65);
-    /* Reference: transition on transform */
-    transition: transform 0.5s cubic-bezier(0.82, 0.385, 0.215, 1.24);
-
-    /* Reference: clip-path: polygon(0 0, 100% 0, 60% 100%, 40% 100%) */
-    clip-path: polygon(0% 0%, 100% 0%, 60% 100%, 40% 100%);
-
-    /* Reference: background-color = foreground (dark) */
-    background-color: rgba(50, 50, 50, 1);
-
-    /* Reference: border-bottom 3px solid foreground */
-    border-bottom: 3px solid rgba(50, 50, 50, 0.8);
-
-    /* Reference: mask-image: linear-gradient(transparent, rgba(0,0,0,0.85))
-       Mask goes FROM transparent (top) TO visible (bottom)
-       So the top fades in and bottom is solid — inverted from what I had */
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.85) 100%);
-
-    /* Reference: opacity 0.35 — very subtle overall */
-    opacity: 0.35;
-
-    overflow: hidden;
-  }
-
-  /* Canvas for animated scanlines + glitch on top of solid bg */
-  #holo-emitter-canvas {
-    position:absolute; inset:0;
-    width:100%; height:100%;
-    mix-blend-mode: screen;
-  }
-
-  /* HUD */
-  #holo-reset-btn {
-    position:fixed; top:14px; right:14px; z-index:100;
-    background:none; border:1px solid rgba(40,30,10,0.18);
-    color:rgba(40,30,10,0.35); font-family:'Courier New',monospace;
-    font-size:8px; letter-spacing:2px; padding:5px 10px;
-    cursor:pointer; display:none; text-transform:uppercase; transition:all 0.15s;
-  }
-  #holo-reset-btn:hover { border-color:rgba(40,30,10,0.5); color:rgba(40,30,10,0.7); }
-
-
-      /* Override body-level rules from hologram that would leak */
-      .holo-root { overflow: visible; }
-    </style>
 </head>
-<body class="is-preload home-page landing-experiment">
+<body class="is-preload home-page landing-experiment view-home">
 
-    <nav class="top-site-nav">
-        <a href="index-experiment.html" class="top-site-logo">
-            <img src="images/about/logo.svg" alt="Sai Vidyasri logo">
-        </a>
-        <div class="top-site-links">
-            <a href="index-experiment.html#projects" class="active">work</a>
-            <a href="about.html">about</a>
-            <a href="images/resume.pdf" target="_blank" rel="noopener noreferrer">resume</a>
-        </div>
-        <div class="top-site-spacer"></div>
-    </nav>
-
-    <div id="wrapper">
+   
+    <div class="screen-wrap">
+    <div id="wrapper" class="screen">
+        <div class="screen-corner screen-corner--tl"></div>
+        <div class="screen-corner screen-corner--tr"></div>
+        <div class="screen-corner screen-corner--bl"></div>
+        <div class="screen-corner screen-corner--br"></div>
+        <div class="crt-overlay" aria-hidden="true"></div>    
+        <div class="landing-topbar" role="banner">
+                <span class="landing-topbar-icon" aria-hidden="true"></span>
+                <p class="landing-hero-broadcast" aria-live="polite">
+                    <span class="landing-hero-work-title">Selected work from the past few years — built with a lot of care, a few pivots, and good people.</span>
+                    <span class="landing-hero-expt-title">Side frequencies. Experiments, play, and work that exists purely for the love of it.</span>
+                    <span class="landing-hero-about-title">Tuning into the person behind the practice — background, toolkit, the whole thing.</span>
+                    <span class="dropcap">T</span><span class="landing-hero-type landing-hero-type-1"
+                    data-text="ransmitting from a sunny south bay city, you've reached the internet home of">ransmitting from a sunny south bay, you've reached the internet space of</span>
+                    <span class="landing-hero-type landing-hero-type-2"
+                    data-text="product &amp; systems designer, Sai Vidyasri Giridharan.">product &amp; systems designer, Sai Vidyasri Giridharan.</span>
+                </p>
+            </div>
+                <nav class="top-site-nav">
+                <a href="#home" class="top-site-logo logo-wrap" data-view="home" aria-label="Home">
+                    <svg class="logo-svg" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+                        <defs>
+                            <clipPath id="logo-sq-clip">
+                                <rect width="36" height="36" rx="6"></rect>
+                            </clipPath>
+                        </defs>
+                        <g clip-path="url(#logo-sq-clip)">
+                            <rect width="36" height="36" fill="transparent"></rect>
+                            <g class="scan-track">
+                                <line x1="0" y1="-9" x2="36" y2="-9" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="-6" x2="36" y2="-6" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="-3" x2="36" y2="-3" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="0" x2="36" y2="0" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="3" x2="36" y2="3" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="6" x2="36" y2="6" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="9" x2="36" y2="9" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="12" x2="36" y2="12" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="15" x2="36" y2="15" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="18" x2="36" y2="18" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="21" x2="36" y2="21" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="24" x2="36" y2="24" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="27" x2="36" y2="27" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="30" x2="36" y2="30" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="33" x2="36" y2="33" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="36" x2="36" y2="36" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="39" x2="36" y2="39" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="42" x2="36" y2="42" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                                <line x1="0" y1="45" x2="36" y2="45" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+                            </g>
+                        </g>
+                        <text class="logo-text" x="18" y="22" text-anchor="middle" font-family="Barlow,sans-serif" font-size="11" font-weight="700" letter-spacing="0.5" fill="#C504A5">.svg</text>
+                    </svg>
+                </a>
+                <div class="top-site-links">
+                    <a href="#work" data-view="work">work</a>
+                    <a href="#expt" data-view="expt">experiments</a>
+                    <a href="#about" data-view="about">about</a>
+                    <a href="#" data-static="resume">resume</a>
+                </div>
+            </nav>
         <div id="main">
 
             <section id="landing-experiment" class="landing-hero">
                 <div class="container landing-hero-inner">
-                    <p class="landing-hero-broadcast" aria-live="polite">
-                        <span class="landing-hero-type landing-hero-type-1" data-text="Transmitting from a sunny south bay city, San Jose"></span>
-                        <span class="landing-hero-type landing-hero-type-2" data-text="you've reached the internet space of Sai Vidyasri Giridharan."></span>
-                        <span class="landing-hero-cursor" aria-hidden="true"></span>
-                    </p>
-
-                    <div class="landing-hero-holo">
-                        <div class="holo-panel">
-                            <iframe class="holo-embed" src="holographic-avatar.html" title="Holographic avatar"></iframe>
-                        </div>
-                    </div>
-
                     <div class="landing-hero-content">
-                        <div class="landing-hero-copy">
-                            <p class="landing-hero-intro">Hi,</p>
-                            <p>I design end-to-end product solutions to be intuitive and delightful.
-                                Along the way, I like having a good time with the people I build them with.</p>
+                        <div class="landing-hero-card">
+                            <div class="landing-hero-card-left">
+                                <div class="landing-hero-holo">
+                                    <div class="holo-inline" aria-label="Holographic avatar">
+                                        <div id="scene">
+                                            <div id="avatar-wrapper">
+                                                <div id="face-section">
+                                                    <div id="face-pivot">
+                                                        <div id="head-stack"></div>
+                                                    </div>
+                                                    <div id="face-mask"></div>
+                                                </div>
+                                                <div id="emitter-section">
+                                                    <div id="emitter">
+                                                        <canvas id="emitter-canvas" width="260" height="210"></canvas>
+                                                    </div>
+                                                    <div class="emitter-base" aria-hidden="true">
+                                                        <svg width="1129" height="424" viewBox="0 0 1129 424" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <defs>
 
-                            <div class="landing-hero-meta">
-                                <div>
-                                    <p class="landing-meta-label">Previously designed at</p>
-                                    <p>Fidelity Investments,<br>Hero MotorCorp</p>
-                                </div>
-                                <div>
-                                    <p class="landing-meta-label">Graduated with</p>
-                                    <p>Product Service Innovation - CMU<br>M.Des | Human Centered Design</p>
+                                                                <!-- Glow filter for dots -->
+                                                                <filter id="dotGlow" x="-80%" y="-80%" width="260%" height="260%">
+                                                                <feGaussianBlur stdDeviation="4" result="blur"/>
+                                                                <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                                                </filter>
+
+                                                                <!-- Soft outer bloom on whole emitter -->
+                                                                <filter id="areaBloom" x="-20%" y="-60%" width="140%" height="220%">
+                                                                <feGaussianBlur stdDeviation="18"/>
+                                                                </filter>
+
+                                                                <!-- Perspective fade mask: bright center-top, fades to edges & bottom -->
+                                                                <!-- Simulates a surface receding away from viewer -->
+                                                                <radialGradient id="perspectiveMask" cx="50%" cy="35%" r="55%" gradientUnits="objectBoundingBox">
+                                                                <stop offset="0%"   stop-color="white" stop-opacity="1"/>
+                                                                <stop offset="40%"  stop-color="white" stop-opacity="0.85"/>
+                                                                <stop offset="70%"  stop-color="white" stop-opacity="0.45"/>
+                                                                <stop offset="100%" stop-color="white" stop-opacity="0.05"/>
+                                                                </radialGradient>
+                                                                <mask id="halftoneMask">
+                                                                <ellipse cx="575.5" cy="94" rx="245" ry="55" fill="url(#perspectiveMask)"/>
+                                                                </mask>
+
+                                                                <!-- Highlight mask: bright streak near top-center to simulate surface gloss -->
+                                                                <radialGradient id="highlightGrad" cx="50%" cy="25%" r="40%" gradientUnits="objectBoundingBox">
+                                                                <stop offset="0%"   stop-color="white" stop-opacity="0.7"/>
+                                                                <stop offset="100%" stop-color="white" stop-opacity="0"/>
+                                                                </radialGradient>
+
+                                                                <!-- Dot patterns: 3 sizes representing near/mid/far zones -->
+                                                                <!-- Near (center): largest dots -->
+                                                                <pattern id="dotsNear" patternUnits="userSpaceOnUse" width="26" height="16">
+                                                                <circle cx="13" cy="8" r="5.2" fill="#C504A5"/>
+                                                                </pattern>
+                                                                <!-- Mid zone -->
+                                                                <pattern id="dotsMid" patternUnits="userSpaceOnUse" width="24" height="12">
+                                                                <circle cx="12" cy="6" r="3.4" fill="#d030b8"/>
+                                                                </pattern>
+                                                                <!-- Far (edges): smallest, most compressed vertically -->
+                                                                <pattern id="dotsFar" patternUnits="userSpaceOnUse" width="22" height="9">
+                                                                <circle cx="11" cy="4.5" r="2" fill="#e060cc"/>
+                                                                </pattern>
+
+                                                                <clipPath id="emitterClip">
+                                                                <path d="M575.5 39C644.915 39 707.416 46.2243 752.268 57.7246C774.769 63.4941 792.264 70.1994 803.895 77.25C816.125 84.6642 819 90.6196 819 94C819 97.3804 816.125 103.336 803.895 110.75C792.264 117.801 774.769 124.506 752.268 130.275C707.416 141.776 644.915 149 575.5 149C506.085 149 443.584 141.776 398.732 130.275C376.231 124.506 358.736 117.801 347.105 110.75C334.875 103.336 332 97.3804 332 94C332 90.6196 334.875 84.6642 347.105 77.25C358.736 70.1994 376.231 63.4941 398.732 57.7246C443.584 46.2243 506.085 39 575.5 39Z"/>
+                                                                </clipPath>
+
+                                                                <!-- Clip for the near/center zone only -->
+                                                                <clipPath id="nearZoneClip">
+                                                                <ellipse cx="575.5" cy="94" rx="150" ry="30"/>
+                                                                </clipPath>
+
+                                                                <!-- Clip for mid zone (ring between near and far) -->
+                                                                <clipPath id="midZoneClip">
+                                                                <ellipse cx="575.5" cy="94" rx="250" ry="50"/>
+                                                                </clipPath>
+
+                                                                <!-- Perspective shadow gradient: darker at far edges to simulate foreshortening shadow -->
+                                                                <radialGradient id="surfaceShadow" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
+                                                                <stop offset="0%"   stop-color="#ffffff" stop-opacity="0"/>
+                                                                <stop offset="60%"  stop-color="#000000" stop-opacity="0.08"/>
+                                                                <stop offset="100%" stop-color="#000000" stop-opacity="0.28"/>
+                                                                </radialGradient>
+
+                                                            </defs>
+
+                                                            <!-- Base shapes -->
+                                                            <ellipse class="emitter-inner" cx="564.5" cy="255.5" rx="564.5" ry="168.5" fill="#7C7C7A"/>
+                                                            <path d="M213 79.5C213 79.5 245.966 174 571 174C891 174 938.5 83.5 938.5 83.5L1039 211C1039 211 911 342.636 556.5 341.5C202 340.364 95 205 95 205L213 79.5Z" fill="#A1A1A1"/>
+                                                            <ellipse cx="575" cy="94" rx="366" ry="94" fill="#BEBEBE"/>
+
+                                                            <!-- Emitter solid base -->
+                                                            <path d="M575.5 39C644.915 39 707.416 46.2243 752.268 57.7246C774.769 63.4941 792.264 70.1994 803.895 77.25C816.125 84.6642 819 90.6196 819 94C819 97.3804 816.125 103.336 803.895 110.75C792.264 117.801 774.769 124.506 752.268 130.275C707.416 141.776 644.915 149 575.5 149C506.085 149 443.584 141.776 398.732 130.275C376.231 124.506 358.736 117.801 347.105 110.75C334.875 103.336 332 97.3804 332 94C332 90.6196 334.875 84.6642 347.105 77.25C358.736 70.1994 376.231 63.4941 398.732 57.7246C443.584 46.2243 506.085 39 575.5 39Z" fill="#efefec"/>
+
+                                                            <!-- Area bloom -->
+                                                            <path d="M575.5 39C644.915 39 707.416 46.2243 752.268 57.7246C774.769 63.4941 792.264 70.1994 803.895 77.25C816.125 84.6642 819 90.6196 819 94C819 97.3804 816.125 103.336 803.895 110.75C792.264 117.801 774.769 124.506 752.268 130.275C707.416 141.776 644.915 149 575.5 149C506.085 149 443.584 141.776 398.732 130.275C376.231 124.506 358.736 117.801 347.105 110.75C334.875 103.336 332 97.3804 332 94C332 90.6196 334.875 84.6642 347.105 77.25C358.736 70.1994 376.231 63.4941 398.732 57.7246C443.584 46.2243 506.085 39 575.5 39Z" fill="#C504A5" opacity="0.18" filter="url(#areaBloom)"/>
+
+                                                            <!-- Single clean dot layer with perspective fade mask -->
+                                                            <g mask="url(#halftoneMask)">
+                                                                <rect x="0" y="0" width="1129" height="424" fill="url(#dotsMid)" clip-path="url(#emitterClip)"/>
+                                                            </g>
+
+                                                            <!-- Surface perspective shadow: vignette darkening at far edges -->
+                                                            <path d="M575.5 39C644.915 39 707.416 46.2243 752.268 57.7246C774.769 63.4941 792.264 70.1994 803.895 77.25C816.125 84.6642 819 90.6196 819 94C819 97.3804 816.125 103.336 803.895 110.75C792.264 117.801 774.769 124.506 752.268 130.275C707.416 141.776 644.915 149 575.5 149C506.085 149 443.584 141.776 398.732 130.275C376.231 124.506 358.736 117.801 347.105 110.75C334.875 103.336 332 97.3804 332 94C332 90.6196 334.875 84.6642 347.105 77.25C358.736 70.1994 376.231 63.4941 398.732 57.7246C443.584 46.2243 506.085 39 575.5 39Z" fill="url(#surfaceShadow)"/>
+
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="landing-hero-card-right">
+                                <div class="landing-hero-copy">
+                                    <p class="landing-hero-intro">Sai Vidyasri Giridharan <span class="landing-hero-pronouns">(she/her)</span></p>
+                                    <p class="landing-hero-subtitle">Designing for 5+ years</p>
 
-                            <div class="landing-hero-meta landing-hero-meta-secondary">
-                                <div>UX Designer</div>
-                                <div>5+ years</div>
+                                    <div class="landing-hero-meta">
+                                        <div>
+                                            <p class="landing-meta-label">Previously at</p>
+                                            <p class="landing-meta-value">Fidelity Investments</p>
+                                        </div>
+                                        <div>
+                                            <p class="landing-meta-label">Graduated with</p>
+                                            <p class="landing-meta-value">
+                                                <span>MS | Product &amp; Service Innovation @ CMU</span>
+                                                <span>M.Des | Human Centered Design @ SMI, India</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section id="projects">
+            <section id="projects" class="work-panel" aria-hidden="true">
                 <div class="container">
-                    <h2 class="projects-title">Featured Projects<span class="site-footer-dot">.</span></h2>                    
+                    <h2 class="projects-title">Featured Projects<span class="site-footer-dot">.</span></h2>
                     <article class="project-card project-card-clickable" data-href="project-hmc.html">
-                        <div class="card-image">
-                            <lottie-player class="play-on-scroll" src="images/project1.json" background="transparent" speed="1" style="width: 100%; height: 100%;" mode="normal"></lottie-player>
+                        <div class="project-card-meta">
+                            <span class="project-card-index">Project 01 / 04</span>
                         </div>
-                        <div class="card-content">
-                            <div class="card-tags">
-                                <span class="pill-highlight pill-grey">Enterprise Design</span>
-                                <span class="pill-highlight pill-grey">Service Design</span>
+                        <div class="project-card-shell">
+                            <div class="card-image">
+                                <lottie-player
+                                    class="play-on-scroll"
+                                    src="images/project1.json"
+                                    background="transparent"
+                                    speed="1"
+                                    style="width: 100%; height: 100%;"
+                                    mode="normal">
+                                </lottie-player>
                             </div>
-                            <h3>Vehicle Service Management Tool</h3>
-                            <p>Integrating Two-Wheeler Vehicle Service Workflows for Optimal Operations and Faster Delivery</p>
-                            <p class="project-meta"> Shipped • 2023</p>
+                            <div class="card-content">
+                                <p class="project-card-tags-inline">Enterprise Design | Service Design</p>
+                                <h3>Vehicle Service Management Tool</h3>
+                                <p>Integrating Two-Wheeler Vehicle Service Workflows for Optimal Operations and Faster Delivery</p>
+                                <p class="project-card-delivery">Shipped &bull; 2023</p>
+                            </div>
                         </div>
                     </article>
 
                     <article class="project-card project-card-clickable" data-href="project-tbm.html">
-                        <div class="card-image">
-                            <lottie-player class="play-on-scroll" src="images/project_tbm/project-tbm.json" background="transparent" speed="1" style="width: 100%; height: 100%;" mode="normal"></lottie-player>
+                        <div class="project-card-meta">
+                            <span class="project-card-index">Project 02 / 04</span>
                         </div>
-                        <div class="card-content">
-                            <div class="card-tags">
-                                <span class="pill-highlight pill-grey">Growth Design</span>
-                                <span class="pill-highlight pill-grey">B2C</span>
+                        <div class="project-card-shell">
+                            <div class="card-image">
+                                <lottie-player
+                                    class="play-on-scroll"
+                                    src="images/project_tbm/project-tbm.json"
+                                    background="transparent"
+                                    speed="1"
+                                    style="width: 100%; height: 100%;"
+                                    mode="normal">
+                                </lottie-player>
                             </div>
-                            <h3>Home Service Marketplace Platform</h3>
-                            <p>Increasing conversions of professionals in the Builder Market Platform</p>
-                            <p class="project-meta">Shipped • 2025</p>
+                            <div class="card-content">
+                                <p class="project-card-tags-inline">Growth Design | B2C</p>
+                                <h3>Home Service Marketplace Platform</h3>
+                                <p>Increasing conversions of professionals in the Builder Market Platform</p>
+                                <p class="project-card-delivery">Shipped &bull; 2025</p>
+                            </div>
                         </div>
                     </article>
 
                     <article class="project-card project-card-clickable" data-href="project-fid.html">
-                        <div class="card-image">
-                            <lottie-player class="play-on-scroll" src="images/project_fid/project_fid.json" background="transparent" speed="1" style="width: 100%; height: 100%;" mode="normal"></lottie-player>
+                        <div class="project-card-meta">
+                            <span class="project-card-index">Project 03 / 04</span>
                         </div>
-                        <div class="card-content">
-                            <div class="card-tags">
-                                <span class="pill-highlight pill-grey">Enterprise Design</span>
-                                <span class="pill-highlight pill-grey">Usability</span>
+                        <div class="project-card-shell">
+                            <div class="card-image">
+                                <lottie-player
+                                    class="play-on-scroll"
+                                    src="images/project_fid/project_fid.json"
+                                    background="transparent"
+                                    speed="1"
+                                    style="width: 100%; height: 100%;"
+                                    mode="normal">
+                                </lottie-player>
                             </div>
-                            <h3>Supervisory Workstation</h3>
-                            <p>Improving workflow efficiency in a compliance-critical enterprise system</p>
-                            <p class="project-meta">Shipped • 2023</p>
+                            <div class="card-content">
+                                <p class="project-card-tags-inline">Enterprise Design | Usability</p>
+                                <h3>Supervisory Workstation</h3>
+                                <p>Improving workflow efficiency in a compliance-critical enterprise system</p>
+                                <p class="project-card-delivery">Shipped &bull; 2023</p>
+                            </div>
                         </div>
                     </article>
 
                     <article class="project-card coming-soon">
-                        <div class="card-image">
-                            <lottie-player class="play-on-scroll" src="images/project_ccomp/project_ccomp.json" background="transparent" speed="1" style="width: 100%; height: 100%;" mode="normal"></lottie-player>
+                        <div class="project-card-meta">
+                            <span class="project-card-index">Project 04 / 04</span>
                         </div>
-                        <div class="card-content">
-                            <div class="card-tags">
-                                <span class="pill-highlight pill-grey">Gen AI</span>
-                                <span class="pill-highlight pill-grey">Vibe coding</span>
-                                <span class="pill-highlight pill-grey">RAG - LLM</span>
+                        <div class="project-card-shell">
+                            <div class="card-image">
+                                <lottie-player
+                                    class="play-on-scroll"
+                                    src="images/project_ccomp/project_ccomp.json"
+                                    background="transparent"
+                                    speed="1"
+                                    style="width: 100%; height: 100%;"
+                                    mode="normal">
+                                </lottie-player>
                             </div>
-                            <h3>Course Compass</h3>
-                            <p>AI Course Recommender System</p>
-                            <p class="project-meta">Concept Design • 2025</p>
+                            <div class="card-content">
+                                <p class="project-card-tags-inline">Gen AI | Vibe coding | RAG - LLM</p>
+                                <h3>Course Compass</h3>
+                                <p>AI Course Recommender System</p>
+                                <p class="project-card-delivery">Concept &bull; 2025</p>
+                            </div>
                         </div>
                         <span class="coming-soon-tooltip">Coming soon</span>
                     </article>
 
+                    <!-- Hidden for now as requested: last work card.
                     <article class="project-card coming-soon">
-                        <div class="card-image">
-                            <lottie-player class="play-on-scroll" src="images/project_avis/project2.json" background="transparent" speed="1" style="width: 100%; height: 100%;" mode="normal"></lottie-player>
+                        <div class="project-card-meta">
+                            <span class="project-card-index">Project 05/05</span>
                         </div>
-                        <div class="card-content">
-                            <div class="card-tags">
-                                <span class="pill-highlight pill-grey">Responsive Design</span>
-                                <span class="pill-highlight pill-grey">B2C</span>
+                        <div class="project-card-shell">
+                            <div class="card-image">
+                                <lottie-player
+                                    class="play-on-scroll"
+                                    src="images/project_avis/project2.json"
+                                    background="transparent"
+                                    speed="1"
+                                    style="width: 100%; height: 100%;"
+                                    mode="normal">
+                                </lottie-player>
                             </div>
-                            <h3>Car Rental Website</h3>
-                            <p>Empowering Users with Targeted Information to Accelerate Car Rental Bookings</p>
-                            <p class="project-meta">Delivered • 2024</p>
+                            <div class="card-content">
+                                <p class="project-card-tags-inline">Responsive Design | B2C</p>
+                                <h3>Car Rental Website</h3>
+                                <p>Empowering Users with Targeted Information to Accelerate Car Rental Bookings</p>
+                                <p class="project-card-delivery">Delivered &bull; 2024</p>
+                            </div>
                         </div>
                         <span class="coming-soon-tooltip">Coming soon</span>
                     </article>
+                    -->
                 </div>
             </section>
 
-            <section id="footer" class="site-footer">
-                <div class="container">
-                    <div class="site-footer-grid">
-                        <div class="site-footer-connect">
-                            <p class="site-footer-title">Let's connect<span class="site-footer-dot">.</span></p>
-                            <div class="site-footer-icons">
-                                <a href="https://www.linkedin.com/in/sai-vidyasri-giridharan-a98270146/" target="_blank" rel="noopener noreferrer" class="icon fa-brands fa-linkedin"></a>
-                                <a href="mailto:vidya1997@gmail.com" class="icon fa-solid fa-envelope"></a>
+            <section id="experiments-panel" class="experiments-panel" aria-hidden="true">
+                <div class="experiments-list">
+                    <div class="experiments-list-item">
+                        <p class="experiments-list-item-id">Exp - 001</p>
+                        <a class="experiments-list-card" href="hologram-expt/hologramtest.html">
+                            <div class="experiments-list-head">
+                                <span class="experiments-list-tag">Vibe coding | Prototype</span>
+                                <span class="experiments-list-date">Mar 2025</span>
                             </div>
-                        </div>
-                        <div class="site-footer-meta">
-                            <p class="site-footer-note">The site design &amp; content <span class="site-footer-copy">&copy; 2026 Sai Vidyasri Giridharan</span></p>
-                        </div>
+                            <div class="experiments-list-body">
+                                <div class="experiments-list-copy">
+                                    <h3>Hologram Tool</h3>
+                                    <p>Vibe-coded hologram emitter, upload your webm or video file.</p>
+                                </div>
+                                <div class="card-preview" aria-hidden="true">
+                                    <iframe
+                                        data-src="hologram-expt/hologramtest.html"
+                                        scrolling="no"
+                                        tabindex="-1"
+                                        title="Hologram Tool preview"></iframe>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="experiments-list-item">
+                        <p class="experiments-list-item-id">Exp - 002</p>
+                        <a class="experiments-list-card" href="hafltone-expt/halftone.html">
+                            <div class="experiments-list-head">
+                                <span class="experiments-list-tag">Vibe coding | Prototype</span>
+                                <span class="experiments-list-date">Mar 2025</span>
+                            </div>
+                            <div class="experiments-list-body">
+                                <div class="experiments-list-copy">
+                                    <h3>Halftone</h3>
+                                    <p>Vibe-coded halftone renderer, upload your webm or video file.</p>
+                                </div>
+                                <div class="card-preview" aria-hidden="true">
+                                    <iframe
+                                        data-src="hafltone-expt/halftone.html"
+                                        scrolling="no"
+                                        tabindex="-1"
+                                        title="Halftone preview"></iframe>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="experiments-list-item">
+                        <p class="experiments-list-item-id">Exp - 003</p>
+                        <a class="experiments-list-card experiments-list-card-static" href="https://www.instagram.com/imafartisttoo/" target="_blank" rel="noopener noreferrer">
+                            <div class="experiments-list-head">
+                                <span class="experiments-list-tag">Comics</span>
+                                <span class="experiments-list-date">Mar 2025</span>
+                            </div>
+                            <div class="experiments-list-body">
+                                <div class="experiments-list-copy">
+                                    <h3>Is it art?</h3>
+                                    <p>Visual snippets, playful sketches, and side-work fragments.</p>
+                                </div>
+                                <div class="card-preview" aria-hidden="true">
+                                    <iframe
+                                        data-src="https://www.instagram.com/imafartisttoo/embed"
+                                        scrolling="no"
+                                        tabindex="-1"
+                                        title="Is it art preview"></iframe>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </section>
+
+            <section id="about-panel" class="about-panel" aria-hidden="true">
+                <section class="about-page-section about-intro-v2">
+                    <div class="about-intro-v2-layout">
+                        <article class="about-intro-v2-card">
+                            <div class="about-intro-v2-left">
+                                <div class="about-intro-v2-media" id="about-intro-media">
+                                    <div class="about-intro-v2-holo-stage" aria-hidden="true">
+                                        <video id="about-intro-video-holo" class="about-intro-v2-video about-intro-v2-video-main about-intro-v2-video-holo" autoplay muted loop playsinline preload="auto">
+                                            <source src="latestht.webm" type="video/webm">
+                                        </video>
+                                        <video id="about-intro-video" class="about-intro-v2-video about-intro-v2-video-main about-intro-v2-video-real" autoplay muted loop playsinline preload="auto">
+                                            <source src="images/about/hologram.webm" type="video/webm">
+                                        </video>
+                                    </div>
+                                </div>
+                                <div class="about-intro-v2-name-block">
+                                    <p class="about-intro-v2-name">Sai Vidyasri Giridharan <span class="about-intro-v2-name-pronouns">(she/her)</span></p>
+                                </div>
+                                <div class="about-intro-v2-social" aria-label="Social links">
+                                    <a href="https://www.linkedin.com/in/sai-vidyasri-giridharan-a98270146/" target="_blank" rel="noopener noreferrer" class="about-intro-v2-social-link">
+                                        <svg class="about-intro-v2-social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <path fill="currentColor" d="M7 8.5H3.5V20H7V8.5ZM5.25 7A2 2 0 1 0 5.25 3a2 2 0 0 0 0 4ZM20.5 13.6c0-3.4-1.82-5.1-4.25-5.1-1.96 0-2.84 1.08-3.32 1.84V8.5H9.5V20h3.43v-6.2c0-1.64.3-3.24 2.34-3.24 2.01 0 2.04 1.88 2.04 3.35V20h3.19v-6.4Z"/>
+                                        </svg>
+                                        <span>LinkedIn</span>
+                                    </a>
+                                    <a href="mailto:vidya1997@gmail.com" class="about-intro-v2-social-link">
+                                        <svg class="about-intro-v2-social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 6.5h18v11H3zM3 7l9 7 9-7"/>
+                                        </svg>
+                                        <span>Mail</span>
+                                    </a>
+                                    <a href="https://www.instagram.com/imafartisttoo/" target="_blank" rel="noopener noreferrer" class="about-intro-v2-social-link">
+                                        <svg class="about-intro-v2-social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                                            <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                                            <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor"/>
+                                        </svg>
+                                        <span>Instagram</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="about-intro-v2-right">
+                                <h1 class="about-intro-v2-title">Hello! I’m Sai <span class="about-intro-v2-pronunciation">(/sai/ -- rhymes with "hi")</span></h1>
+                                <p class="about-intro-v2-lead">
+                                I design end-to-end product solutions to be intuitive and delightful. Along the way, I like having a good time with the
+                                <span class="about-intro-v2-hover" tabindex="0" data-stack-items="images/about/teamfun1.mp4,images/about/teamfun2.gif,images/about/teamfun3.jpeg,images/about/teamfun4.jpeg">people I build them with.</span>
+                                </p>
+                                <div class="about-intro-v2-copy">
+                                    <p>
+                                        I studied biotechnology &amp; bioinformatics. Before UX design, I was an analyst in pharmaceutical research &amp; development industry where I helped develop a tool called
+                                        <span class="about-intro-v2-hover" tabindex="0" data-preview="images/about/seewise.png">seewise</span>
+                                        to manage and visualise clinical trial data. And that was my window to UX &amp; design.
+                                    </p>
+                                    <p>
+                                        Outside of work, I enjoy exploring new dishes, watching cooking videos, doodling
+                                        comics
+                                        drawing from my childhood,
+                                        <span class="about-intro-v2-hover" tabindex="0" data-book-title="The Contrarian" data-book-author="Max Chafkin" data-book-isbn="9781984878533" data-preview-fallback="images/about/rapid.png">reading</span>,
+                                        and
+                                        occasionally painting.
+                                        I’m learning to grow into adulthood while keeping my inner child alive.
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div id="about-hover-preview" class="about-intro-v2-hover-preview" hidden>
+                        <img id="about-intro-preview" class="about-intro-v2-preview" src="" alt="" hidden>
+                        <video id="about-intro-preview-video" class="about-intro-v2-preview-video" muted autoplay loop playsinline preload="metadata" hidden></video>
+                        <div id="about-intro-caption" class="about-intro-v2-caption" hidden>
+                            <span id="about-intro-caption-text"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="about-arsenal">
+                    <div class="container">
+                        <h2>My toolkit</h2>
+                        <p class="about-arsenal-intro">In addition to my design craft.</p>
+
+                        <div class="about-arsenal-grid">
+                            <article class="arsenal-card">
+                                <div class="arsenal-icon">
+                                    <picture>
+                                        <source srcset="images/about/complexity.svg" type="image/svg+xml">
+                                        <img src="images/about/complexity.png" alt="Translate Complexity">
+                                    </picture>
+                                </div>
+                                <h3>Translate Complexity</h3>
+                                <p>I have a knack for breaking down complex problems into a clear set of knowns and unknowns.</p>
+                            </article>
+
+                            <article class="arsenal-card">
+                                <div class="arsenal-icon">
+                                    <picture>
+                                        <source srcset="images/about/rapid.svg" type="image/svg+xml">
+                                        <img src="images/about/rapid.png" alt="Rapid Iteration">
+                                    </picture>
+                                </div>
+                                <h3>Rapid Iteration</h3>
+                                <p>I believe in exploring and testing ideas early; it’s the most efficient way to find what actually works.</p>
+                            </article>
+
+                            <article class="arsenal-card">
+                                <div class="arsenal-icon">
+                                    <picture>
+                                        <source srcset="images/about/systems.svg" type="image/svg+xml">
+                                        <img src="images/about/system.png" alt="Systems &amp; Product Thinking">
+                                    </picture>
+                                </div>
+                                <h3>Systems &amp; Product Thinking</h3>
+                                <p>I can holistically think about product &amp; business and not just design.</p>
+                            </article>
+
+                            <article class="arsenal-card">
+                                <div class="arsenal-icon">
+                                    <picture>
+                                        <source srcset="images/about/storytelling.svg" type="image/svg+xml">
+                                        <img src="images/about/story.png" alt="Visual Storytelling">
+                                    </picture>
+                                </div>
+                                <h3>Visual Storytelling</h3>
+                                <p>I can transform complex concepts to visually compelling narratives.</p>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="about-ethics">
+                    <div class="container">
+                        <h2>My design ethics &amp; principles</h2>
+                        <p class="about-ethics-intro">As a designer, things I care about in my practice.</p>
+
+                        <div class="about-ethics-grid">
+                            <article class="ethics-card">
+                                <h3>People</h3>
+                                <picture>
+                                    <source srcset="images/about/people.svg" type="image/svg+xml">
+                                    <img src="images/about/people.png" alt="People">
+                                </picture>
+                                <p>Listen and learn from the people you design for and the people you build with.</p>
+                            </article>
+                            <article class="ethics-card ethics-card-large">
+                                <h3>Peripheries</h3>
+                                <picture>
+                                    <source srcset="images/about/peripheries.svg" type="image/svg+xml">
+                                    <img src="images/about/peripheries.png" alt="Peripheries">
+                                </picture>
+                                <p>Design for a better life for all and not just a few.</p>
+                            </article>
+                            <article class="ethics-card">
+                                <h3>Passion</h3>
+                                <picture>
+                                    <source srcset="images/about/passion.svg" type="image/svg+xml">
+                                    <img src="images/about/passion.png" alt="Passion">
+                                </picture>
+                                <p>Be passionate about what you’re solving for and care about the details.</p>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="about-values">
+                    <div class="container">
+                        <h2>Current values</h2>
+                        <p class="about-values-intro">Some values that I’ve consciously built in me through years of learning through reflections &amp; introspections. </p>
+
+                        <div class="about-values-list">
+                            <div class="values-row">
+                                <div class="values-thumb">
+                                    <img src="images/about/value.png" alt="Value">
+                                </div>
+                                <div class="values-copy">
+                                    <h3>Curiosity &amp; strength</h3>
+                                    <p>I ask the questions that have gone unasked for too long. This didn’t come easily; It required me to stop seeking safety in external spaces and instead build my mind to be a safe place for my thoughts.</p>
+                                </div>
+                            </div>
+
+                            <div class="values-row">
+                                <div class="values-thumb">
+                                    <img src="images/about/value.png" alt="Value">
+                                </div>
+                                <div class="values-copy">
+                                    <h3>Experiences &amp; learning</h3>
+                                    <p>I maintain an open mind to learn from diverse stories of past and present. I think stories are great, through them I’m invited to experiences &amp; lessons which I could have never possibly imagined.</p>
+                                </div>
+                            </div>
+
+                            <div class="values-row">
+                                <div class="values-thumb">
+                                    <img src="images/about/value.png" alt="Value">
+                                </div>
+                                <div class="values-copy">
+                                    <h3>Intuitions &amp; taste</h3>
+                                    <p>Intuition is the outcome of reflection and introspection. Taste is a sacred quality of a person. These both qualities are strengths I actively cultivate.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </section>
+
+        </div>
         </div>
     </div>
 
-<!-- ── All original portfolio scripts ── -->
+    <footer class="global-footer" aria-label="Site footer">
+        <div class="global-footer-inner">
+            <div class="global-footer-left">
+                <p class="global-footer-connect">Let’s connect.</p>
+                <a href="https://www.linkedin.com/in/sai-vidyasri-giridharan-a98270146/" target="_blank" rel="noopener noreferrer" class="icon fa-brands fa-linkedin" aria-label="LinkedIn"></a>
+                <a href="mailto:vidya1997@gmail.com" class="icon fa-solid fa-envelope" aria-label="Email"></a>
+            </div>
+            <div class="global-footer-right">
+                <p class="global-footer-note">The site design &amp; content</p>
+                <p class="global-footer-copy">&copy; Sai Vidyasri Giridharan 2026</p>
+            </div>
+        </div>
+    </footer>
+
+<!-- ── Landing experiment scripts ── -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hero = document.querySelector('.landing-hero');
+        if (!hero) return;
+        const broadcast = document.querySelector('.landing-hero-broadcast');
+        const firstLine  = document.querySelector('.landing-hero-type-1');
+        const secondLine = document.querySelector('.landing-hero-type-2');
+        const cursor  = document.querySelector('.landing-hero-cursor');
+        const card    = hero.querySelector('.landing-hero-card');
+        const holo    = hero.querySelector('.landing-hero-holo');
+        const emitterBase = hero.querySelector('.emitter-base');
+        const firstText  = firstLine?.getAttribute('data-text') || '';
+        const secondText = secondLine?.getAttribute('data-text') || '';
+        if (firstLine)  firstLine.textContent  = firstText;
+        if (secondLine) secondLine.textContent = secondText;
+        if (card) {
+            card.classList.remove('is-visible');
+            card.classList.remove('is-copy-visible');
+        }
+        if (cursor) cursor.classList.add('is-hidden');
+        if (emitterBase) {
+            emitterBase.classList.remove('is-visible', 'is-glowing');
+        }
+        window.setTimeout(() => {
+            if (broadcast) broadcast.classList.add('is-visible');
+            if (emitterBase) {
+                emitterBase.classList.add('is-visible');
+                window.setTimeout(() => emitterBase.classList.add('is-glowing'), 160);
+            }
+            document.body.classList.remove('emitter-live');
+            window.setTimeout(() => document.body.classList.add('emitter-live'), 420);
+            window.setTimeout(() => {
+                if (card) card.classList.add('is-visible');
+                if (holo) holo.classList.add('is-emitting');
+            }, 220);
+        }, 40);
+
+        const revealCopy = () => {
+            if (!card || card.classList.contains('is-copy-visible')) return;
+            card.classList.add('is-copy-visible');
+        };
+
+        window.addEventListener('holo-ready', revealCopy);
+        window.setTimeout(revealCopy, 2200);
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sceneEl = document.getElementById('scene');
+        const headStack = document.getElementById('head-stack');
+        const emitter = document.getElementById('emitter');
+        const faceEl = document.getElementById('face-section');
+        const emitterSection = document.getElementById('emitter-section');
+        const emitterCanvas = document.getElementById('emitter-canvas');
+        const card = document.querySelector('.landing-hero-card');
+        if (!sceneEl || !headStack || !emitter || !emitterCanvas || !faceEl) return;
+
+        const N = 8;
+        const EASE = 0.14;
+        const MAX_Y = 20;
+        const MAX_X = 14;
+        const Z_STEP = 28;
+        const OPACITIES = [1.0, 0.7, 0.5, 0.35, 0.25, 0.18, 0.12, 0.08];
+
+        let layerVids = [];
+        let blobUrl = null;
+        let running = false;
+        let rotX = 0, rotY = 0;
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        const notifyReady = () => window.dispatchEvent(new Event('holo-ready'));
+
+        function loadVideo(blob) {
+            cleanup();
+            blobUrl = URL.createObjectURL(blob);
+
+            let launched = false;
+            const facePivot = document.getElementById('face-pivot');
+            const perspective = facePivot
+                ? parseFloat(getComputedStyle(facePivot).perspective) || 550
+                : 550;
+            for (let i = 0; i < N; i++) {
+                const div = document.createElement('div');
+                div.className = 'layer';
+                const z = -i * Z_STEP;
+                const scale = perspective > 0 ? (perspective - z) / perspective : 1;
+                div.style.transform = `translateZ(${z}px) scale(${scale})`;
+
+                const v = document.createElement('video');
+                v.src = blobUrl;
+                v.muted = true;
+                v.loop = true;
+                v.autoplay = true;
+                v.playsInline = true;
+                v.preload = 'auto';
+                v.setAttribute('muted', '');
+                v.setAttribute('autoplay', '');
+                v.setAttribute('playsinline', '');
+                v.setAttribute('webkit-playsinline', '');
+                v.style.opacity = i === 0 ? '1' : String(OPACITIES[i]);
+                v.style.filter = 'none';
+                v.style.mixBlendMode = 'screen';
+
+                div.appendChild(v);
+                headStack.appendChild(div);
+                layerVids.push(v);
+
+                v.addEventListener('canplay', () => { if (!launched) { launched = true; launch(); } }, { once: true });
+                v.addEventListener('loadeddata', () => { if (!launched) { launched = true; launch(); } }, { once: true });
+                v.load();
+            }
+
+            setTimeout(() => { if (!launched) { launched = true; launch(); } }, 5000);
+        }
+
+        function launch() {
+            layerVids.forEach(v => { v.currentTime = 0; v.play().catch(() => {}); });
+            sceneEl.style.display = 'block';
+
+            faceEl.classList.remove('is-revealing', 'is-revealed', 'is-glitching');
+            faceEl.style.opacity = '0';
+            headStack.style.opacity = '0';
+
+            if (emitterSection) emitterSection.classList.add('is-booting');
+            if (!emitterRunning) {
+                emitterRunning = true;
+                requestAnimationFrame(emitterLoop);
+            }
+
+            const revealDuration = 1600;
+            const glitchDuration = 500;
+
+            resetPointerToCenter();
+
+            setTimeout(() => {
+                if (emitterSection) emitterSection.classList.remove('is-booting');
+                faceEl.classList.add('is-revealing');
+                setTimeout(() => {
+                    faceEl.classList.add('is-glitching');
+                    headStack.style.opacity = '1';
+                    running = true;
+                    requestAnimationFrame(tick);
+                    setTimeout(() => {
+                        faceEl.classList.add('is-revealed');
+                        faceEl.classList.remove('is-revealing', 'is-glitching');
+                        faceEl.style.opacity = '1';
+                        headStack.style.opacity = '1';
+                        notifyReady();
+                    }, glitchDuration);
+                }, revealDuration);
+            }, 750);
+        }
+
+        let emitterRunning = false;
+        function emitterLoop() {
+            if (!emitterRunning) return;
+            drawEmitter();
+            requestAnimationFrame(emitterLoop);
+        }
+
+        setInterval(() => {
+            if (!running || !layerVids[0]) return;
+            const t = layerVids[0].currentTime;
+            for (let i = 1; i < N; i++) {
+                const v = layerVids[i];
+                if (v && v.readyState >= 2 && Math.abs(v.currentTime - t) > 0.12) v.currentTime = t;
+            }
+        }, 400);
+
+        let lastGlitch = 0;
+        function glitch(ts) {
+            if (ts - lastGlitch < 2000 + Math.random() * 3000) return;
+            lastGlitch = ts;
+            const picks = [];
+            while (picks.length < 2) {
+                const r = 1 + Math.floor(Math.random() * (N - 1));
+                if (!picks.includes(r)) picks.push(r);
+            }
+            picks.forEach(i => {
+                const v = layerVids[i];
+                if (!v) return;
+                v.style.transform = `translate(${(Math.random() - 0.5) * 28}px,0)`;
+                setTimeout(() => { if (v) v.style.transform = ''; }, 55 + Math.random() * 80);
+            });
+        }
+
+        const updatePointer = (x, y) => { mouseX = x; mouseY = y; };
+        const resetPointerToCenter = () => {
+            const facePivotEl = document.getElementById('face-pivot');
+            if (!facePivotEl) return;
+            const r = facePivotEl.getBoundingClientRect();
+            updatePointer(r.left + r.width * 0.5, r.top + r.height * 0.42);
+        };
+
+        document.addEventListener('mousemove', e => updatePointer(e.clientX, e.clientY), { passive: true });
+        document.addEventListener('touchmove', e => {
+            if (!e.touches[0]) return;
+            updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+        window.addEventListener('resize', () => {
+            resetPointerToCenter();
+            if (typeof syncEmitterSize === 'function') syncEmitterSize();
+        });
+
+        function tick(ts) {
+            if (!running) return;
+            requestAnimationFrame(tick);
+            glitch(ts);
+
+            const facePivotEl = document.getElementById('face-pivot');
+            const r = facePivotEl.getBoundingClientRect();
+            const cx = r.left + r.width * 0.5;
+            const cy = r.top + r.height * 0.42;
+
+            const dx = (mouseX - cx) / (window.innerWidth * 0.44);
+            const dy = (mouseY - cy) / (window.innerHeight * 0.44);
+            const d = Math.sqrt(dx * dx + dy * dy);
+            const k = Math.min(d * 1.4, 1.0);
+
+            const tY = dx * MAX_Y * k;
+            const tX = -dy * MAX_X * k;
+
+            rotX += (tX - rotX) * EASE;
+            rotY += (tY - rotY) * EASE;
+
+            headStack.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+
+            const emitRotate = rotY * 0.1;
+            emitter.style.transform = `rotate(${emitRotate}deg)`;
+        }
+
+        const eCtx = emitterCanvas.getContext('2d');
+        let EW = 150, EH = 220;
+        let elines = [];
+
+        const syncEmitterSize = () => {
+            const rect = emitter.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+            const dpr = window.devicePixelRatio || 1;
+            emitterCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+            emitterCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+            emitterCanvas.style.width = `${rect.width}px`;
+            emitterCanvas.style.height = `${rect.height}px`;
+            eCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            EW = rect.width;
+            EH = rect.height;
+            elines = buildEmitterLines();
+        };
+
+        const NUM_LINES = 40;
+        const buildEmitterLines = () => Array.from({ length: NUM_LINES }, (_, i) => ({
+            y: (i / NUM_LINES) * EH,
+            speed: 0.5 + Math.random() * 1.0,
+            opacity: 0.3 + Math.random() * 0.5,
+            glitchX: 0,
+            glitchTimer: 0,
+            tone: (i % 5 === 0) ? 'yellow' : 'pink',
+        }));
+        syncEmitterSize();
+
+        let emitterTime = 0;
+        function drawEmitter() {
+            emitterTime += 0.016;
+            eCtx.clearRect(0, 0, EW, EH);
+
+            elines.forEach(ln => {
+                ln.y -= ln.speed;
+                if (ln.y < -2) {
+                    ln.y = EH + 2;
+                    ln.speed = 0.5 + Math.random() * 1.0;
+                    ln.opacity = 0.25 + Math.random() * 0.5;
+                    ln.glitchX = 0;
+                    ln.tone = (Math.random() < 0.25) ? 'yellow' : 'pink';
+                }
+
+                if (ln.glitchTimer > 0) {
+                    ln.glitchTimer--;
+                } else if (Math.random() < 0.005) {
+                    ln.glitchX = (Math.random() - 0.5) * 22;
+                    ln.glitchTimer = 2 + Math.floor(Math.random() * 6);
+                } else {
+                    ln.glitchX *= 0.85;
+                }
+
+                const t = ln.y / EH;
+                const lineFade = Math.max(0, 1 - t * 1.1);
+                if (lineFade <= 0.01) return;
+
+                const alpha = ln.opacity * lineFade;
+                const x1 = ln.glitchX;
+                const x2 = EW + ln.glitchX;
+                const grad = eCtx.createLinearGradient(x1, 0, x2, 0);
+
+                if (ln.tone === 'yellow') {
+                    grad.addColorStop(0, `rgba(245,195,118,0)`);
+                    grad.addColorStop(0.18, `rgba(245,195,118,${alpha * 0.7})`);
+                    grad.addColorStop(0.5, `rgba(255,214,138,${alpha})`);
+                    grad.addColorStop(0.82, `rgba(245,195,118,${alpha * 0.7})`);
+                    grad.addColorStop(1, `rgba(245,195,118,0)`);
+                } else {
+                    grad.addColorStop(0, `rgba(211,12,174,0)`);
+                    grad.addColorStop(0.18, `rgba(211,12,174,${alpha * 0.7})`);
+                    grad.addColorStop(0.5, `rgba(236,86,184,${alpha})`);
+                    grad.addColorStop(0.82, `rgba(211,12,174,${alpha * 0.7})`);
+                    grad.addColorStop(1, `rgba(211,12,174,0)`);
+                }
+
+                eCtx.strokeStyle = grad;
+                eCtx.lineWidth = 1;
+                eCtx.beginPath();
+                eCtx.moveTo(x1, ln.y);
+                eCtx.lineTo(x2, ln.y);
+                eCtx.stroke();
+            });
+
+            const pulseY = EH - ((emitterTime * 55) % (EH + 30));
+            const pAlpha = Math.max(0, (pulseY / EH));
+            const pulseGrad = eCtx.createLinearGradient(0, pulseY - 10, 0, pulseY + 10);
+            pulseGrad.addColorStop(0, 'rgba(211,12,174,0)');
+            pulseGrad.addColorStop(0.5, `rgba(236,86,184,${0.22 * pAlpha})`);
+            pulseGrad.addColorStop(1, 'rgba(211,12,174,0)');
+            eCtx.fillStyle = pulseGrad;
+            eCtx.fillRect(0, pulseY - 10, EW, 20);
+        }
+
+        function cleanup() {
+            running = false;
+            layerVids.forEach(v => { try { v.pause(); v.src = ''; v.parentNode && v.parentNode.remove(); } catch (e) {} });
+            layerVids = [];
+            while (headStack.firstChild) headStack.removeChild(headStack.firstChild);
+            if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl = null; }
+            rotX = 0; rotY = 0;
+            headStack.style.transform = '';
+            emitter.style.transform = '';
+            emitterRunning = false;
+            eCtx.clearRect(0, 0, EW, EH);
+        }
+
+        fetch('latestht.webm')
+            .then(r => {
+                if (!r.ok) throw new Error('Could not load latestht.webm');
+                return r.blob();
+            })
+            .then(blob => loadVideo(blob))
+            .catch(err => {
+                console.error('Hologram load error:', err);
+                sceneEl.style.display = 'block';
+                emitterRunning = true;
+                requestAnimationFrame(emitterLoop);
+            });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const body = document.body;
+        const viewLinks = document.querySelectorAll('.top-site-links a[data-view], .top-site-logo[data-view]');
+        const resumeLink = document.querySelector('.top-site-links a[data-static="resume"]');
+        const mainScroller = document.querySelector('#wrapper.screen #main');
+        const workPanel = document.querySelector('.work-panel');
+        const exptPanel = document.querySelector('.experiments-panel');
+        const aboutPanel = document.querySelector('.about-panel');
+        const heroPanel = document.querySelector('.landing-hero');
+        const logo = document.querySelector('.top-site-logo');
+        const resetScrollPosition = () => {
+            if (mainScroller) {
+                mainScroller.scrollTop = 0;
+            }
+            window.scrollTo(0, 0);
+        };
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        const setView = (view, updateHash = true) => {
+            const isWork = view === 'work';
+            const isHome = view === 'home';
+            const isExpt = view === 'expt';
+            const isAbout = view === 'about';
+            body.classList.toggle('view-work', isWork);
+            body.classList.toggle('view-expt', isExpt);
+            body.classList.toggle('view-about', isAbout);
+            body.classList.toggle('view-home', isHome);
+            if (workPanel) workPanel.setAttribute('aria-hidden', String(!isWork));
+            if (exptPanel) exptPanel.setAttribute('aria-hidden', String(!isExpt));
+            if (aboutPanel) aboutPanel.setAttribute('aria-hidden', String(!isAbout));
+            if (heroPanel) heroPanel.setAttribute('aria-hidden', String(!isHome));
+            if (logo) {
+                logo.classList.toggle('is-active', isHome);
+                if (!isHome) {
+                    logo.classList.remove('clicked');
+                }
+            }
+            viewLinks.forEach(link => {
+                if (!link.dataset.view) return;
+                const isActive = link.dataset.view === view;
+                link.classList.toggle('active', isActive);
+                if (isActive) {
+                    link.setAttribute('aria-current', 'page');
+                } else {
+                    link.removeAttribute('aria-current');
+                }
+            });
+            if (updateHash) {
+                const hash = isWork ? '#work' : (isExpt ? '#expt' : (isAbout ? '#about' : ''));
+                if (window.location.hash !== hash) {
+                    history.replaceState(null, '', hash);
+                }
+            }
+            resetScrollPosition();
+        };
+
+        const hash = window.location.hash;
+        const initial = hash.includes('work') ? 'work' : (hash.includes('expt') ? 'expt' : (hash.includes('about') ? 'about' : 'home'));
+        setView(initial, false);
+
+        viewLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const view = link.dataset.view;
+                if (!view) return;
+                e.preventDefault();
+                setView(view);
+            });
+        });
+
+        if (resumeLink) {
+            resumeLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                resetScrollPosition();
+            });
+        }
+    });
+</script>
+<script>
+  document.querySelectorAll('.logo-wrap').forEach(el => {
+    el.addEventListener('click', () => el.classList.toggle('clicked'));
+  });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const media = document.getElementById('about-intro-media');
+        const holoVideo = document.getElementById('about-intro-video-holo');
+        const video = document.getElementById('about-intro-video');
+        const floatPreview = document.getElementById('about-hover-preview');
+        const preview = document.getElementById('about-intro-preview');
+        const previewVideo = document.getElementById('about-intro-preview-video');
+        const caption = document.getElementById('about-intro-caption');
+        const captionText = document.getElementById('about-intro-caption-text');
+        const hoverTargets = document.querySelectorAll('.about-intro-v2-hover');
+        if (!media || !video || !holoVideo || !floatPreview || !preview || !previewVideo || !hoverTargets.length) return;
+
+        let holoRevealStarted = false;
+        let viewObserver = null;
+        let activeTarget = null;
+
+        const triggerHoloReveal = () => {
+            if (holoRevealStarted) return;
+            holoRevealStarted = true;
+            if (viewObserver) {
+                viewObserver.disconnect();
+                viewObserver = null;
+            }
+            window.setTimeout(() => {
+                try {
+                    video.currentTime = holoVideo.currentTime;
+                } catch (e) {}
+                const holoPlay = holoVideo.play();
+                if (holoPlay && typeof holoPlay.catch === 'function') holoPlay.catch(() => {});
+                const realPlay = video.play();
+                if (realPlay && typeof realPlay.catch === 'function') realPlay.catch(() => {});
+                media.classList.add('is-real-video');
+            }, 900);
+        };
+
+        const checkAboutView = () => {
+            if (document.body.classList.contains('view-about')) {
+                triggerHoloReveal();
+            }
+        };
+
+        checkAboutView();
+        viewObserver = new MutationObserver(checkAboutView);
+        viewObserver.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        const buildOpenLibraryCoverUrl = (isbn, size = 'L') => {
+            if (!isbn) return '';
+            return `https://covers.openlibrary.org/b/isbn/${encodeURIComponent(isbn)}-${size}.jpg?default=false`;
+        };
+
+        const isVideoAsset = (src = '') => /\.(mp4|webm|ogg)(\?.*)?$/i.test(src);
+
+        const clearPreviewMedia = () => {
+            preview.hidden = true;
+            preview.removeAttribute('src');
+            preview.alt = '';
+            preview.onerror = null;
+            try {
+                previewVideo.pause();
+                previewVideo.removeAttribute('src');
+                previewVideo.load();
+            } catch (e) {}
+            previewVideo.hidden = true;
+        };
+
+        const updateCaption = (text = '') => {
+            if (!caption || !captionText) return;
+            if (!text) {
+                caption.hidden = true;
+                captionText.textContent = '';
+                return;
+            }
+            captionText.textContent = text;
+            caption.hidden = false;
+        };
+
+        const placeFloatingPreview = (clientX, clientY) => {
+            const rect = floatPreview.getBoundingClientRect();
+            const width = rect.width || (window.innerWidth < 900 ? 170 : 220);
+            const height = rect.height || Math.round(width * 1.32);
+            const pad = 12;
+            let left = clientX + 18;
+            let top = clientY + 18;
+
+            if (left + width > window.innerWidth - pad) {
+                left = clientX - width - 18;
+            }
+            if (top + height > window.innerHeight - pad) {
+                top = window.innerHeight - height - pad;
+            }
+            if (left < pad) left = pad;
+            if (top < pad) top = pad;
+
+            floatPreview.style.transform = `translate3d(${Math.round(left)}px, ${Math.round(top)}px, 0)`;
+        };
+
+        const placePreviewNearTarget = (target) => {
+            if (!target) return;
+            const rect = target.getBoundingClientRect();
+            placeFloatingPreview(rect.right, rect.top + rect.height * 0.5);
+        };
+
+        const getRotatingSource = (target, sources) => {
+            if (!Array.isArray(sources) || !sources.length) return '';
+            const raw = parseInt(target.getAttribute('data-hover-seq-index') || '0', 10);
+            const safeIndex = Number.isFinite(raw)
+                ? ((raw % sources.length) + sources.length) % sources.length
+                : 0;
+            target.setAttribute('data-hover-seq-index', String((safeIndex + 1) % sources.length));
+            return sources[safeIndex];
+        };
+
+        const showPreview = ({
+            target,
+            event,
+            primarySrc,
+            fallbackSrc,
+            label,
+            hoverCaption,
+            isBookPreview = false,
+            sequenceSources = []
+        }) => {
+            const sequenceSrc = getRotatingSource(target, sequenceSources);
+            const src = sequenceSrc || primarySrc || fallbackSrc;
+            if (!src) return;
+
+            activeTarget = target;
+            floatPreview.hidden = false;
+            floatPreview.classList.toggle('is-book-preview', isBookPreview && !isVideoAsset(src));
+
+            clearPreviewMedia();
+
+            if (isVideoAsset(src)) {
+                previewVideo.hidden = false;
+                previewVideo.src = src;
+                const p = previewVideo.play();
+                if (p && typeof p.catch === 'function') p.catch(() => {});
+            } else {
+                preview.hidden = false;
+                preview.alt = label ? `${label} preview` : 'About preview';
+                preview.onerror = null;
+                if (primarySrc && fallbackSrc && primarySrc !== fallbackSrc && src === primarySrc) {
+                    preview.onerror = () => {
+                        preview.onerror = null;
+                        preview.src = fallbackSrc;
+                    };
+                }
+                preview.src = src;
+            }
+
+            updateCaption(hoverCaption || '');
+
+            if (event && typeof event.clientX === 'number' && typeof event.clientY === 'number') {
+                placeFloatingPreview(event.clientX, event.clientY);
+            } else {
+                placePreviewNearTarget(target);
+            }
+        };
+
+        const resetPreview = () => {
+            activeTarget = null;
+            floatPreview.hidden = true;
+            floatPreview.classList.remove('is-book-preview');
+            floatPreview.style.transform = 'translate3d(-9999px, -9999px, 0)';
+            clearPreviewMedia();
+            updateCaption('');
+        };
+
+        hoverTargets.forEach(target => {
+            const directSrc = target.getAttribute('data-preview');
+            const fallback = target.getAttribute('data-preview-fallback');
+            const label = target.textContent.trim();
+            const bookTitle = target.getAttribute('data-book-title');
+            const bookIsbn = target.getAttribute('data-book-isbn');
+            const bookAuthor = target.getAttribute('data-book-author');
+            const stackItemsAttr = target.getAttribute('data-stack-items');
+            const stackSources = stackItemsAttr
+                ? stackItemsAttr.split(',').map(item => item.trim()).filter(Boolean)
+                : [];
+            let hoverCaption = target.getAttribute('data-caption');
+            let src = directSrc;
+
+            if (bookIsbn) {
+                src = buildOpenLibraryCoverUrl(bookIsbn, 'L');
+                if (bookAuthor) {
+                    target.setAttribute('aria-label', `Currently reading ${bookTitle || 'book'} by ${bookAuthor}`);
+                }
+            }
+
+            if (!stackSources.length && !src && !fallback) return;
+
+            const isBookPreview = Boolean(bookIsbn);
+            target.addEventListener('mouseenter', (event) => showPreview({
+                target,
+                event,
+                primarySrc: src,
+                fallbackSrc: fallback,
+                label,
+                hoverCaption,
+                isBookPreview,
+                sequenceSources: stackSources
+            }));
+            target.addEventListener('mousemove', (event) => {
+                if (activeTarget !== target || floatPreview.hidden) return;
+                placeFloatingPreview(event.clientX, event.clientY);
+            });
+            target.addEventListener('focus', () => showPreview({
+                target,
+                primarySrc: src,
+                fallbackSrc: fallback,
+                label,
+                hoverCaption,
+                isBookPreview,
+                sequenceSources: stackSources
+            }));
+            target.addEventListener('mouseleave', resetPreview);
+            target.addEventListener('blur', resetPreview);
+        });
+
+        window.addEventListener('scroll', () => {
+            if (activeTarget && !floatPreview.hidden) {
+                placePreviewNearTarget(activeTarget);
+            }
+        }, { passive: true });
+
+        window.addEventListener('resize', () => {
+            if (activeTarget && !floatPreview.hidden) {
+                placePreviewNearTarget(activeTarget);
+            }
+        });
+    });
+</script>
 <script>
     document.querySelectorAll('.project-card-clickable').forEach(card => {
         card.addEventListener('click', () => {
@@ -370,428 +1330,60 @@
     document.querySelectorAll('.project-card.coming-soon').forEach(card => {
         const tooltip = card.querySelector('.coming-soon-tooltip');
         if (!tooltip) return;
-        card.addEventListener('mouseenter', () => { tooltip.style.opacity = '1'; });
-        card.addEventListener('mouseleave', () => { tooltip.style.opacity = '0'; });
+
+        card.addEventListener('mouseenter', () => {
+            tooltip.style.opacity = '1';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = '0';
+        });
+
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
-            tooltip.style.left = `${e.clientX - rect.left}px`;
-            tooltip.style.top  = `${e.clientY - rect.top}px`;
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            tooltip.style.left = `${x}px`;
+            tooltip.style.top = `${y}px`;
         });
     });
-</script>
-<script>
-    window.addEventListener('load', () => {
-        const topNav = document.querySelector('.top-site-nav');
-        if (!topNav) return;
-        let lastScroll = window.pageYOffset || 0, ticking = false;
-        const handleScroll = () => {
-            const current = window.pageYOffset || 0;
-            if (current <= 0) topNav.classList.remove('nav-hidden');
-            else if (current > lastScroll && current > 80) topNav.classList.add('nav-hidden');
-            else topNav.classList.remove('nav-hidden');
-            lastScroll = current; ticking = false;
-        };
-        window.addEventListener('scroll', () => { if (!ticking) { window.requestAnimationFrame(handleScroll); ticking = true; } }, { passive: true });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const hero = document.querySelector('.landing-hero');
-        if (!hero) return;
-        const broadcast = hero.querySelector('.landing-hero-broadcast');
-        const firstLine  = hero.querySelector('.landing-hero-type-1');
-        const secondLine = hero.querySelector('.landing-hero-type-2');
-        const cursor  = hero.querySelector('.landing-hero-cursor');
-        const content = hero.querySelector('.landing-hero-content');
-        const holo    = hero.querySelector('.landing-hero-holo');
-        const firstText  = firstLine?.getAttribute('data-text') || '';
-        const secondText = secondLine?.getAttribute('data-text') || '';
-        let firstIndex = 0, secondIndex = 0;
-        if (firstLine)  firstLine.textContent  = '';
-        if (secondLine) secondLine.textContent = '';
-        if (content) content.classList.remove('is-revealed');
-        const typeFirst = () => {
-            if (firstLine && firstIndex <= firstText.length) {
-                firstLine.textContent = firstText.slice(0, firstIndex++);
-                window.setTimeout(typeFirst, 32);
-            } else { window.setTimeout(typeSecond, 120); }
-        };
-        const typeSecond = () => {
-            if (secondLine && secondIndex <= secondText.length) {
-                secondLine.textContent = secondText.slice(0, secondIndex++);
-                window.setTimeout(typeSecond, 28);
-            } else {
-                if (cursor) cursor.classList.add('is-hidden');
-                scrollEnabled = true;
-                applyProgress(scrollProgress);
-            }
-        };
-        let scrollEnabled = false, scrollProgress = 0, isTicking = false;
-        const applyProgress = (progress) => {
-            const heroWidth = hero.offsetWidth || 1;
-            const shift = Math.min(380, heroWidth * 0.32) * progress;
-            hero.style.setProperty('--hero-holo-scale', (1.25 - 0.45 * progress).toFixed(3));
-            hero.style.setProperty('--hero-holo-x', `${shift.toFixed(1)}px`);
-            hero.style.setProperty('--hero-text-opacity', progress.toFixed(3));
-            hero.style.setProperty('--hero-text-y', `${Math.max(0, 40 - 40 * progress)}px`);
-            hero.style.setProperty('--hero-text-x', `${(-shift).toFixed(1)}px`);
-        };
-        const updateProgress = (delta) => {
-            scrollProgress = Math.min(Math.max(scrollProgress + delta, 0), 1);
-            applyProgress(scrollProgress);
-        };
-        const onWheel = (event) => {
-            if (!scrollEnabled) return;
-            const atTop = window.scrollY <= hero.offsetTop + 1;
-            if (atTop && (scrollProgress < 1 || event.deltaY < 0)) {
-                event.preventDefault();
-                if (!isTicking) {
-                    window.requestAnimationFrame(() => { updateProgress(event.deltaY / 1200); isTicking = false; });
-                    isTicking = true;
-                }
-                if (scrollProgress >= 1 && event.deltaY > 0) scrollEnabled = false;
-            }
-        };
-        window.addEventListener('wheel', onWheel, { passive: false });
-        window.addEventListener('resize', () => applyProgress(scrollProgress));
-        window.setTimeout(() => {
-            if (holo) holo.classList.add('is-emitting');
-            if (broadcast) broadcast.classList.add('is-visible');
-            typeFirst();
-        }, 40);
-    });
-</script>
-<script>
-    const projectSection = document.querySelector('#projects');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) document.body.classList.add('dark-mode');
-            else document.body.classList.remove('dark-mode');
-        });
-    }, { threshold: 0.16, rootMargin: "-100px" });
-    observer.observe(projectSection);
 </script>
 <script>
     const lottieObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) { entry.target.play(); lottieObserver.unobserve(entry.target); }
+            if (entry.isIntersecting) {
+                entry.target.play();
+                lottieObserver.unobserve(entry.target);
+            }
         });
     }, { threshold: 0.5 });
-    document.querySelectorAll('.play-on-scroll').forEach(player => {
-        player.addEventListener('ready', () => { lottieObserver.observe(player); });
+
+    const lottieElements = document.querySelectorAll('.play-on-scroll');
+    lottieElements.forEach(player => {
+        player.addEventListener('ready', () => {
+            lottieObserver.observe(player);
+        });
     });
 </script>
-
-<!-- ── Hologram script (auto-loads images/head.webm) ── -->
 <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const iframe = entry.target.querySelector('iframe[data-src]');
+          if (iframe) {
+            iframe.src = iframe.dataset.src;
+            observer.unobserve(entry.target);
+          }
+        }
+      });
+    }, { rootMargin: '200px' });
 
-const N      = 8;
-const EASE   = 0.14;
-const MAX_Y  = 38;
-const MAX_X  = 24;
-const Z_STEP = 22;
-const OPACITIES = [1.0, 0.58, 0.40, 0.27, 0.17, 0.10, 0.06, 0.03];
-
-const uploadScr   = document.getElementById('holo-upload-screen');
-const sceneEl     = document.getElementById('holo-scene');
-const headStack   = document.getElementById('holo-head-stack');
-const emitter     = document.getElementById('holo-emitter');
-const fileInput   = document.getElementById('file-input');
-const dropZone    = document.getElementById('drop-zone');
-const progWrap    = document.getElementById('prog-wrap');
-const progBar     = document.getElementById('prog-bar');
-const errMsg      = document.getElementById('err-msg');
-const resetBtn    = document.getElementById('holo-reset-btn');
-
-let layerVids = [], blobUrl = null, running = false;
-let rotX = 0, rotY = 0;
-let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-
-// ── Load video ────────────────────────────────────────────────────────────
-function loadVideo(file) {
-  cleanup();
-  blobUrl = URL.createObjectURL(file);
-
-  let launched = false, readyCnt = 0;
-
-  for (let i = 0; i < N; i++) {
-    const div = document.createElement('div');
-    div.className = 'layer';
-    div.style.transform = `translateZ(${-i * Z_STEP}px)`;
-
-    const v = document.createElement('video');
-    v.src = blobUrl; v.muted = true; v.loop = true;
-    v.playsInline = true; v.preload = 'auto';
-    v.style.opacity = String(OPACITIES[i]);
-    const blurPart = i > 0 ? ` blur(${(i * 0.5).toFixed(1)}px)` : '';
-    v.style.filter = `contrast(1.3) brightness(1.1) saturate(1) sepia(0.25) hue-rotate(340deg)${blurPart}`;
-
-    div.appendChild(v);
-    headStack.appendChild(div);
-    layerVids.push(v);
-
-    v.addEventListener('canplay',    () => { readyCnt++; progBar.style.width = Math.min(90, 10+readyCnt*11)+'%'; if (!launched) { launched=true; launch(); } }, { once:true });
-    v.addEventListener('loadeddata', () => { if (!launched) { launched=true; launch(); } }, { once:true });
-    v.addEventListener('error',      () => {
-      const c=v.error?v.error.code:'?';
-      const m={1:'ABORTED',2:'NETWORK',3:'DECODE ERROR',4:'FORMAT NOT SUPPORTED'};
-      showErr('✗ '+(m[c]||'ERROR')+' — code '+c);
-    }, { once:true });
-    v.load();
-  }
-  setTimeout(() => { if (!launched) { launched=true; launch(); } }, 5000);
-}
-
-function launch() {
-  progBar.style.width = '100%';
-  layerVids.forEach(v => { v.currentTime=0; v.play().catch(()=>{}); });
-  setTimeout(() => {
-    uploadScr.style.display = 'none';
-    sceneEl.style.display   = 'block';
-    // Start with flicker intro before going stable
-    startFlickerIntro(() => {
-      running = true;
-      emitterRunning = true;
-      requestAnimationFrame(tick);
-      requestAnimationFrame(emitterLoop);
+    document.querySelectorAll('.card-preview').forEach(card => {
+      observer.observe(card);
     });
-  }, 150);
-}
-
-// ── Flicker intro — simulates hologram powering on ───────────────────────
-function startFlickerIntro(onComplete) {
-  const stack = document.getElementById('holo-head-stack');
-  const emitterEl = document.getElementById('holo-emitter');
-
-  // Flicker sequence: [opacity, duration_ms]
-  const seq = [
-    [0.0,  60],
-    [0.9,  40],
-    [0.0,  80],
-    [0.6,  30],
-    [0.0,  60],
-    [1.0,  50],
-    [0.0,  40],
-    [0.8,  60],
-    [0.2,  30],
-    [1.0,  40],
-    [0.0,  50],
-    [0.7,  30],
-    [0.0,  40],
-    [1.0,  60],
-    [0.3,  20],
-    [1.0,  80],
-    [0.0,  30],
-    [1.0, 120],  // settle
-  ];
-
-  let i = 0;
-  emitterRunning = true;
-  requestAnimationFrame(emitterLoop); // emitter flickers on too
-
-  function step() {
-    if (i >= seq.length) {
-      stack.style.opacity    = '1';
-      emitterEl.style.opacity = '0.35';
-      onComplete();
-      return;
-    }
-    const [op, dur] = seq[i++];
-    stack.style.opacity     = String(op);
-    emitterEl.style.opacity  = String(op * 0.35);
-    setTimeout(step, dur);
-  }
-  step();
-}
-
-// ── Emitter always-on loop — independent of mouse movement ───────────────
-let emitterRunning = false;
-function emitterLoop() {
-  if (!emitterRunning) return;
-  drawEmitter();
-  requestAnimationFrame(emitterLoop);
-}
-
-function showErr(msg) { errMsg.textContent=msg; errMsg.style.display='block'; progWrap.style.display='none'; }
-
-// ── Sync ──────────────────────────────────────────────────────────────────
-setInterval(() => {
-  if (!running || !layerVids[0]) return;
-  const t = layerVids[0].currentTime;
-  for (let i=1; i<N; i++) {
-    const v=layerVids[i];
-    if (v && v.readyState>=2 && Math.abs(v.currentTime-t)>0.12) v.currentTime=t;
-  }
-}, 400);
-
-// ── Glitch ────────────────────────────────────────────────────────────────
-let lastGlitch = 0;
-function glitch(ts) {
-  if (ts - lastGlitch < 2000 + Math.random()*3000) return;
-  lastGlitch = ts;
-  const picks=[];
-  while (picks.length<2) { const r=1+Math.floor(Math.random()*(N-1)); if (!picks.includes(r)) picks.push(r); }
-  picks.forEach(i => {
-    const v=layerVids[i]; if (!v) return;
-    v.style.transform=`translate(${(Math.random()-.5)*28}px,0)`;
-    setTimeout(()=>{ if(v) v.style.transform=''; }, 55+Math.random()*80);
-  });
-}
-
-// ── Mouse ─────────────────────────────────────────────────────────────────
-document.addEventListener('mousemove', e => { mouseX=e.clientX; mouseY=e.clientY; });
-document.addEventListener('touchmove', e => { mouseX=e.touches[0].clientX; mouseY=e.touches[0].clientY; }, {passive:true});
-
-// ── Tick ──────────────────────────────────────────────────────────────────
-function tick(ts) {
-  if (!running) return;
-  requestAnimationFrame(tick);
-  glitch(ts);
-
-  // Get face center
-  const facePivotEl = document.getElementById('holo-face-pivot');
-  const r  = facePivotEl.getBoundingClientRect();
-  const cx = r.left + r.width  * 0.5;
-  const cy = r.top  + r.height * 0.42;
-
-  const dx = (mouseX - cx) / (window.innerWidth  * 0.44);
-  const dy = (mouseY - cy) / (window.innerHeight * 0.44);
-  const d  = Math.sqrt(dx*dx + dy*dy);
-  const k  = Math.min(d * 1.4, 1.0);
-
-  const tY =  dx * MAX_Y * k;
-  const tX = -dy * MAX_X * k;
-
-  rotX += (tX - rotX) * EASE;
-  rotY += (tY - rotY) * EASE;
-
-  // Rotate the 3D face stack
-  headStack.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-
-  // Emitter: reference uses scaleY(0.65) base + slight rotate from mouse
-  // transform-origin is 50% 100% (bottom) so it tilts from base
-  // We add a small rotate() matching horizontal mouse offset
-  const emitRotate = rotY * 0.06; // subtle tilt — reference shows ~2deg
-  const emitScaleY = 0.65;
-  emitter.style.transform = `scaleY(${emitScaleY}) rotate(${emitRotate}deg)`;
-}
-
-// ── Emitter canvas renderer ───────────────────────────────────────────────
-// Canvas overlays animated scanlines + glitch on top of the solid CSS bg
-const emitterCanvas = document.getElementById('holo-emitter-canvas');
-const eCtx = emitterCanvas.getContext('2d');
-const EW = 160, EH = 260;
-emitterCanvas.width  = EW;
-emitterCanvas.height = EH;
-
-// Scanline state — each line independent speed, opacity, glitch
-const NUM_LINES = 40;
-const elines = Array.from({length: NUM_LINES}, (_, i) => ({
-  y:           (i / NUM_LINES) * EH,
-  speed:       0.5 + Math.random() * 1.0,
-  opacity:     0.3 + Math.random() * 0.5,
-  glitchX:     0,
-  glitchTimer: 0,
-}));
-
-let emitterTime = 0;
-
-function drawEmitter() {
-  emitterTime += 0.016;
-  eCtx.clearRect(0, 0, EW, EH);
-
-  // ── Scanlines: scroll upward (emitting upward toward face) ──
-  elines.forEach(ln => {
-    ln.y -= ln.speed; // move UP — projecting toward the face
-    if (ln.y < -2) {
-      ln.y       = EH + 2;
-      ln.speed   = 0.5 + Math.random() * 1.0;
-      ln.opacity = 0.25 + Math.random() * 0.5;
-      ln.glitchX = 0;
-    }
-
-    // Glitch: random horizontal snap
-    if (ln.glitchTimer > 0) {
-      ln.glitchTimer--;
-    } else if (Math.random() < 0.005) {
-      ln.glitchX     = (Math.random() - 0.5) * 22;
-      ln.glitchTimer = 2 + Math.floor(Math.random() * 6);
-    } else {
-      ln.glitchX *= 0.85; // smooth return
-    }
-
-    // Fade: lines near top (close to face) = more visible
-    // lines near bottom = fade out (matches mask: transparent top → solid bottom
-    // but we want scanlines visible more at top where they project from)
-    const t         = ln.y / EH; // 0=top, 1=bottom
-    const lineFade  = Math.max(0, 1 - t * 1.1); // brighter at top
-    if (lineFade <= 0.01) return;
-
-    const alpha = ln.opacity * lineFade;
-
-    // Full width of canvas (clip-path on parent handles trapezoid shape)
-    const x1 = ln.glitchX;
-    const x2 = EW + ln.glitchX;
-
-    // Horizontal glow — bright center, fade edges
-    const grad = eCtx.createLinearGradient(x1, 0, x2, 0);
-    grad.addColorStop(0,    `rgba(255,245,220,0)`);
-    grad.addColorStop(0.15, `rgba(240,228,195,${alpha * 0.6})`);
-    grad.addColorStop(0.5,  `rgba(255,248,220,${alpha})`);
-    grad.addColorStop(0.85, `rgba(240,228,195,${alpha * 0.6})`);
-    grad.addColorStop(1,    `rgba(255,245,220,0)`);
-
-    eCtx.strokeStyle = grad;
-    eCtx.lineWidth   = 1;
-    eCtx.beginPath();
-    eCtx.moveTo(x1, ln.y);
-    eCtx.lineTo(x2, ln.y);
-    eCtx.stroke();
-  });
-
-  // ── Pulse wave scrolling upward — bright energy band ──
-  const pulseY = EH - ((emitterTime * 55) % (EH + 30));
-  const pAlpha = Math.max(0, (pulseY / EH)); // brighter when higher up
-  const pulseGrad = eCtx.createLinearGradient(0, pulseY - 10, 0, pulseY + 10);
-  pulseGrad.addColorStop(0,   'rgba(255,245,200,0)');
-  pulseGrad.addColorStop(0.5, `rgba(255,248,210,${0.18 * pAlpha})`);
-  pulseGrad.addColorStop(1,   'rgba(255,245,200,0)');
-  eCtx.fillStyle = pulseGrad;
-  eCtx.fillRect(0, pulseY - 10, EW, 20);
-}
-
-// ── Reset ─────────────────────────────────────────────────────────────────────
-function cleanup() {
-  running = false;
-  layerVids.forEach(v => { try { v.pause(); v.src=''; v.parentNode&&v.parentNode.remove(); } catch(e){} });
-  layerVids = [];
-  while (headStack.firstChild) headStack.removeChild(headStack.firstChild);
-  if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl=null; }
-  rotX=rotY=0;
-  headStack.style.transform='';
-  emitter.style.transform='';
-  emitterRunning = false;
-  eCtx.clearRect(0,0,EW,EH);
-}
-
-function doReset() {
-  cleanup();
-  sceneEl.style.display='none'; resetBtn.style.display='none';
-  uploadScr.style.display='flex'; progWrap.style.display='none';
-  progBar.style.width='0%'; errMsg.style.display='none';
-  fileInput.value='';
-}
-
-// Auto-load video from images/head.webm
-fetch('images/hologram.webm')
-  .then(r => {
-    if (!r.ok) throw new Error('Could not load images/hologram.webm');
-    return r.blob();
-  })
-  .then(blob => loadVideo(blob))
-  .catch(err => console.error('Hologram load error:', err));
-
 </script>
+<script src="assets/js/topbar-scroll.js?v=20260309b"></script>
+<script src="assets/js/footer-reveal.js?v=20260309b"></script>
 
 </body>
 </html>

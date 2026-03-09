@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Halftone Video Processor</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0a0a0a; color: #f0f0f0;
+    font-family: system-ui, sans-serif;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 36px 16px;
+  }
+  h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 5px; }
+  .subtitle { color: #444; font-size: 0.8rem; margin-bottom: 30px; }
+  .card { background: #141414; border: 1px solid #1e1e1e; border-radius: 14px; padding: 22px 20px; width: 100%; max-width: 660px; margin-bottom: 14px; }
+  .card-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: #444; margin-bottom: 14px; }
+  .dropzone { border: 2px dashed #252525; border-radius: 10px; padding: 34px 20px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; }
+  .dropzone:hover, .dropzone.drag-over { border-color: #444; background: #1a1a1a; }
+  .dropzone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .dropzone-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  .dropzone p { color: #666; font-size: 0.85rem; }
+  .dropzone strong { color: #aaa; }
+  .dropzone small { color: #3a3a3a; font-size: 0.75rem; display: block; margin-top: 4px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 480px) { .grid2 { grid-template-columns: 1fr; } }
+  .slider-item label { display: flex; justify-content: space-between; font-size: 0.76rem; color: #666; margin-bottom: 7px; }
+  .slider-item label span { color: #bbb; font-variant-numeric: tabular-nums; }
+  .slider-item input[type=range] { width: 100%; accent-color: #fff; cursor: pointer; }
+  .preview-box { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; }
+  .preview-box canvas { width: 100%; height: 100%; display: block; }
+  .preview-box video { display: none; }
+  .status { font-size: 0.76rem; margin-top: 10px; min-height: 1.1em; color: #555; }
+  .status.ok  { color: #4ade80; }
+  .status.err { color: #f87171; }
+  .progress { margin-top: 12px; display: none; }
+  .progress.visible { display: block; }
+  .progress-track { height: 4px; background: #1e1e1e; border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #fff; border-radius: 2px; width: 0%; transition: width 0.1s; }
+  .progress-label { font-size: 0.72rem; color: #444; margin-top: 6px; }
+  .btn-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  button { padding: 10px 18px; border-radius: 8px; font-size: 0.84rem; font-weight: 600; cursor: pointer; border: none; }
+  .btn-primary { background: #fff; color: #000; }
+  .btn-primary:hover:not(:disabled) { background: #e0e0e0; }
+  .btn-primary:disabled { background: #252525; color: #555; cursor: not-allowed; }
+  .btn-secondary { background: #181818; color: #bbb; border: 1px solid #2a2a2a; }
+  .btn-secondary:hover { background: #222; }
+  footer { color: #282828; font-size: 0.72rem; margin-top: 10px; text-align: center; max-width: 500px; }
+</style>
+</head>
+<body>
+
+<h1>Halftone Video Processor</h1>
+<p class="subtitle">Canvas API · MediaRecorder · .webm export</p>
+
+<div class="card">
+  <div class="card-label">1 — Upload Video</div>
+  <div class="dropzone" id="dropzone">
+    <input type="file" id="fileInput" accept="video/*,image/*">
+    <div class="dropzone-icon">🎬</div>
+    <p><strong>Drop your .webm here</strong> or click to browse</p>
+    <small>webm · mp4 · any browser-supported video format</small>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-label">2 — Adjust Effect</div>
+  <div class="grid2">
+    <div class="slider-item"><label>Dot Size <span id="vDotSize">4px</span></label><input type="range" id="dotSize" min="2" max="20" step="1" value="4"></div>
+    <div class="slider-item"><label>Dot Angle <span id="vAngle">20°</span></label><input type="range" id="angle" min="0" max="90" step="1" value="20"></div>
+    <div class="slider-item"><label>Brightness <span id="vBrightness">80%</span></label><input type="range" id="brightness" min="20" max="200" step="1" value="80"></div>
+    <div class="slider-item"><label>Contrast <span id="vContrast">150%</span></label><input type="range" id="contrast" min="50" max="400" step="1" value="150"></div>
+    <div class="slider-item"><label>Blur <span id="vBlur">2px</span></label><input type="range" id="blur" min="0" max="10" step="0.5" value="2"></div>
+    <div class="slider-item"><label>Dot Darkness <span id="vLineColor">#333333</span></label><input type="range" id="lineColor" min="0" max="200" step="1" value="51"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-label">3 — Preview & Export</div>
+  <div class="preview-box">
+    <canvas id="canvas"></canvas>
+    <video id="video" loop muted playsinline></video>
+  </div>
+  <div class="status" id="status">Upload a video to begin.</div>
+  <div class="progress" id="progress">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">Processing…</div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary"   id="previewBtn" disabled>▶ Preview</button>
+    <button class="btn-primary"   id="exportBtn"  disabled>⬇ Export .webm</button>
+    <button class="btn-secondary" id="stopBtn">■ Stop</button>
+  </div>
+</div>
+
+<footer>Export records in real-time at playback speed. Use Chrome for best results.</footer>
+
+<script>
+  const video=document.getElementById('video'),canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
+  const fileInput=document.getElementById('fileInput'),dropzone=document.getElementById('dropzone');
+  const previewBtn=document.getElementById('previewBtn'),exportBtn=document.getElementById('exportBtn'),stopBtn=document.getElementById('stopBtn');
+  const statusEl=document.getElementById('status'),progressEl=document.getElementById('progress');
+  const progressFill=document.getElementById('progressFill'),progressLabel=document.getElementById('progressLabel');
+  const offA=document.createElement('canvas'),offB=document.createElement('canvas');
+  const ctxA=offA.getContext('2d'),ctxB=offB.getContext('2d');
+  let animFrame=null,recorder=null,isRunning=false;
+
+  const sliderDefs=[
+    {id:'dotSize',   lblId:'vDotSize',    fmt:v=>v+'px'},
+    {id:'angle',     lblId:'vAngle',      fmt:v=>v+'°'},
+    {id:'brightness',lblId:'vBrightness', fmt:v=>v+'%'},
+    {id:'contrast',  lblId:'vContrast',   fmt:v=>v+'%'},
+    {id:'blur',      lblId:'vBlur',       fmt:v=>v+'px'},
+    {id:'lineColor', lblId:'vLineColor',  fmt:v=>{const h=Math.min(255,+v).toString(16).padStart(2,'0');return'#'+h+h+h;}},
+  ];
+  sliderDefs.forEach(s=>{
+    const el=document.getElementById(s.id),lbl=document.getElementById(s.lblId);
+    el.addEventListener('input',()=>{lbl.textContent=s.fmt(el.value);});
+  });
+
+  function getParams(){
+    const g=id=>parseFloat(document.getElementById(id).value);
+    return{
+      dotSize:g('dotSize'), angle:g('angle')*Math.PI/180,
+      brightness:g('brightness')/100, contrast:g('contrast')/100,
+      blur:g('blur'), lineColor:Math.min(255,parseInt(g('lineColor')))
+    };
+  }
+
+  function loadFile(file){
+  if(!file) return;
+
+  if(file.type.startsWith('image/')){
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      // store image for rendering
+      window._sourceImage = img;
+      window._sourceType = 'image';
+      previewBtn.disabled = false;
+      exportBtn.disabled = false;
+      setStatus(`Loaded: ${file.name} (${canvas.width}×${canvas.height})`,'ok');
+      // immediately render once
+      renderHalftoneImage(img);
+    };
+    img.src = URL.createObjectURL(file);
+
+  } else if(file.type.startsWith('video/')){
+    window._sourceType = 'video';
+    window._sourceImage = null;
+    const url = URL.createObjectURL(file);
+    video.src = url; video.load();
+    video.onloadeddata = () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      previewBtn.disabled = false;
+      exportBtn.disabled = false;
+      setStatus(`Loaded: ${file.name} (${canvas.width}×${canvas.height}, ${video.duration.toFixed(1)}s)`,'ok');
+    };
+  } else {
+    setStatus('Please upload a valid image or video file.','err');
+  }
+}
+  fileInput.addEventListener('change',e=>loadFile(e.target.files[0]));
+  dropzone.addEventListener('dragover',e=>{e.preventDefault();dropzone.classList.add('drag-over');});
+  dropzone.addEventListener('dragleave',()=>dropzone.classList.remove('drag-over'));
+  dropzone.addEventListener('drop',e=>{e.preventDefault();dropzone.classList.remove('drag-over');loadFile(e.dataTransfer.files[0]);});
+
+  function renderHalftone(){
+    const{dotSize,angle,brightness,contrast,blur}=getParams();
+    const W=canvas.width,H=canvas.height;
+    offA.width=W;offA.height=H;offB.width=W;offB.height=H;
+
+    // Step 1 — filtered video frame
+    ctxA.filter=`grayscale(1) brightness(${brightness}) contrast(${contrast})${blur>0?` blur(${blur}px)`:''}`;
+    ctxA.drawImage(video,0,0,W,H); ctxA.filter='none';
+    ctxA.globalCompositeOperation='destination-in';
+    ctxA.drawImage(video,0,0,W,H);
+    ctxA.globalCompositeOperation='source-over';
+
+    // Step 2 — sample pixels
+    const px=ctxA.getImageData(0,0,W,H).data;
+
+    // Step 3 — draw halftone dots with color mapping
+    ctxB.fillStyle='#efefec';  // light grey background
+    ctxB.clearRect(0,0,W,H);
+
+    const cos=Math.cos(angle),sin=Math.sin(angle),diag=Math.sqrt(W*W+H*H);
+
+    ctxB.save();
+    ctxB.translate(W/2,H/2);
+
+    for(let gy=-diag;gy<diag;gy+=dotSize){
+      for(let gx=-diag;gx<diag;gx+=dotSize){
+        const cx=gx+dotSize/2,cy=gy+dotSize/2;
+        const sx=Math.floor(cx*cos-cy*sin+W/2),sy=Math.floor(cx*sin+cy*cos+H/2);
+        if(sx<0||sy<0||sx>=W||sy>=H)continue;
+        const lum=px[(sy*W+sx)*4]/255;
+        const alpha=px[(sy*W+sx)*4+3];  // ADD THIS
+        if(alpha < 128) continue;         // ADD THIS — skip transparent pixels
+        const r=dotSize*0.7*(1-lum);
+        if(r<1.5)continue;
+
+        // Color mapping based on luminance:
+        // very dark (shadows/hair) → #C504A5 magenta-purple
+        // mid tones → blend toward yellow #F5C376
+        // light → near white, skip or tiny dot
+        let dotColor;
+        if(lum < 0.1){
+          dotColor='#C504A5';          // only the very deepest shadows get deep magenta
+        } else if(lum < 0.25){
+          const t=(lum-0.1)/0.15;
+          const r2=Math.round(0xC5+t*(0xE8-0xC5));
+          const g2=Math.round(0x04+t*(0x2A-0x04));
+          const b2=Math.round(0xA5+t*(0xB8-0xA5));
+          dotColor=`rgb(${r2},${g2},${b2})`;  // magenta → deep rose
+        } else if(lum < 0.45){
+          const t=(lum-0.25)/0.2;
+          const r2=Math.round(0xE8+t*(0xF7-0xE8));
+          const g2=Math.round(0x2A+t*(0x8A-0x2A));
+          const b2=Math.round(0xB8+t*(0xC8-0xB8));
+          dotColor=`rgb(${r2},${g2},${b2})`;  // deep rose → mid pink
+        } else if(lum < 0.65){
+          const t=(lum-0.45)/0.2;
+          const r2=Math.round(0xF7+t*(0xFD-0xF7));
+          const g2=Math.round(0x8A+t*(0xC8-0x8A));
+          const b2=Math.round(0xC8+t*(0xE4-0xC8));
+          dotColor=`rgb(${r2},${g2},${b2})`;  // mid pink → soft blush
+        } else {
+          continue; // everything above 0.65 lum → transparent, including hair highlights
+        }
+      
+        const fadedR = r * Math.pow(alpha / 255, 0.4);
+        if(fadedR < 0.3) continue;
+
+        ctxB.fillStyle = dotColor;
+        ctxB.beginPath();
+        ctxB.arc(cx, cy, fadedR, 0, Math.PI*2);  // ← fadedR not r
+        ctxB.fill();
+
+      }
+    }
+    ctxB.restore();
+
+    // Step 4 — composite: just draw the dot layer, no blend needed
+    ctx.clearRect(0,0,W,H);
+    ctxA.clearRect(0,0,W,H);  // ADD THIS before ctxA.drawImage
+    ctxA.filter=`grayscale...`
+    ctxA.drawImage(video,0,0,W,H);
+    ctx.drawImage(offB,0,0);
+    ctxA.globalCompositeOperation = 'source-in';
+    ctxA.fillStyle = 'white';
+    ctxA.fillRect(0, 0, W, H);
+    ctxA.globalCompositeOperation = 'source-over';
+  }
+
+  function renderHalftoneImage(source){
+  const{dotSize,angle,brightness,contrast,blur}=getParams();
+  const W=canvas.width,H=canvas.height;
+  offA.width=W;offA.height=H;offB.width=W;offB.height=H;
+
+  ctxA.filter=`grayscale(1) brightness(${brightness}) contrast(${contrast})${blur>0?` blur(${blur}px)`:''}`;
+  ctxA.drawImage(source,0,0,W,H);
+  ctxA.filter='none';
+
+  const px=ctxA.getImageData(0,0,W,H).data;
+  ctxA.clearRect(0,0,W,H);
+
+  const cos=Math.cos(angle),sin=Math.sin(angle),diag=Math.sqrt(W*W+H*H);
+  ctxB.save();
+  ctxB.translate(W/2,H/2);
+
+  for(let gy=-diag;gy<diag;gy+=dotSize){
+    for(let gx=-diag;gx<diag;gx+=dotSize){
+      const cx=gx+dotSize/2,cy=gy+dotSize/2;
+      const sx=Math.floor(cx*cos-cy*sin+W/2),sy=Math.floor(cx*sin+cy*cos+H/2);
+      if(sx<0||sy<0||sx>=W||sy>=H)continue;
+      const idx=(sy*W+sx)*4;
+      const lum=px[idx]/255;
+      const alpha=px[idx+3];
+      if(alpha<128)continue;
+      const r=dotSize*0.7*(1-lum);
+      if(r<1.5)continue;
+
+      let dotColor;
+      if(lum < 0.3){
+        // dark areas (black text) → magenta
+        dotColor='#C504A5';
+      } else if(lum < 0.6){
+        // mid tones → blend magenta to yellow
+        const t=(lum-0.3)/0.3;
+        const r2=Math.round(0xC5+t*(0xF5-0xC5));
+        const g2=Math.round(0x04+t*(0xC3-0x04));
+        const b2=Math.round(0xA5+t*(0x76-0xA5));
+        dotColor=`rgb(${r2},${g2},${b2})`;
+      } else if(lum < 0.85){
+        // light-mid (yellow bg) → soft golden #F5C376 dots
+        dotColor='#F5C376';
+      } else {
+        continue; // near white → skip, let #efefec show
+      }
+
+      const fadedR=r*Math.pow(alpha/255,0.4);
+      if(fadedR<0.3)continue;
+      ctxB.fillStyle=dotColor;
+      ctxB.beginPath();
+      ctxB.arc(cx,cy,fadedR,0,Math.PI*2);
+      ctxB.fill();
+    }
+  }
+  ctxB.restore();
+  ctx.clearRect(0,0,W,H);
+  ctx.drawImage(offB,0,0);
+}
+
+
+  function stopAll(){
+    isRunning=false;
+    if(animFrame)cancelAnimationFrame(animFrame);
+    video.pause();
+    if(recorder&&recorder.state!=='inactive')recorder.stop();
+    progressEl.classList.remove('visible');
+  }
+
+  previewBtn.addEventListener('click',()=>{
+  stopAll();
+    if(window._sourceType === 'image'){
+    renderHalftoneImage(window._sourceImage);
+    setStatus('Rendered!','ok');
+    } else {
+    isRunning=true; video.currentTime=0; video.play();
+    setStatus('Previewing halftone effect…','');
+    const loop=()=>{if(!isRunning)return;if(!video.paused&&!video.ended)renderHalftone();animFrame=requestAnimationFrame(loop);};
+    loop();
+    }
+  });
+
+  exportBtn.addEventListener('click',()=>{
+    if(window._sourceType === 'image'){
+    // just download canvas as PNG
+    const a=document.createElement('a');
+    a.href=canvas.toDataURL('image/png');
+    a.download='halftone-output.png';
+    a.click();
+    setStatus('✓ Image downloaded!','ok');
+    return;
+  }
+    stopAll();
+    const dur=video.duration,chunks=[];
+    const mime=MediaRecorder.isTypeSupported('video/webm;codecs=vp9')?'video/webm;codecs=vp9':'video/webm';
+    recorder=new MediaRecorder(canvas.captureStream(30),{mimeType:mime,videoBitsPerSecond:8_000_000});
+    recorder.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+    recorder.onstop=()=>{
+      const blob=new Blob(chunks,{type:'video/webm'});
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='halftone-output.webm';a.click();
+      progressEl.classList.remove('visible');setStatus('✓ Download started!','ok');
+    };
+    isRunning=true; video.currentTime=0; video.play(); canvas.style.background = 'transparent'; recorder.start(100);
+    progressEl.classList.add('visible'); setStatus('Recording… please wait.','');
+    const loop=()=>{
+      if(!isRunning)return; renderHalftone();
+      const pct=(video.currentTime/dur)*100;
+      progressFill.style.width=pct.toFixed(1)+'%';
+      progressLabel.textContent=`${video.currentTime.toFixed(1)}s / ${dur.toFixed(1)}s`;
+      if(video.ended||video.currentTime>=dur-0.05){recorder.stop();isRunning=false;return;}
+      animFrame=requestAnimationFrame(loop);
+    };
+    loop();
+  });
+
+  stopBtn.addEventListener('click',()=>{stopAll();setStatus('Stopped.','');});
+  function setStatus(msg,type){statusEl.textContent=msg;statusEl.className='status'+(type?' '+type:'');}
+</script>
+</body>
+</html>
