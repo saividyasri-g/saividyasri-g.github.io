@@ -5,7 +5,7 @@
 
         const body = document.body;
         const landingMain = document.querySelector('#wrapper.screen #main');
-        const showThreshold = 10;
+        const showThreshold = 8;
         const baseHideThreshold = 56;
         const maxHideThreshold = 180;
         const minScrollableDistance = 24;

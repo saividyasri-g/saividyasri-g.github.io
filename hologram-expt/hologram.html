@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hologram Preview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root { --accent: #C504A5; }
+
+  body {
+    font-family: 'Space Mono', monospace;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    overflow: hidden;
+    transition: background 0.4s, color 0.4s;
+  }
+
+  body.dark  { background: #07070f; color: #d0d0e8; --sbg: #0b0b16; --border: #1e1e32; --muted: #8080a8; }
+  body.light { background: #efefec; color: #2a2a3a; --sbg: #e8e8e4; --border: #d0d0c8; --muted: #5a5a72; }
+
+  /* ── Sidebar ── */
+  aside {
+    background: var(--sbg);
+    border-right: 1px solid var(--border);
+    padding: 28px 28px;
+    display: flex; flex-direction: column; gap: 28px;
+    overflow-y: auto;
+    transition: background 0.4s, border-color 0.4s;
+  }
+
+  .logo     { font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+  .logo-sub { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; margin-top: 4px; }
+
+  .sec-label {
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700;
+    color: var(--muted); display: block; margin-bottom: 10px;
+  }
+
+  /* Dropzone */
+  .dropzone {
+    border: 1px dashed var(--border); border-radius: 6px;
+    padding: 20px 14px; text-align: center; cursor: pointer;
+    position: relative; transition: border-color 0.2s, background 0.2s;
+  }
+  .dropzone:hover, .dropzone.over { border-color: var(--accent); background: rgba(197,4,165,0.05); }
+  .dropzone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .dropzone .icon { font-size: 20px; opacity: 0.2; display: block; margin-bottom: 8px; }
+  .dropzone p { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .dropzone strong { font-size: 13px; color: inherit; display: block; margin-bottom: 3px; }
+  .loaded-name { font-size: 11px; color: var(--accent); margin-top: 8px; display: none; word-break: break-all; line-height: 1.5; }
+
+  /* Tip */
+  .tip {
+    font-size: 12px; color: var(--muted); line-height: 1.75;
+    padding: 12px 14px; border-radius: 5px;
+    border: 1px solid var(--border);
+    background: rgba(197,4,165,0.04);
+  }
+  .tip strong {
+    color: var(--accent); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; display: block; margin-bottom: 5px;
+  }
+
+  /* Color swatches */
+  .swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .swatch {
+    width: 28px; height: 28px; border-radius: 50%;
+    cursor: pointer; border: 2px solid transparent;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .swatch:hover { transform: scale(1.18); }
+  body.dark  .swatch.active { border-color: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.4); }
+  body.light .swatch.active { border-color: #222; box-shadow: 0 0 0 1px rgba(255,255,255,0.4); }
+
+  .custom-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .custom-row label { font-size: 12px; color: var(--muted); }
+  input[type=color] { width: 32px; height: 24px; border: 1px solid var(--border); border-radius: 4px; background: none; cursor: pointer; padding: 0; }
+
+  /* BG buttons */
+  .bg-btn-row { display: flex; gap: 8px; }
+
+  .bg-btn {
+    flex: 1; padding: 12px 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer;
+    border-radius: 4px; border: 2px solid var(--border);
+    background: var(--sbg); color: var(--muted);
+    box-shadow: 3px 3px 0 var(--border);
+    transition: box-shadow 0.08s, top 0.08s, left 0.08s, border-color 0.15s, color 0.15s;
+    position: relative; top: 0; left: 0;
+  }
+  .bg-btn:active { top: 3px; left: 3px; box-shadow: 0 0 0 var(--border) !important; }
+  .bg-btn.active { border-color: var(--accent); color: var(--accent); box-shadow: 3px 3px 0 var(--accent); }
+
+  .hint { font-size: 12px; color: var(--muted); line-height: 1.75; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
+
+  /* ── Stage ── */
+  main {
+    position: relative; display: flex;
+    align-items: center; justify-content: center;
+    overflow: hidden; cursor: crosshair;
+    transition: background 0.4s;
+  }
+
+  main::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(197,4,165,0.015) 60px),
+      repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(197,4,165,0.015) 60px);
+    pointer-events: none; z-index: 0;
+  }
+
+  .vignette { position: absolute; inset: 0; z-index: 30; pointer-events: none; transition: background 0.4s; }
+  body.dark  .vignette { background: radial-gradient(ellipse at center, transparent 30%, rgba(7,7,15,0.8) 100%); }
+  body.light .vignette { background: radial-gradient(ellipse at center, transparent 30%, rgba(239,239,236,0.75) 100%); }
+
+  .empty { position: absolute; text-align: center; z-index: 5; pointer-events: none; opacity: 0.12; }
+  .empty .big { font-size: 52px; display: block; margin-bottom: 10px; }
+  .empty p { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; }
+
+  /* ── Hologram ── */
+  :root { --holo-wrap-w: 340px; --holo-wrap-h: 400px; }
+
+  #holo-wrap {
+    position: relative; z-index: 10;
+    width: var(--holo-wrap-w); height: var(--holo-wrap-h);
+    opacity: 0; transform: translateY(14px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  #holo-wrap.is-emitting { opacity: 1; transform: translateY(0); }
+
+  #avatar-wrapper {
+    position: absolute;
+    width: var(--holo-wrap-w); height: var(--holo-wrap-h);
+    left: 50%; top: 50%; transform: translate(-50%, -50%);
+  }
+
+  #face-section {
+    position: relative;
+    width: var(--holo-wrap-w); height: var(--holo-wrap-h);
+    opacity: 0; overflow: hidden; clip-path: inset(100% 0 0 0);
+  }
+  #face-section.is-revealing { animation: holo-reveal 1.6s cubic-bezier(0.25, 0.9, 0.2, 1) forwards; }
+  #face-section.is-glitching #head-stack { animation: holo-glitch 0.5s steps(2, end) infinite; }
+
+  @keyframes holo-reveal {
+    from { opacity: 0; clip-path: inset(100% 0 0 0); }
+    to   { opacity: 1; clip-path: inset(0 0 0 0); }
+  }
+  @keyframes holo-glitch {
+    0%   { opacity: 0; }
+    15%  { opacity: 1; }
+    35%  { opacity: 0.2; }
+    55%  { opacity: 1; }
+    75%  { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  #face-pivot { position: absolute; inset: 0; perspective: 550px; perspective-origin: 50% 42%; }
+
+  #head-stack {
+    position: absolute; inset: 0;
+    transform-style: preserve-3d; transform-origin: 50% 42%;
+    will-change: transform; opacity: 0;
+  }
+
+  .holo-layer { position: absolute; inset: 0; transform-style: preserve-3d; }
+  body.dark  .holo-layer { mix-blend-mode: screen; }
+  body.light .holo-layer { mix-blend-mode: normal; }
+  .holo-layer canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+
+  #face-mask {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+    pointer-events: none; transition: background 0.4s;
+  }
+  body.dark  #face-mask { background: linear-gradient(to top, rgba(7,7,15,0.9), transparent); }
+  body.light #face-mask { background: linear-gradient(to top, rgba(239,239,236,0.9), transparent); }
+
+  #face-scanlines {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px,
+      transparent 1px, transparent 3px
+    );
+    pointer-events: none; z-index: 5; mix-blend-mode: multiply;
+  }
+</style>
+</head>
+<body class="dark">
+
+<aside>
+  <div>
+    <div class="logo">Hologram</div>
+    <div class="logo-sub">// projection preview</div>
+  </div>
+
+  <div>
+    <span class="sec-label">Source</span>
+    <div class="dropzone" id="dz">
+      <input type="file" id="fi" accept="image/*,video/*">
+      <span class="icon">⬡</span>
+      <p><strong>Drop image or video</strong>renders on drop</p>
+    </div>
+    <div class="loaded-name" id="fname"></div>
+  </div>
+
+  <div class="tip">
+    <strong>✦ Best results</strong>
+    Use images or video with a transparent background — PNG, WebM, or MOV with alpha — for the cleanest hologram projection.
+  </div>
+
+  <div>
+    <span class="sec-label">Color</span>
+    <div class="swatch-row">
+      <div class="swatch active" data-c="#C504A5" style="background:#C504A5"></div>
+      <div class="swatch" data-c="#04B8C5" style="background:#04B8C5"></div>
+      <div class="swatch" data-c="#E08020" style="background:#E08020"></div>
+      <div class="swatch" data-c="#4488ff" style="background:#4488ff"></div>
+      <div class="swatch" data-c="#44cc88" style="background:#44cc88"></div>
+      <div class="swatch" data-c="#ffffff" style="background:#ddd;border:1px solid #aaa"></div>
+    </div>
+    <div class="custom-row">
+      <label>Custom</label>
+      <input type="color" id="customColor" value="#C504A5">
+    </div>
+  </div>
+
+  <div>
+    <span class="sec-label">Background</span>
+    <div class="bg-btn-row">
+      <button class="bg-btn" id="btnLight" onclick="setBg('light')">◈ Light</button>
+      <button class="bg-btn active" id="btnDark" onclick="setBg('dark')">◈ Dark</button>
+    </div>
+  </div>
+
+  <div class="hint">Move cursor over the preview to shift hologram depth layers.</div>
+</aside>
+
+<main id="stage-wrap">
+  <div class="empty" id="empty">
+    <span class="big">⬡</span>
+    <p>drop a file to project</p>
+  </div>
+  <div class="vignette"></div>
+  <div id="holo-wrap">
+    <div id="avatar-wrapper">
+      <div id="face-section">
+        <div id="face-pivot">
+          <div id="head-stack"></div>
+        </div>
+        <div id="face-mask"></div>
+        <div id="face-scanlines"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const NUM_LAYERS = 7;
+const MAX_SIZE   = 500;
+const PARALLAX   = 10;
+
+let holoColor = '#C504A5';
+let srcCanvas = null;
+let vidEl = null, vidRAF = null;
+let layers = [];
+let mX=0, mY=0, tX=0, tY=0;
+
+const headStack   = document.getElementById('head-stack');
+const faceSection = document.getElementById('face-section');
+const holoWrap    = document.getElementById('holo-wrap');
+
+function hexRgb(hex) {
+  hex = hex.replace('#','');
+  if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
+  return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
+}
+
+function buildLayers(w, h) {
+  layers.forEach(l => l.el.remove());
+  layers = [];
+  for(let i=0; i<NUM_LAYERS; i++) {
+    const el = document.createElement('div');
+    el.className = 'holo-layer';
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    el.appendChild(c);
+    headStack.appendChild(el);
+    layers.push({ el, canvas: c, ctx: c.getContext('2d') });
+  }
+}
+
+function makeDuotone(source, W, H) {
+  const tmp = document.createElement('canvas');
+  tmp.width = W; tmp.height = H;
+  const tctx = tmp.getContext('2d');
+  tctx.drawImage(source, 0, 0, W, H);
+  const imgData = tctx.getImageData(0, 0, W, H);
+  const d = imgData.data;
+  const [r, g, b] = hexRgb(holoColor);
+  for(let i = 0; i < d.length; i += 4) {
+    if(d[i+3] === 0) continue;
+    const lum   = (0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2]) / 255;
+    const toned = Math.pow(lum, 0.88);
+    d[i]   = Math.round(r * toned);
+    d[i+1] = Math.round(g * toned);
+    d[i+2] = Math.round(b * toned);
+  }
+  tctx.putImageData(imgData, 0, 0);
+  return tmp;
+}
+
+function renderLayer(i, duotone) {
+  const t = NUM_LAYERS > 1 ? i / (NUM_LAYERS - 1) : 0.5;
+  const { canvas, ctx } = layers[i];
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(duotone, 0, 0, canvas.width, canvas.height);
+  layers[i].el.style.opacity = (0.18 + t * 0.82).toFixed(3);
+}
+
+function renderAll(source) {
+  if(!layers.length) return;
+  const W = layers[0].canvas.width;
+  const H = layers[0].canvas.height;
+  const dt = makeDuotone(source, W, H);
+  for(let i = 0; i < NUM_LAYERS; i++) renderLayer(i, dt);
+}
+
+function loadFile(file) {
+  if(!file) return;
+  document.getElementById('empty').style.display = 'none';
+  document.getElementById('fname').style.display = 'block';
+  document.getElementById('fname').textContent   = file.name;
+
+  if(vidEl) { vidEl.pause(); vidEl = null; }
+  if(vidRAF) { cancelAnimationFrame(vidRAF); vidRAF = null; }
+
+  faceSection.classList.remove('is-revealing','is-glitching');
+  holoWrap.classList.remove('is-emitting');
+  headStack.style.opacity = '0';
+
+  if(file.type.startsWith('image/')) {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, MAX_SIZE / Math.max(img.naturalWidth, img.naturalHeight));
+      const W = Math.round(img.naturalWidth  * scale);
+      const H = Math.round(img.naturalHeight * scale);
+      const tmp = document.createElement('canvas');
+      tmp.width = W; tmp.height = H;
+      tmp.getContext('2d').drawImage(img, 0, 0, W, H);
+      srcCanvas = tmp;
+      buildLayers(W, H);
+      renderAll(srcCanvas);
+      triggerReveal();
+    };
+    img.src = URL.createObjectURL(file);
+
+  } else if(file.type.startsWith('video/')) {
+    srcCanvas = null;
+    vidEl = document.createElement('video');
+    vidEl.loop = true; vidEl.muted = true; vidEl.playsInline = true;
+    vidEl.onloadeddata = () => {
+      const scale = Math.min(1, MAX_SIZE / Math.max(vidEl.videoWidth, vidEl.videoHeight));
+      const W = Math.round(vidEl.videoWidth  * scale);
+      const H = Math.round(vidEl.videoHeight * scale);
+      buildLayers(W, H);
+      vidEl.play();
+      let f = 0;
+      const loop = () => {
+        f++;
+        if(f % 3 === 0 && !vidEl.paused) renderAll(vidEl);
+        vidRAF = requestAnimationFrame(loop);
+      };
+      loop();
+      triggerReveal();
+    };
+    vidEl.src = URL.createObjectURL(file);
+    vidEl.load();
+  }
+}
+
+function triggerReveal() {
+  holoWrap.classList.add('is-emitting');
+  setTimeout(() => { faceSection.classList.add('is-glitching'); headStack.style.opacity = '1'; }, 300);
+  setTimeout(() => { faceSection.classList.remove('is-glitching'); faceSection.classList.add('is-revealing'); }, 800);
+}
+
+(function loop() {
+  mX += (tX - mX) * 0.08;
+  mY += (tY - mY) * 0.08;
+  layers.forEach((l, i) => {
+    const depth  = NUM_LAYERS > 1 ? i / (NUM_LAYERS - 1) : 0.5;
+    const factor = (depth - 0.5) * 2;
+    l.el.style.transform = `translate(${(mX*PARALLAX*factor).toFixed(1)}px,${(mY*PARALLAX*factor).toFixed(1)}px) scale(${(1+depth*0.015).toFixed(4)})`;
+  });
+  if(layers.length) {
+    headStack.style.transform = `rotateY(${(mX*8).toFixed(1)}deg) rotateX(${(-mY*5).toFixed(1)}deg)`;
+  }
+  requestAnimationFrame(loop);
+})();
+
+const wrap = document.getElementById('stage-wrap');
+wrap.addEventListener('mousemove', e => {
+  const r = wrap.getBoundingClientRect();
+  tX = ((e.clientX - r.left) / r.width  - 0.5) * 2;
+  tY = ((e.clientY - r.top)  / r.height - 0.5) * 2;
+});
+wrap.addEventListener('mouseleave', () => { tX = 0; tY = 0; });
+
+document.getElementById('fi').addEventListener('change', e => loadFile(e.target.files[0]));
+const dz = document.getElementById('dz');
+dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); loadFile(e.dataTransfer.files[0]); });
+
+function setColor(hex) {
+  holoColor = hex;
+  document.getElementById('customColor').value = hex;
+  document.querySelectorAll('.swatch').forEach(s => s.classList.toggle('active', s.dataset.c === hex));
+  if(srcCanvas) renderAll(srcCanvas);
+  else if(vidEl && !vidEl.paused) renderAll(vidEl);
+}
+
+document.querySelectorAll('.swatch').forEach(s => s.addEventListener('click', () => setColor(s.dataset.c)));
+document.getElementById('customColor').addEventListener('input', function() {
+  holoColor = this.value;
+  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+  if(srcCanvas) renderAll(srcCanvas);
+  else if(vidEl && !vidEl.paused) renderAll(vidEl);
+});
+
+function setBg(mode) {
+  const isLight = mode === 'light';
+  document.body.className = isLight ? 'light' : 'dark';
+  document.getElementById('btnLight').classList.toggle('active', isLight);
+  document.getElementById('btnDark').classList.toggle('active', !isLight);
+  if(srcCanvas) renderAll(srcCanvas);
+  else if(vidEl && !vidEl.paused) renderAll(vidEl);
+}
+</script>
+</body>
+</html>
