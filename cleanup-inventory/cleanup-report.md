@@ -1,6 +1,6 @@
 # V2 Cleanup Inventory
 
-- Seed entrypoint: `index-experiment.html`
+- Seed entrypoint: `index.html`
 - Reachability: recursive local references from HTML/CSS/JS (`href/src/data-src/poster/fetch/url()`).
 - Used files: 129
 - Candidate-unused files: 68

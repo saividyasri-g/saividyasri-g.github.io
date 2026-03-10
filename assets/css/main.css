@@ -6509,7 +6509,7 @@ body.home-page:not(.about-active) #header::before {
     }
 }
 
-/* Landing experiment (index-experiment.html) */
+/* Landing experiment (index.html) */
 body.landing-experiment {
     background: #efefec;
     height: 100vh;
