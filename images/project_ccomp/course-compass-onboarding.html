@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Compass Onboarding Flow</title>
+  <style>
+    :root {
+      --cream-100: #f8f4ee;
+      --cream-200: #efe8de;
+      --ink-900: #1d1b1a;
+      --ink-700: #3a3531;
+      --ink-500: #655d56;
+      --sage-500: #6a8b83;
+      --sage-300: #b8c9c3;
+      --terracotta-500: #b76f52;
+      --terracotta-300: #dfb29e;
+      --sand-300: #ddc7a4;
+      --card: #fffdf8;
+      --line: #e4d9cc;
+      --glow: 0 18px 34px rgba(45, 35, 27, 0.11);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink-900);
+      font-family: "Avenir Next", "Nunito Sans", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(1300px 520px at 7% -8%, rgba(183, 111, 82, 0.2), transparent 58%),
+        radial-gradient(920px 440px at 93% 8%, rgba(106, 139, 131, 0.17), transparent 63%),
+        linear-gradient(165deg, #f4efe7 0%, #f5f0e8 45%, #ece4d7 100%);
+      padding: 56px 30px 72px;
+    }
+
+    .header {
+      max-width: 1200px;
+      margin: 0 auto 30px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      animation: fade-in 560ms ease both;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-family: "Palatino Linotype", "Iowan Old Style", serif;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      font-size: clamp(30px, 4vw, 42px);
+      color: var(--ink-900);
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--ink-500);
+      max-width: 430px;
+      font-size: 14px;
+      line-height: 1.45;
+      text-wrap: balance;
+    }
+
+    .canvas {
+      max-width: 1260px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(250px, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+
+    .screen {
+      background:
+        radial-gradient(320px 240px at 88% 3%, rgba(183, 111, 82, 0.09), transparent 62%),
+        radial-gradient(220px 180px at 0% 98%, rgba(106, 139, 131, 0.1), transparent 62%),
+        var(--card);
+      border: 1px solid rgba(185, 166, 144, 0.36);
+      border-radius: 30px;
+      box-shadow: var(--glow);
+      min-height: 760px;
+      padding: 22px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      animation: rise-in 680ms cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    .screen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.32), transparent 22%);
+    }
+
+    .screen:nth-child(2) { animation-delay: 110ms; }
+    .screen:nth-child(3) { animation-delay: 190ms; }
+    .screen:nth-child(4) { animation-delay: 270ms; }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand {
+      font-size: 12px;
+      letter-spacing: 0.85px;
+      text-transform: uppercase;
+      color: var(--ink-500);
+      font-weight: 600;
+    }
+
+    .step {
+      font-size: 11px;
+      color: var(--sage-500);
+      background: rgba(106, 139, 131, 0.13);
+      border: 1px solid rgba(106, 139, 131, 0.24);
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
+
+    .prompt {
+      font-family: "Palatino Linotype", "Iowan Old Style", serif;
+      font-size: 27px;
+      line-height: 1.13;
+      margin: 8px 0 8px;
+      letter-spacing: 0.15px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .sub {
+      margin: 0 0 18px;
+      color: var(--ink-500);
+      font-size: 14px;
+      line-height: 1.4;
+      position: relative;
+      z-index: 2;
+    }
+
+    .options {
+      display: grid;
+      gap: 11px;
+      margin-top: 6px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .option {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--ink-700);
+      line-height: 1.35;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.62);
+      animation: fade-up 420ms ease both;
+    }
+
+    .option:nth-child(1) { animation-delay: 340ms; }
+    .option:nth-child(2) { animation-delay: 420ms; }
+    .option:nth-child(3) { animation-delay: 500ms; }
+    .option:nth-child(4) { animation-delay: 580ms; }
+
+    .option.selected {
+      border-color: rgba(183, 111, 82, 0.46);
+      background: linear-gradient(126deg, rgba(183, 111, 82, 0.16), rgba(255, 255, 255, 0.77));
+      box-shadow: inset 0 0 0 1px rgba(183, 111, 82, 0.18);
+    }
+
+    .dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1.5px solid #b9a995;
+      margin-top: 2px;
+      flex: 0 0 18px;
+      position: relative;
+    }
+
+    .selected .dot::before {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 999px;
+      background: var(--terracotta-500);
+    }
+
+    .footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ghost {
+      color: var(--ink-500);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .2px;
+    }
+
+    .primary {
+      color: #fff;
+      background: linear-gradient(120deg, #a75f45, #bf7a59 60%, #cd8d6f);
+      border: 0;
+      border-radius: 12px;
+      padding: 9px 13px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .rationale {
+      border: 1px solid rgba(106, 139, 131, 0.3);
+      background: rgba(106, 139, 131, 0.08);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .rationale h3 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      letter-spacing: .15px;
+      color: var(--ink-900);
+    }
+
+    .rationale p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.38;
+      color: var(--ink-700);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .chip {
+      border: 1px solid rgba(58, 53, 49, 0.2);
+      color: var(--ink-700);
+      border-radius: 999px;
+      font-size: 12px;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .course-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .course {
+      border-radius: 13px;
+      border: 1px solid var(--line);
+      padding: 11px 11px 10px;
+      background: #fffdf9;
+    }
+
+    .course strong {
+      display: block;
+      font-size: 13px;
+      letter-spacing: .1px;
+      margin-bottom: 4px;
+    }
+
+    .course span {
+      font-size: 12px;
+      color: var(--ink-500);
+      line-height: 1.35;
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--ink-500);
+      line-height: 1.4;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(22px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 1200px) {
+      .canvas {
+        grid-template-columns: repeat(2, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 24px 14px 30px;
+      }
+
+      .header {
+        display: block;
+        margin-bottom: 18px;
+      }
+
+      .header p {
+        margin-top: 8px;
+      }
+
+      .canvas {
+        grid-template-columns: 1fr;
+      }
+
+      .screen {
+        min-height: 704px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Course Compass Onboarding</h1>
+    <p>A reflective 4-screen flow that infers momentum-vs-exploration without asking mechanical planning questions.</p>
+  </header>
+
+  <main class="canvas">
+    <section class="screen">
+      <div class="topline">
+        <span class="brand">Course Compass</span>
+        <span class="step">1 of 4</span>
+      </div>
+      <h2 class="prompt">When class feels most alive for you, what are you usually doing?</h2>
+      <p class="sub">Choose what feels closest. There are no wrong answers.</p>
+      <div class="options">
+        <div class="option selected">
+          <span class="dot"></span>
+          <span>Untangling messy systems and making them clearer.</span>
+        </div>
+        <div class="option">
+          <span class="dot"></span>
+          <span>Building something that works for real people.</span>
+        </div>
+        <div class="option">
+          <span class="dot"></span>
+          <span>Testing claims against evidence until the pattern holds.</span>
+        </div>
+        <div class="option">
+          <span class="dot"></span>
+          <span>Connecting ideas across fields that usually stay separate.</span>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="ghost">Back</span>
+        <button class="primary">Continue</button>
+      </div>
+    </section>
+
+    <section class="screen">
+      <div class="topline">
+        <span class="brand">Course Compass</span>
+        <span class="step">2 of 4</span>
+      </div>
+      <h2 class="prompt">What kinds of questions have quietly stayed with you lately?</h2>
+      <p class="sub">Even vague curiosity counts. Pick what keeps pulling you back.</p>
+      <div class="options">
+        <div class="option selected">
+          <span class="dot"></span>
+          <span>How do institutions adapt without losing trust?</span>
+        </div>
+        <div class="option">
+          <span class="dot"></span>
+          <span>Why do some products become habits while others fade?</span>
+        </div>
+        <div class="option">
+          <span class="dot"></span>
+          <span>How can data explain people without flattening them?</span>
+        </div>
+        <div class="option">
+          <span class="dot"></span>
+          <span>What makes complex social systems fair in practice?</span>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="ghost">Back</span>
+        <button class="primary">Continue</button>
+      </div>
+    </section>
+
+    <section class="screen">
+      <div class="topline">
+        <span class="brand">Course Compass</span>
+        <span class="step">3 of 4</span>
+      </div>
+      <h2 class="prompt">This term, what kind of energy would feel most useful?</h2>
+      <p class="sub">We’ll use this to shape your mix of depth and range.</p>
+      <div class="options">
+        <div class="option selected">
+          <span class="dot"></span>
+          <span>Momentum: leave each week with visible progress.</span>
+        </div>
+        <div class="option">
+          <span class="dot"></span>
+          <span>Stretch: try unfamiliar lenses and see what surprises me.</span>
+        </div>
+        <div class="option">
+          <span class="dot"></span>
+          <span>Craft: deepen one capability until it becomes second nature.</span>
+        </div>
+        <div class="option">
+          <span class="dot"></span>
+          <span>Perspective: connect dots across methods and disciplines.</span>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="ghost">Back</span>
+        <button class="primary">See My Rationale</button>
+      </div>
+    </section>
+
+    <section class="screen">
+      <div class="topline">
+        <span class="brand">Course Compass</span>
+        <span class="step">4 of 4</span>
+      </div>
+      <h2 class="prompt">Here’s why this recommendation fits your goals</h2>
+      <p class="sub">We inferred this from your reflections, not from scheduling or load questions.</p>
+
+      <div class="chips">
+        <span class="chip">Systems clarity</span>
+        <span class="chip">Institutional adaptation</span>
+        <span class="chip">Momentum + depth</span>
+      </div>
+
+      <div class="rationale">
+        <h3>Recommendation profile</h3>
+        <p>Your answers point to a path that stays grounded in structured progress while keeping one intentional lane open for cross-disciplinary discovery.</p>
+      </div>
+
+      <div class="course-list">
+        <div class="course">
+          <strong>Anchor: Systems Methods Studio</strong>
+          <span>Builds the analytical rigor and problem-framing style you said energizes you.</span>
+        </div>
+        <div class="course">
+          <strong>Anchor: Institutions & Public Trust</strong>
+          <span>Directly matches your recurring curiosity about adaptation and legitimacy.</span>
+        </div>
+        <div class="course">
+          <strong>Discovery Edge: Human-Centered Data Narratives</strong>
+          <span>Adds a stretch lens so your plan stays open, not narrow.</span>
+        </div>
+      </div>
+
+      <p class="hint">Next, Course Compass will personalize section-level picks from your eligible courses and remaining degree requirements.</p>
+      <div class="footer">
+        <span class="ghost">Edit Answers</span>
+        <button class="primary">Generate Course Plan</button>
+      </div>
+    </section>
+  </main>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</body>
+</html>

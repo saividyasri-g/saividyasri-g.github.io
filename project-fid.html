@@ -105,7 +105,7 @@
                 <aside class="cs-local-sidebar">
                     <div class="sticky-wrapper">
                         <ul>
-                            <li><a href="#overview" class="active">overview</a></li>
+                            <li><a href="#overview-section" class="active">overview</a></li>
                             <li><a href="#problem">problem</a></li>
                             <li><a href="#ideation">ideation</a></li>
                             <li><a href="#solution">solution</a></li>
@@ -241,22 +241,22 @@
                         </p>
                         <div class="fid-iter-tags">
                             <div class="fid-iter-tag">
-                                <span class="fid-iter-label">ENVIRONMENT</span>
+                                <span class="fid-iter-label solution-counter">ENVIRONMENT</span>
                                 <span class="fid-iter-value">In-person</span>
                             </div>
                             <div class="fid-iter-tag">
-                                <span class="fid-iter-label">FORMAT</span>
+                                <span class="fid-iter-label solution-counter">FORMAT</span>
                                 <span class="fid-iter-value">Concept testing</span>
                             </div>
                             <div class="fid-iter-tag">
-                                <span class="fid-iter-label">WITH</span>
+                                <span class="fid-iter-label solution-counter">WITH</span>
                                 <span class="fid-iter-value">Managers &amp; Supervisors</span>
                             </div>
                         </div>
                         <div class="fid-iter-group">
                             <div class="fid-iter-card">
                                 <div class="fid-iter-left">
-                                    <span class="fid-iter-step">Iteration 1</span>
+                                    <span class="fid-iter-step solution-counter">Iteration 1</span>
                                     <h4>Designing for the Investigation Flow</h4>
                                     <p>Introduced a two panel layout, where on left there is big picture view and on the right detailed drill down.</p>
                                     <p>Associate and Incident tables are tabs, user can focus on one view fitting their investigating workflow behavior.</p>
@@ -288,7 +288,7 @@
                         <div class="fid-iter-group">
                             <div class="fid-iter-card">
                                 <div class="fid-iter-left">
-                                    <span class="fid-iter-step">Iteration 2</span>
+                                    <span class="fid-iter-step solution-counter">Iteration 2</span>
                                     <h4>Embedded Learnability</h4>
                                     <p>I introduced a no-click default instructional state. This allowed users to grasp the interaction organically during use.</p>
                                 </div>
@@ -320,7 +320,7 @@
                         <div class="fid-solution">
                             <div class="fid-solution-row">
                                 <div class="fid-solution-col">
-                                    <span class="fid-solution-label fid-solution-label-before">Before</span>
+                                    <span class="meta-label label-before">Before</span>
                                     <h4>Inconsistent interaction patterns</h4>
                                     <p>Identical triggers resulted in different outcomes (modal, expansion, navigation), requiring reliance on recall. Modal overlays disrupted workflow continuity and focus as it required repeated modal closures.</p>
                                     <div class="fid-solution-media">
@@ -330,7 +330,7 @@
                                     </div>
                                 </div>
                                 <div class="fid-solution-col">
-                                    <span class="fid-solution-label fid-solution-label-after">After</span>
+                                    <span class="meta-label label-after">After</span>
                                     <h4>Standardized interactions with reduced navigation depth</h4>
                                     <p>Implemented consistent drill-down pattern: Overview → Detail. <br>The layout preserved visibility between summary and detail, minimizing context switching.</p>
                                     <div class="fid-solution-media">
@@ -342,7 +342,7 @@
                             </div>
                             <div class="fid-solution-row">
                                 <div class="fid-solution-col">
-                                    <span class="fid-solution-label fid-solution-label-before">Before</span>
+                                    <span class="meta-label label-before">Before</span>
                                     <h4>Inaccessible design affordances</h4>
                                     <p>Severity was primarily conveyed through color, limiting accessibility. <br> </p>
                                     <div class="fid-solution-media">
@@ -350,7 +350,7 @@
                                     </div>
                                 </div>
                                 <div class="fid-solution-col">
-                                    <span class="fid-solution-label fid-solution-label-after">After</span>
+                                    <span class="meta-label label-after">After</span>
                                     <h4>Accessible design</h4>
                                     <p>Severity indicators use color, text, and iconography to ensure clarity across diverse visual abilities.</p>
                                     <div class="fid-solution-media">
@@ -360,7 +360,7 @@
                             </div>
                             <div class="fid-solution-row">
                                 <div class="fid-solution-col">
-                                    <span class="fid-solution-label fid-solution-label-before">Before</span>
+                                    <span class="meta-label label-before">Before</span>
                                     <h4>Overloading data &amp; divided attention</h4>
                                     <p>Incident and Associate tables were displayed concurrently, increasing visual density and splitting user attention.</p>
                                     <div class="fid-solution-media">
@@ -370,7 +370,7 @@
                                     </div>
                                 </div>
                                 <div class="fid-solution-col">
-                                    <span class="fid-solution-label fid-solution-label-after">After</span>
+                                    <span class="meta-label label-after">After</span>
                                     <h4>Focused view through contextual tabs</h4>
                                     <p>Incident and Associate tables were separated into focused tabs, reducing cognitive overload and aligning with observed investigation behavior.</p>
                                     <div class="fid-solution-media">
@@ -423,6 +423,13 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const sidebarLinks = document.querySelectorAll('.cs-local-sidebar a');
+            const setActiveSidebarLink = (id) => {
+                sidebarLinks.forEach(link => link.classList.remove('active'));
+                const activeLink = document.querySelector(`.cs-local-sidebar [href="#${id}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            };
             const observerOptions = {
                 root: null,
                 threshold: 0,
@@ -434,11 +441,7 @@
                     if (entry.isIntersecting) {
                         const id = entry.target.getAttribute('id');
                         if (id) {
-                            sidebarLinks.forEach(link => link.classList.remove('active'));
-                            const activeLink = document.querySelector(`.cs-local-sidebar [href="#${id}"]`);
-                            if (activeLink) {
-                                activeLink.classList.add('active');
-                            }
+                            setActiveSidebarLink(id);
                         }
                     }
                 });
@@ -450,6 +453,9 @@
                 if (section) {
                     observer.observe(section);
                 }
+                link.addEventListener('click', () => {
+                    setActiveSidebarLink(id);
+                });
             });
 
             const flowItems = document.querySelectorAll('.fid-flow-row');
