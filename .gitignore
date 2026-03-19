@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/
+
+# Thumbnails
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.local
+
+# Node (if ever used)
+node_modules/
+npm-debug.log*
+
+# Build output
+/dist
+/build
+
+# Local archives / cleanup notes
+_quarantine/
+cleanup-inventory/

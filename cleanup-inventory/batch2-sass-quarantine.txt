@@ -1,7 +1,0 @@
-assets/sass/libs/_breakpoints.scss
-assets/sass/libs/_functions.scss
-assets/sass/libs/_html-grid.scss
-assets/sass/libs/_mixins.scss
-assets/sass/libs/_vars.scss
-assets/sass/libs/_vendor.scss
-assets/sass/main.scss
