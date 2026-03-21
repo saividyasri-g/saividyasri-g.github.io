@@ -232,14 +232,6 @@
   }
   .status-bar span { color: var(--text); }
 
-  .scanlines {
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.12) 0px, rgba(0,0,0,0.12) 1px, transparent 1px, transparent 3px);
-    pointer-events: none; border-radius: 4px; opacity: 0.5;
-  }
-
-  .glow-ring { position: absolute; inset: -2px; border-radius: 6px; box-shadow: 0 0 40px rgba(197,4,165,0.15), 0 0 80px rgba(197,4,165,0.06); pointer-events: none; display: none; }
-  .glow-ring.active { display: block; }
 </style>
 </head>
 <body class="light">
@@ -339,8 +331,6 @@
   </div>
   <div class="canvas-wrap" id="canvasWrap" style="display:none">
     <canvas id="canvas"></canvas>
-    <div class="scanlines"></div>
-    <div class="glow-ring" id="glowRing"></div>
   </div>
 </main>
 
@@ -364,6 +354,7 @@ let sourceType = null;
 let sourceImage = null;
 let currentFileName = 'screenprint';
 let sourceFile = null; // original File reference for non-image export
+let exportInProgress = false;
 
 const PRESETS = {
   magenta: { shadow: '#C504A5', mid: '#F78AC8', highlight: '#FDC8E4' },
@@ -479,40 +470,131 @@ function renderSource(source, isVideo) {
 
   ctxB.restore();
   ctx.clearRect(0, 0, W, H);
-  if(document.body.classList.contains('light')) {
-    ctx.fillStyle = '#efefec';
-    ctx.fillRect(0, 0, W, H);
-  }
   ctx.drawImage(offB, 0, 0);
 
   document.getElementById('statDots').textContent = dotCount.toLocaleString();
 }
 
+function triggerDownload(url, filename, revokeAfterMs = 0) {
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  if(revokeAfterMs > 0) {
+    setTimeout(() => URL.revokeObjectURL(url), revokeAfterMs);
+  }
+}
+
+function getSupportedVideoMimeType() {
+  if(typeof MediaRecorder === 'undefined') return '';
+  const candidates = [
+    'video/webm;codecs=vp9',
+    'video/webm;codecs=vp8',
+    'video/webm',
+  ];
+  return candidates.find(type => MediaRecorder.isTypeSupported(type)) || '';
+}
+
+function seekVideo(time) {
+  const targetTime = Math.max(0, Math.min(time, Number.isFinite(video.duration) ? video.duration : time));
+  if(Math.abs(video.currentTime - targetTime) < 0.02) return Promise.resolve();
+  return new Promise(resolve => {
+    const onSeeked = () => resolve();
+    video.addEventListener('seeked', onSeeked, { once: true });
+    video.currentTime = targetTime;
+  });
+}
+
+async function exportProcessedVideo() {
+  if(typeof MediaRecorder === 'undefined' || typeof canvas.captureStream !== 'function') {
+    throw new Error('Video export is not supported in this browser.');
+  }
+
+  const wasLooping = video.loop;
+  const wasPaused = video.paused;
+  const restoreTime = video.currentTime;
+  const mimeType = getSupportedVideoMimeType();
+  const stream = canvas.captureStream(30);
+  const recorderConfig = mimeType ? { mimeType, videoBitsPerSecond: 12000000 } : { videoBitsPerSecond: 12000000 };
+  const recorder = new MediaRecorder(stream, recorderConfig);
+  const chunks = [];
+
+  recorder.addEventListener('dataavailable', e => {
+    if(e.data && e.data.size > 0) chunks.push(e.data);
+  });
+
+  const finished = new Promise((resolve, reject) => {
+    recorder.addEventListener('stop', resolve, { once: true });
+    recorder.addEventListener('error', e => reject(e.error || new Error('MediaRecorder failed')), { once: true });
+  });
+
+  try {
+    video.loop = false;
+    video.pause();
+    await seekVideo(0);
+    renderSource(video, true);
+
+    recorder.start(120);
+    await video.play();
+
+    await new Promise(resolve => video.addEventListener('ended', resolve, { once: true }));
+    if(recorder.state !== 'inactive') recorder.stop();
+    await finished;
+
+    const outputType = mimeType || 'video/webm';
+    const blob = new Blob(chunks, { type: outputType });
+    const baseName = currentFileName.replace(/\.[^/.]+$/, '');
+    const dotVal = document.getElementById('dotSize').value;
+    const outName = `${baseName}_${currentPreset}_d${dotVal}.webm`;
+    const outUrl = URL.createObjectURL(blob);
+    triggerDownload(outUrl, outName, 10000);
+  } finally {
+    if(recorder.state !== 'inactive') recorder.stop();
+    stream.getTracks().forEach(track => track.stop());
+
+    video.loop = wasLooping;
+    await seekVideo(restoreTime);
+    if(wasPaused) {
+      video.pause();
+      renderSource(video, true);
+    } else {
+      video.play().catch(() => {});
+    }
+  }
+}
+
 // ── Export ───────────────────────────────────────────────────────────
-function exportImage() {
-  if(!sourceFile) return;
+async function exportImage() {
+  if(!sourceFile || exportInProgress) return;
 
   // Flash feedback
   const btn = document.getElementById('exportBtn');
   btn.style.background = 'rgba(197,4,165,0.3)';
   setTimeout(() => { btn.style.background = ''; }, 200);
 
-  const link = document.createElement('a');
-
-  if(sourceType === 'image') {
-    // Export processed canvas as PNG, named with preset + dot size
-    const baseName = currentFileName.replace(/\.[^/.]+$/, '');
-    const dotVal   = document.getElementById('dotSize').value;
-    link.download = `${baseName}_${currentPreset}_d${dotVal}.png`;
-    link.href = canvas.toDataURL('image/png');
-  } else {
-    // Video or any other file — download the original file unchanged
-    link.download = currentFileName;
-    link.href = URL.createObjectURL(sourceFile);
-    setTimeout(() => URL.revokeObjectURL(link.href), 10000);
+  exportInProgress = true;
+  try {
+    if(sourceType === 'image') {
+      if(sourceImage) renderSource(sourceImage, false);
+      const baseName = currentFileName.replace(/\.[^/.]+$/, '');
+      const dotVal = document.getElementById('dotSize').value;
+      const filename = `${baseName}_${currentPreset}_d${dotVal}.png`;
+      triggerDownload(canvas.toDataURL('image/png'), filename);
+    } else if(sourceType === 'video') {
+      setExportReady(false, 'Rendering...');
+      await exportProcessedVideo();
+      setExportReady(true, 'Export Video');
+    } else {
+      const fileUrl = URL.createObjectURL(sourceFile);
+      triggerDownload(fileUrl, currentFileName, 10000);
+    }
+  } catch(err) {
+    console.error(err);
+    alert('Could not export processed video in this browser.');
+    if(sourceType === 'video') setExportReady(true, 'Export Video');
+  } finally {
+    exportInProgress = false;
   }
-
-  link.click();
 }
 
 function setExportReady(ready, label) {
@@ -543,7 +625,6 @@ function loadFile(file) {
   sourceFile = file;
   document.getElementById('emptyState').style.display = 'none';
   document.getElementById('canvasWrap').style.display = 'block';
-  document.getElementById('glowRing').classList.add('active');
   document.getElementById('fileLoaded').style.display = 'block';
   document.getElementById('fileLoaded').textContent = file.name;
   document.getElementById('statFile').textContent = file.name;
