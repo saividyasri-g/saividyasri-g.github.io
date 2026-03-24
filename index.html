@@ -340,11 +340,16 @@
                             <div class="about-intro-v2-left">
                                 <div class="about-intro-v2-media" id="about-intro-media">
                                     <div class="about-intro-v2-holo-stage" aria-hidden="true">
-                                        <video id="about-intro-video-holo" class="about-intro-v2-video about-intro-v2-video-main about-intro-v2-video-holo" autoplay muted loop playsinline preload="auto">
-                                            <source src="assets/media/latestht.webm" type="video/webm">
-                                        </video>
-                                        <video id="about-intro-video" class="about-intro-v2-video about-intro-v2-video-main about-intro-v2-video-real" autoplay muted loop playsinline preload="auto">
-                                            <source src="assets/media/about/hologram.webm" type="video/webm">
+                                        <!-- Hologram effect (same as landing) -->
+                                        <div class="about-holo-wrapper">
+                                            <div class="about-holo-flicker">
+                                                <div class="about-avatar-head" id="about-avatar-head">
+                                                    <div class="scan-lines about-avatar-scanlines"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Real video (revealed after glitch transition) -->
+                                        <video id="about-intro-video" class="about-intro-v2-video about-intro-v2-video-main about-intro-v2-video-real" muted loop playsinline preload="auto">
                                         </video>
                                     </div>
                                 </div>
@@ -599,46 +604,96 @@
             if (signalEl) signalEl.classList.add('show');
             if (cursorEl) cursorEl.classList.add('blink');
 
-            // T=0.6s–1.2s — type dots
+            // T=0.6s–1.2s — type dots, then beep sequence, then "receiving signal"
             typeDots(textEl, () => {
-                // T=1.5s — type "receiving signal"
-                setTimeout(() => {
-                    typeChars(textEl, 'receiving signal', 55, () => {
-                        // T=~2.5s — hide cursor
-                        if (cursorEl) cursorEl.classList.remove('blink');
-                        if (cursorEl) cursorEl.classList.add('done');
+                typeChars(textEl, 'beep..boop..beep..', 55, () => {
+                    setTimeout(() => {
+                        textEl.textContent = '';
+                        typeChars(textEl, 'receiving signal', 55, () => {
+                            // Hide cursor
+                            if (cursorEl) cursorEl.classList.remove('blink');
+                            if (cursorEl) cursorEl.classList.add('done');
 
-                        // T=~2.6s — card fades in
-                        setTimeout(() => {
-                            if (card) card.classList.add('is-visible');
-                            if (holo) holo.classList.add('is-emitting');
-
-                            // T=~3.3s — trigger hologram
+                            // Card fades in
                             setTimeout(() => {
-                                window.dispatchEvent(new Event('intro-launch-holo'));
-                            }, 700);
+                                if (card) card.classList.add('is-visible');
+                                if (holo) holo.classList.add('is-emitting');
 
-                            // T=~4.3s — info fades in
-                            setTimeout(() => {
-                                if (card) card.classList.add('is-copy-visible');
-
-                                // T=~4.5s — swap label to "signal received"
+                                // Trigger hologram
                                 setTimeout(() => {
-                                    if (signalEl) {
-                                        signalEl.classList.remove('show');
-                                        setTimeout(() => {
-                                            if (textEl) textEl.textContent = '... signal received';
-                                            signalEl.classList.add('show');
-                                        }, 200);
-                                    }
-                                }, 200);
-                            }, 1700);
-                        }, 100);
-                    });
-                }, 300);
+                                    window.dispatchEvent(new Event('intro-launch-holo'));
+                                }, 700);
+
+                                // Info fades in
+                                setTimeout(() => {
+                                    if (card) card.classList.add('is-copy-visible');
+
+                                    // Swap label to final text
+                                    setTimeout(() => {
+                                        if (signalEl) {
+                                            signalEl.classList.remove('show');
+                                            setTimeout(() => {
+                                                if (textEl) textEl.textContent = '... meet the signal source';
+                                                signalEl.classList.add('show');
+                                            }, 200);
+                                        }
+                                    }, 200);
+                                }, 1700);
+                            }, 100);
+                        });
+                    }, 400);
+                });
             });
         }, 300);
     });
+</script>
+<script>
+/* Shared: browser detection + glitch animation helpers */
+var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+var holoVideoSrc = isSafari ? 'assets/media/hologram/head.mp4' : 'assets/media/hologram/head.webm';
+
+function glitchIn(el, onDone) {
+    var seq = [
+        [0,50,0,0],[0.7,40,5,1.5],[0,60,0,0],[0.5,35,-4,-1],
+        [0,55,0,0],[0.9,30,6,1.2],[0.3,45,-3,-0.8],[1,35,4,0.6],
+        [0,40,0,0],[0.8,50,-2,-0.4],[1,30,1,0.2],[0.4,35,-1,0],[1,80,0,0],
+    ];
+    var i = 0;
+    function step() {
+        if (i >= seq.length) {
+            el.style.opacity = '1';
+            el.style.transform = '';
+            onDone();
+            return;
+        }
+        var s = seq[i++];
+        el.style.opacity = String(s[0]);
+        el.style.transform = 'translateX(' + s[2] + 'px) skewX(' + s[3] + 'deg)';
+        setTimeout(step, s[1]);
+    }
+    step();
+}
+
+function glitchOut(el, onDone) {
+    var seq = [
+        [1,40,0,0],[0.6,35,3,0.8],[1,50,-2,-0.4],[0.3,30,5,1.2],
+        [0.8,45,-4,-1],[0.1,35,6,1.5],[0.5,40,-3,-0.6],[0,50,0,0],
+    ];
+    var i = 0;
+    function step() {
+        if (i >= seq.length) {
+            el.style.opacity = '0';
+            el.style.transform = '';
+            onDone();
+            return;
+        }
+        var s = seq[i++];
+        el.style.opacity = String(s[0]);
+        el.style.transform = 'translateX(' + s[2] + 'px) skewX(' + s[3] + 'deg)';
+        setTimeout(step, s[1]);
+    }
+    step();
+}
 </script>
 <script>
 (function() {
@@ -661,8 +716,7 @@
         v.preload = 'auto';
         v.setAttribute('webkit-playsinline', '');
 
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        v.src = isSafari ? 'assets/media/hologram/head.mp4' : 'assets/media/hologram/head.webm';
+        v.src = holoVideoSrc;
         if (isSafari) {
             v.style.opacity = '0.55';
             if (i === NUM_LAYERS - 1) v.dataset.safariLast = '1';
@@ -688,39 +742,6 @@
             }
         }
     }, 400);
-
-    function glitchIn(el, onDone) {
-        const seq = [
-            // [opacity, duration, translateX, skewX]
-            [0,   50,  0,    0],
-            [0.7, 40,  5,    1.5],
-            [0,   60,  0,    0],
-            [0.5, 35, -4,   -1],
-            [0,   55,  0,    0],
-            [0.9, 30,  6,    1.2],
-            [0.3, 45, -3,   -0.8],
-            [1,   35,  4,    0.6],
-            [0,   40,  0,    0],
-            [0.8, 50, -2,   -0.4],
-            [1,   30,  1,    0.2],
-            [0.4, 35, -1,    0],
-            [1,   80,  0,    0],
-        ];
-        let i = 0;
-        function step() {
-            if (i >= seq.length) {
-                el.style.opacity = '1';
-                el.style.transform = '';
-                onDone();
-                return;
-            }
-            const [op, ms, tx, sk] = seq[i++];
-            el.style.opacity = String(op);
-            el.style.transform = 'translateX(' + tx + 'px) skewX(' + sk + 'deg)';
-            setTimeout(step, ms);
-        }
-        step();
-    }
 
     let videoReady = false;
     let launched = false;
@@ -758,7 +779,7 @@
                 }
                 startTracking();
 
-                // Googly eyes easter egg
+                // Cartoon eyes — click avatar to toggle
                 cachedPupils = avatarHead.querySelectorAll('.googly-pupil');
                 avatarHead.addEventListener('click', () => {
                     const eyes = avatarHead.querySelector('.avatar__googly-eyes');
@@ -816,7 +837,15 @@
                 `scaleY(0.65) rotate(${(currentX * 2.5).toFixed(2)}deg)`;
         }
 
-        // Googly eye pupils follow mouse (snap to fixed pos when hovering face)
+        // About panel hologram parallax (when visible)
+        const aboutAvatarHead = document.getElementById('about-avatar-head');
+        if (aboutAvatarHead && document.body.classList.contains('view-about')) {
+            const aRotY = (currentX * 15).toFixed(3);
+            const aRotX = -(currentY * 8).toFixed(3);
+            aboutAvatarHead.style.transform = `rotateY(${aRotY}deg) rotateX(${aRotX}deg)`;
+        }
+
+        // Cartoon eye pupils follow mouse (snap to fixed pos when hovering face)
         if (cachedPupils && cachedPupils.length) {
             if (avatarHead.matches(':hover')) {
                 cachedPupils[0].style.transform = 'translate(6px, 0px)';
@@ -956,7 +985,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const media = document.getElementById('about-intro-media');
-        const holoVideo = document.getElementById('about-intro-video-holo');
         const video = document.getElementById('about-intro-video');
         const floatPreview = document.getElementById('about-hover-preview');
         const preview = document.getElementById('about-intro-preview');
@@ -965,7 +993,91 @@
         const captionText = document.getElementById('about-intro-caption-text');
         const hoverTargets = document.querySelectorAll('.about-intro-v2-hover');
         const mainScroller = document.querySelector('#wrapper.screen #main');
-        if (!media || !video || !holoVideo || !floatPreview || !preview || !previewVideo || !hoverTargets.length) return;
+        if (!media || !video || !floatPreview || !preview || !previewVideo || !hoverTargets.length) return;
+
+        // About hologram setup
+        const aboutHead = document.getElementById('about-avatar-head');
+        const aboutFlicker = document.querySelector('.about-holo-flicker');
+        const aboutHoloWrapper = document.querySelector('.about-holo-wrapper');
+        const ABOUT_NUM_LAYERS = 6;
+        const aboutVideos = [];
+        let aboutHoloInited = false;
+
+        function initAboutHolo() {
+            if (aboutHoloInited || !aboutHead) return;
+            aboutHoloInited = true;
+            for (let i = 0; i < ABOUT_NUM_LAYERS; i++) {
+                const v = document.createElement('video');
+                v.muted = true; v.loop = true; v.playsInline = true;
+                v.preload = 'auto';
+                v.setAttribute('webkit-playsinline', '');
+                v.src = holoVideoSrc;
+                if (isSafari) {
+                    v.style.opacity = '0.55';
+                    if (i === ABOUT_NUM_LAYERS - 1) v.dataset.safariLast = '1';
+                }
+                if (i === ABOUT_NUM_LAYERS - 1) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'about-front-layer';
+                    aboutHead.appendChild(wrapper);
+                    wrapper.appendChild(v);
+                } else {
+                    aboutHead.appendChild(v);
+                }
+                aboutVideos.push(v);
+                v.load();
+            }
+            // Sync about video layers
+            setInterval(() => {
+                if (!aboutVideos[0]) return;
+                const t = aboutVideos[0].currentTime;
+                for (let i = 1; i < ABOUT_NUM_LAYERS; i++) {
+                    if (aboutVideos[i] && aboutVideos[i].readyState >= 2 && Math.abs(aboutVideos[i].currentTime - t) > 0.12) {
+                        aboutVideos[i].currentTime = t;
+                    }
+                }
+            }, 400);
+        }
+
+        function aboutHoloLaunch() {
+            initAboutHolo();
+            if (!video.src || video.src === '') {
+                video.src = holoVideoSrc;
+            }
+            // Reset state
+            media.classList.remove('is-real-video');
+            if (aboutHoloWrapper) {
+                aboutHoloWrapper.style.opacity = '';
+                aboutHoloWrapper.style.visibility = '';
+            }
+            if (aboutFlicker) aboutFlicker.style.opacity = '0';
+            aboutHead.classList.remove('is-loaded');
+
+            aboutVideos.forEach(v => {
+                v.currentTime = 0;
+                const p = v.play();
+                if (p) p.catch(() => {});
+            });
+
+            // Glitch hologram in, then after delay glitch out to real video
+            setTimeout(() => {
+                if (!aboutFlicker) return;
+                glitchIn(aboutFlicker, () => {
+                    aboutHead.classList.add('is-loaded');
+                    const safariLastV = aboutHead.querySelector('[data-safari-last]');
+                    if (safariLastV) safariLastV.style.filter = 'saturate(0) blur(0.1px) brightness(100%) contrast(200%)';
+                    aboutRevealTimer = setTimeout(() => {
+                        if (!document.body.classList.contains('view-about')) return;
+                        glitchOut(aboutFlicker, () => {
+                            try { video.currentTime = 0; } catch(e) {}
+                            const p = video.play();
+                            if (p) p.catch(() => {});
+                            media.classList.add('is-real-video');
+                        });
+                    }, 1500);
+                });
+            }, 650);
+        }
 
         let viewObserver = null;
         let activeTarget = null;
@@ -983,36 +1095,16 @@
         const resetAboutIntro = () => {
             clearAboutRevealTimer();
             media.classList.remove('is-real-video');
-            try {
-                holoVideo.pause();
-                video.pause();
-                holoVideo.currentTime = 0;
-                video.currentTime = 0;
-            } catch (e) {}
+            if (aboutFlicker) { aboutFlicker.style.opacity = '0'; aboutFlicker.style.transform = ''; }
+            if (aboutHoloWrapper) { aboutHoloWrapper.style.opacity = ''; aboutHoloWrapper.style.visibility = ''; }
+            aboutHead && aboutHead.classList.remove('is-loaded');
+            aboutVideos.forEach(v => { try { v.pause(); v.currentTime = 0; } catch(e) {} });
+            try { video.pause(); video.currentTime = 0; } catch(e) {}
         };
 
         const triggerHoloReveal = () => {
             clearAboutRevealTimer();
-            media.classList.remove('is-real-video');
-            try {
-                holoVideo.pause();
-                video.pause();
-                holoVideo.currentTime = 0;
-                video.currentTime = 0;
-            } catch (e) {}
-
-            const holoPlay = holoVideo.play();
-            if (holoPlay && typeof holoPlay.catch === 'function') holoPlay.catch(() => {});
-            const realPlay = video.play();
-            if (realPlay && typeof realPlay.catch === 'function') realPlay.catch(() => {});
-
-            aboutRevealTimer = window.setTimeout(() => {
-                if (!document.body.classList.contains('view-about')) return;
-                try {
-                    video.currentTime = holoVideo.currentTime;
-                } catch (e) {}
-                media.classList.add('is-real-video');
-            }, 900);
+            aboutHoloLaunch();
         };
 
         const checkAboutView = () => {
