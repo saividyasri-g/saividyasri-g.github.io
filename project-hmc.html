@@ -165,52 +165,45 @@
                             </div>
                         </div>
                     </section> 
-                    <section id="problem-section" class="problem-dark-mode">
-                        <div class="problem-content-wrapper">
-                            
-                            <div class="problem-header-block">
-                                <h3 class="problem-main-title case-section-heading">Identified Problem</h3>
-                                <p class="problem-main-desc">
-                                    Through a combination of primary and secondary research methods, we identified that root cause of workflow dependencies and late service deliveries,
+                    <section id="problem-section" class="cs-section">
+                        <h3 class="case-section-heading">Identified Problem</h3>
+                        <p class="problem-main-desc">
+                            Through a combination of primary and secondary research methods, we identified that root cause of workflow dependencies and late service deliveries,
+                        </p>
+
+                        <div class="problem-cards-grid">
+
+                            <div class="prob-card">
+                                <div class="card-top-info">
+                                    <span class="pc-number">#1</span>
+                                    <h4 class="pc-title">Service Workflow</h4>
+                                </div>
+
+                                <p class="pc-body">
+                                    <strong>Lack of shared, real-time visibility</strong> led to fragmented coordination and avoidable workflow delays.
                                 </p>
+
+                                <div class="pc-tags">
+                                    <span class="pc-pill">User Interviews</span>
+                                    <span class="pc-pill">Research Synthesis</span>
+                                </div>
                             </div>
 
-                            <div class="problem-cards-grid">
-                                
-                                <div class="prob-card">
-                                    <div class="card-top-info">
-                                        <span class="pc-number">#1</span>
-                                        <h4 class="pc-title">Service Workflow</h4>
-                                    </div>
-                                    
-                                    <p class="pc-body">
-                                        <strong>Lack of shared, real-time visibility</strong> led to fragmented coordination and avoidable workflow delays.
-                                    </p>
-                                    
-                                    <div class="pc-tags">
-                                        <span class="pc-pill">User Interviews</span>
-                                        <span class="pc-pill">Research Synthesis</span>
-                                    </div>
+                            <div class="prob-card">
+                                <div class="card-top-info">
+                                    <span class="pc-number">#2</span>
+                                    <h4 class="pc-title">Service Management Tool</h4>
                                 </div>
 
-                                <div class="prob-card">
-                                    <div class="card-top-info">
-                                        <span class="pc-number">#2</span>
-                                        <h4 class="pc-title">Service Management Tool</h4>
-                                    </div>
-                                    
-                                    <p class="pc-body">
-                                        The existing tool's design affordances <strong>did not support time-sensitive operations</strong>, forcing staff to work around the system rather than through it. 
-                                    </p>
-                                    <div class="pc-tags">
-                                        <span class="pc-pill">Heuristic Evaluation</span>
-                                    </div>
+                                <p class="pc-body">
+                                    The existing tool's design affordances <strong>did not support time-sensitive operations</strong>, forcing staff to work around the system rather than through it.
+                                </p>
+                                <div class="pc-tags">
+                                    <span class="pc-pill">Heuristic Evaluation</span>
                                 </div>
-
                             </div>
 
                         </div>
-
                     </section>
 
                     <section id="solution" class="cs-section">
@@ -383,7 +376,7 @@
                                     <h3 class="eco-title">Understanding the service centre layout & operations</h3>
                                 </div>
                                 <p class="eco-intro-text">
-                                    To learn <strong>where</strong> these fragmentations happen, we studied the spatial layout and workflow structure service centre ecosystem
+                                    To learn <span class="text-highlight">where</span> these fragmentations happen, we studied the spatial layout and workflow structure service centre ecosystem
                                 </p>
                             </div>
                             <div class="deep-dive-layout-row">
@@ -505,7 +498,7 @@
                                      <div class="actors-header">
                                         <h3 class="eco-title">Understanding the service staff & vehicle movements</h3>
                                         <p class="eco-intro-text">
-                                        To learn <strong>why</strong> these fragmentations happen, 
+                                        To learn <span class="text-highlight">why</span> these fragmentations happen, 
                                         we studied the service staff's role and workflow in the service centre. 
                                         </p>
                                     </div>               
@@ -1207,18 +1200,7 @@
                 });
             }, observerOptions);
 
-            // --- B. HANDLE DARK MODE (separate observer to avoid flicker) ---
-            const problemSection = document.getElementById('problem-section');
-            if (problemSection) {
-                const darkObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.target.id === 'problem-section') {
-                            body.classList.toggle('dark-mode-active', entry.isIntersecting);
-                        }
-                    });
-                }, observerOptions);
-                darkObserver.observe(problemSection);
-            }
+            // Dark mode observer removed — problem section uses default background
 
             // --- C. DEEP DIVE STICKY STORY (update right column on scroll) ---
             const flowItems = document.querySelectorAll('.flow-left-item');

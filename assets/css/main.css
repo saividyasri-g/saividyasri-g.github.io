@@ -2872,55 +2872,7 @@ body.dark-mode .cs-local-sidebar a:hover, body.dark-mode .cs-local-sidebar a.act
 body.dark-mode .cs-hero-visual { background: #2a2a2a; }
 body.dark-mode .cs-divider { border-top: 1px solid #333; }
 
-/* Dark mode trigger for problem section on this page */
-body.dark-mode-active .cs-local-sidebar a { color: #7c7c7a; }
-body.dark-mode-active .cs-local-sidebar a:hover,
-body.dark-mode-active .cs-local-sidebar a.active { color: #efefec; }
-
-/* Full-screen darkening while the problem section is active (HMC only) */
-body.project-hmc.dark-mode-active {
-    background-color: #000000;
-}
-
-body.project-hmc.dark-mode-active #main {
-    background-color: #000000;
-}
-
-body.project-hmc.dark-mode-active .top-back-nav {
-    background-color: rgba(0, 0, 0, 0.96);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
-}
-
-body.project-hmc.dark-mode-active .nav-link,
-body.project-hmc.dark-mode-active .nav-resume {
-    color: #9a9a9a;
-}
-
-body.project-hmc.dark-mode-active .nav-link:hover,
-body.project-hmc.dark-mode-active .nav-link.active,
-body.project-hmc.dark-mode-active .nav-resume:hover,
-body.project-hmc.dark-mode-active .nav-resume.active {
-    color: #efefec;
-}
-
-body.project-hmc.dark-mode-active .nav-project-label,
-body.project-hmc.dark-mode-active .nav-arrow-prev,
-body.project-hmc.dark-mode-active .nav-arrow-next {
-    color: #7c7c7a;
-}
-
-body.project-hmc.dark-mode-active .nav-arrow-prev:hover,
-body.project-hmc.dark-mode-active .nav-arrow-next:hover {
-    color: #111;
-}
-
-body.project-hmc.dark-mode-active .nav-brand {
-    border-color: transparent;
-    background: transparent;
-    box-shadow: none;
-}
-
-/* Smooth color transitions when toggling dark-mode-active */
+/* Smooth color transitions */
 body,
 .cs-local-sidebar a,
 .cs-section h3,
@@ -3218,8 +3170,8 @@ body.single-project #header { display: none; }
 /* Individual Card Styling */
 .impact-card {
     background: #E6E5E3;   /* The Grey Background from image */
-    border-radius: 12px;   /* Rounded corners */
-    padding: 20px;         /* Internal spacing */
+    border-radius: 8px;   /* Rounded corners */
+    padding: 40px;         /* Internal spacing */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -3357,7 +3309,7 @@ body.single-project #header { display: none; }
 .prob-card {
     border: 1px solid #111; /* Dark Grey Border */
     border-radius: 8px;
-    padding: 24px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -3935,7 +3887,7 @@ body.dark-mode .meta-number { color: #666; }
 
 .deep-dive-flow-left-list {
     display: grid;
-    gap: 140px;
+    gap: 200px;
     min-width: 0;
     padding-bottom: 160px;
 }
@@ -8677,17 +8629,29 @@ body.project-hmc .case-section-heading {
     color: #111;
 }
 
-body.project-hmc .problem-dark-mode .case-section-heading {
+body.project-hmc #problem-section .prob-card {
+    background-color: #111;
+    border-color: #111;
+}
+
+body.project-hmc #problem-section .pc-title,
+body.project-hmc #problem-section .pc-body strong {
     color: #efefec;
-    margin-bottom: 24px;
+}
+
+body.project-hmc #problem-section .pc-number-box {
+    background-color: #3E4950;
+    color: #efefec;
 }
 
 /* Deep-dive typography tuning */
 body.project-hmc #deep-dive .eco-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 24px;
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: -0.5px;
+    margin-bottom: 40px;
 }
 
 body.project-hmc #deep-dive .eco-intro-text,
