@@ -8691,12 +8691,26 @@ body.project-hmc #deep-dive .eco-title {
 }
 
 body.project-hmc #deep-dive .eco-intro-text,
+body.project-hmc #deep-dive .deep-dive-flow-title {
+    font-size: 18px;
+}
+
 body.project-hmc #deep-dive .deep-dive-lead,
 body.project-hmc #deep-dive .deep-dive-note,
-body.project-hmc #deep-dive .deep-dive-flow-title,
-body.project-hmc #deep-dive .deep-dive-zone-desc,
-body.project-hmc #deep-dive .deep-dive-zones li {
-    font-size: 18px;
+body.project-hmc #deep-dive .deep-dive-zones li,
+body.project-hmc #deep-dive .deep-dive-zone-desc {
+    font-size: 16px;
+}
+
+body.project-hmc #deep-dive .zone-number {
+    font-size: 14px;
+    min-width: 16px;
+}
+
+body.project-hmc #deep-dive .flow-badge {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
 }
 
 /* Shared subheading/highlight typography (single control class) */
