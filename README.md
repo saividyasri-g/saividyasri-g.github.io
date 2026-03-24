@@ -12,6 +12,7 @@ This repository contains:
 - Individual case-study pages for selected projects
 - Standalone experiment pages/assets in `expt/`
 - Shared global styles and small vanilla-JS interaction scripts
+- Interactive hologram avatar on landing and about pages (with glitch transitions, parallax, scan sweep)
 
 Primary entry page:
 
@@ -52,16 +53,17 @@ Portfolio/
 │   ├── js/
 │   │   ├── topbar-scroll.js
 │   │   └── footer-reveal.js
+│   ├── media/
+│   │   ├── about/
+│   │   ├── hologram/        ← head.webm, head.mp4 (HEVC alpha for Safari), eyes.svg
+│   │   ├── project_hmc/
+│   │   ├── project_tbm/
+│   │   ├── project_fid/
+│   │   ├── project_ccomp/
+│   │   ├── project_avis/
+│   │   ├── resume.pdf
+│   │   └── og-preview.jpeg
 │   └── webfonts/
-├── images/
-│   ├── about/
-│   ├── project_hmc/
-│   ├── project_tbm/
-│   ├── project_fid/
-│   ├── project_ccomp/
-│   ├── project_avis/
-│   ├── resume.pdf
-│   └── latestht.webm
 └── expt/
     ├── hologram-expt/
     │   └── hologram.html
@@ -113,9 +115,20 @@ Then open:
 
 ### Media assets
 
-- Project and about images/videos live in `images/`
-- HMC project media and Lottie JSON files are under `images/project_hmc/` (used by `project-hmc.html` and the HMC card in `index.html`)
+- Project and about images/videos live in `assets/media/`
+- Hologram video layers (WebM + HEVC alpha MP4 for Safari) are in `assets/media/hologram/`
+- HMC project media and Lottie JSON files are under `assets/media/project_hmc/`
 - Experiment-specific files live in `expt/screenprint-expt/` and `expt/hologram-expt/`
+
+### Hologram avatar
+
+The landing page and about page both use a 6-layer video hologram effect with:
+- Browser detection: WebM (Chrome/Firefox) or HEVC alpha MP4 (Safari)
+- Shared `glitchIn()` / `glitchOut()` animation helpers
+- Parallax head tracking via mouse position
+- Landing: emitter beam boot → glitch-in → scan sweep line
+- About: glitch-in → delay → glitch-out → real video reveal
+- Cartoon eyes easter egg (click the landing hologram)
 
 ## Notes
 
@@ -133,7 +146,8 @@ Then open:
 - Check desktop and mobile layouts
 - Verify tab/view transitions on `index.html`
 - Verify sidebar active states in each case-study page
-- Check media loading and fallback behavior
+- Check media loading and fallback behavior (test hologram in both Safari and Chrome)
+- Verify hologram glitch transitions on landing and about pages
 - Confirm footer reveal behavior on long pages
 - Validate resume link and external links open as expected
 
