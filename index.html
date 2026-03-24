@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Hanken+Grotesk:wght@900&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=DM+Sans:ital,wght@0,400;0,600;1,400&family=Hanken+Grotesk:wght@900&family=JetBrains+Mono:wght@500&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script data-goatcounter="https://saividyasri-g.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -87,116 +87,22 @@
             <section id="landing-experiment" class="landing-hero">
                 <div class="container landing-hero-inner">
                     <div class="landing-hero-content">
+                        <p class="landing-hero-signal" aria-live="polite"><span class="signal-text"></span><span class="signal-cursor"></span></p>
                         <div class="landing-hero-card">
                             <div class="landing-hero-card-left">
                                 <div class="landing-hero-holo">
-                                    <div class="holo-inline" aria-label="Holographic avatar">
-                                        <div id="scene">
-                                            <div id="avatar-wrapper">
-                                                <div id="face-section">
-                                                    <div id="face-pivot">
-                                                        <div id="head-stack"></div>
-                                                    </div>
-                                                    <div id="face-mask"></div>
-                                                </div>
-                                                <div id="emitter-section">
-                                                    <div id="emitter">
-                                                        <canvas id="emitter-canvas" width="260" height="210"></canvas>
-                                                    </div>
-                                                    <div class="emitter-base" aria-hidden="true">
-                                                        <svg width="1129" height="424" viewBox="0 0 1129 424" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <defs>
-
-                                                                <!-- Glow filter for dots -->
-                                                                <filter id="dotGlow" x="-80%" y="-80%" width="260%" height="260%">
-                                                                <feGaussianBlur stdDeviation="4" result="blur"/>
-                                                                <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                                                                </filter>
-
-                                                                <!-- Soft outer bloom on whole emitter -->
-                                                                <filter id="areaBloom" x="-20%" y="-60%" width="140%" height="220%">
-                                                                <feGaussianBlur stdDeviation="18"/>
-                                                                </filter>
-
-                                                                <!-- Perspective fade mask: bright center-top, fades to edges & bottom -->
-                                                                <!-- Simulates a surface receding away from viewer -->
-                                                                <radialGradient id="perspectiveMask" cx="50%" cy="35%" r="55%" gradientUnits="objectBoundingBox">
-                                                                <stop offset="0%"   stop-color="white" stop-opacity="1"/>
-                                                                <stop offset="40%"  stop-color="white" stop-opacity="0.85"/>
-                                                                <stop offset="70%"  stop-color="white" stop-opacity="0.45"/>
-                                                                <stop offset="100%" stop-color="white" stop-opacity="0.05"/>
-                                                                </radialGradient>
-                                                                <mask id="halftoneMask">
-                                                                <ellipse cx="575.5" cy="94" rx="245" ry="55" fill="url(#perspectiveMask)"/>
-                                                                </mask>
-
-                                                                <!-- Highlight mask: bright streak near top-center to simulate surface gloss -->
-                                                                <radialGradient id="highlightGrad" cx="50%" cy="25%" r="40%" gradientUnits="objectBoundingBox">
-                                                                <stop offset="0%"   stop-color="white" stop-opacity="0.7"/>
-                                                                <stop offset="100%" stop-color="white" stop-opacity="0"/>
-                                                                </radialGradient>
-
-                                                                <!-- Dot patterns: 3 sizes representing near/mid/far zones -->
-                                                                <!-- Near (center): largest dots -->
-                                                                <pattern id="dotsNear" patternUnits="userSpaceOnUse" width="26" height="16">
-                                                                <circle cx="13" cy="8" r="5.2" fill="#C504A5"/>
-                                                                </pattern>
-                                                                <!-- Mid zone -->
-                                                                <pattern id="dotsMid" patternUnits="userSpaceOnUse" width="24" height="12">
-                                                                <circle cx="12" cy="6" r="3.4" fill="#d030b8"/>
-                                                                </pattern>
-                                                                <!-- Far (edges): smallest, most compressed vertically -->
-                                                                <pattern id="dotsFar" patternUnits="userSpaceOnUse" width="22" height="9">
-                                                                <circle cx="11" cy="4.5" r="2" fill="#e060cc"/>
-                                                                </pattern>
-
-                                                                <clipPath id="emitterClip">
-                                                                <path d="M575.5 39C644.915 39 707.416 46.2243 752.268 57.7246C774.769 63.4941 792.264 70.1994 803.895 77.25C816.125 84.6642 819 90.6196 819 94C819 97.3804 816.125 103.336 803.895 110.75C792.264 117.801 774.769 124.506 752.268 130.275C707.416 141.776 644.915 149 575.5 149C506.085 149 443.584 141.776 398.732 130.275C376.231 124.506 358.736 117.801 347.105 110.75C334.875 103.336 332 97.3804 332 94C332 90.6196 334.875 84.6642 347.105 77.25C358.736 70.1994 376.231 63.4941 398.732 57.7246C443.584 46.2243 506.085 39 575.5 39Z"/>
-                                                                </clipPath>
-
-                                                                <!-- Clip for the near/center zone only -->
-                                                                <clipPath id="nearZoneClip">
-                                                                <ellipse cx="575.5" cy="94" rx="150" ry="30"/>
-                                                                </clipPath>
-
-                                                                <!-- Clip for mid zone (ring between near and far) -->
-                                                                <clipPath id="midZoneClip">
-                                                                <ellipse cx="575.5" cy="94" rx="250" ry="50"/>
-                                                                </clipPath>
-
-                                                                <!-- Perspective shadow gradient: darker at far edges to simulate foreshortening shadow -->
-                                                                <radialGradient id="surfaceShadow" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
-                                                                <stop offset="0%"   stop-color="#ffffff" stop-opacity="0"/>
-                                                                <stop offset="60%"  stop-color="#000000" stop-opacity="0.08"/>
-                                                                <stop offset="100%" stop-color="#000000" stop-opacity="0.28"/>
-                                                                </radialGradient>
-
-                                                            </defs>
-
-                                                            <!-- Base shapes -->
-                                                            <ellipse class="emitter-inner" cx="564.5" cy="255.5" rx="564.5" ry="168.5" fill="#7C7C7A"/>
-                                                            <path d="M213 79.5C213 79.5 245.966 174 571 174C891 174 938.5 83.5 938.5 83.5L1039 211C1039 211 911 342.636 556.5 341.5C202 340.364 95 205 95 205L213 79.5Z" fill="#A1A1A1"/>
-                                                            <ellipse cx="575" cy="94" rx="366" ry="94" fill="#BEBEBE"/>
-
-                                                            <!-- Emitter solid base -->
-                                                            <path d="M575.5 39C644.915 39 707.416 46.2243 752.268 57.7246C774.769 63.4941 792.264 70.1994 803.895 77.25C816.125 84.6642 819 90.6196 819 94C819 97.3804 816.125 103.336 803.895 110.75C792.264 117.801 774.769 124.506 752.268 130.275C707.416 141.776 644.915 149 575.5 149C506.085 149 443.584 141.776 398.732 130.275C376.231 124.506 358.736 117.801 347.105 110.75C334.875 103.336 332 97.3804 332 94C332 90.6196 334.875 84.6642 347.105 77.25C358.736 70.1994 376.231 63.4941 398.732 57.7246C443.584 46.2243 506.085 39 575.5 39Z" fill="#efefec"/>
-
-                                                            <!-- Area bloom -->
-                                                            <path d="M575.5 39C644.915 39 707.416 46.2243 752.268 57.7246C774.769 63.4941 792.264 70.1994 803.895 77.25C816.125 84.6642 819 90.6196 819 94C819 97.3804 816.125 103.336 803.895 110.75C792.264 117.801 774.769 124.506 752.268 130.275C707.416 141.776 644.915 149 575.5 149C506.085 149 443.584 141.776 398.732 130.275C376.231 124.506 358.736 117.801 347.105 110.75C334.875 103.336 332 97.3804 332 94C332 90.6196 334.875 84.6642 347.105 77.25C358.736 70.1994 376.231 63.4941 398.732 57.7246C443.584 46.2243 506.085 39 575.5 39Z" fill="#C504A5" opacity="0.18" filter="url(#areaBloom)"/>
-
-                                                            <!-- Single clean dot layer with perspective fade mask -->
-                                                            <g mask="url(#halftoneMask)">
-                                                                <rect x="0" y="0" width="1129" height="424" fill="url(#dotsMid)" clip-path="url(#emitterClip)"/>
-                                                            </g>
-
-                                                            <!-- Surface perspective shadow: vignette darkening at far edges -->
-                                                            <path d="M575.5 39C644.915 39 707.416 46.2243 752.268 57.7246C774.769 63.4941 792.264 70.1994 803.895 77.25C816.125 84.6642 819 90.6196 819 94C819 97.3804 816.125 103.336 803.895 110.75C792.264 117.801 774.769 124.506 752.268 130.275C707.416 141.776 644.915 149 575.5 149C506.085 149 443.584 141.776 398.732 130.275C376.231 124.506 358.736 117.801 347.105 110.75C334.875 103.336 332 97.3804 332 94C332 90.6196 334.875 84.6642 347.105 77.25C358.736 70.1994 376.231 63.4941 398.732 57.7246C443.584 46.2243 506.085 39 575.5 39Z" fill="url(#surfaceShadow)"/>
-
-                                                        </svg>
-                                                    </div>
+                                    <div class="avatar-wrapper">
+                                        <div class="avatar__holo-flicker">
+                                            <div class="avatar__head" data-el="head">
+                                                <div class="scan-lines avatar__head__scan-lines"></div>
+                                                <div class="avatar__googly-eyes" style="display:none;">
+                                                    <img src="images/eyes.svg" class="googly-eyes-svg" alt="">
+                                                    <div class="googly-pupil googly-pupil--left"></div>
+                                                    <div class="googly-pupil googly-pupil--right"></div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="avatar__emitter" data-el="emitter"></div>
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +110,7 @@
                                 <div class="landing-hero-copy">
                                     <p class="landing-hero-intro">Sai Vidyasri Giridharan <span class="landing-hero-pronouns">(she/her)</span></p>
                                     <p class="landing-hero-subtitle">Designing for 5+ years</p>
-
+                                    <div class="landing-hero-divider"></div>
                                     <div class="landing-hero-meta">
                                         <div>
                                             <p class="landing-meta-label">Previously at</p>
@@ -650,349 +556,308 @@
 
 <!-- ── Landing experiment scripts ── -->
 <script>
+    function typeDots(el, onDone) {
+        const dots = ['.', '.', '. '];
+        let i = 0;
+        function next() {
+            if (i >= dots.length) { onDone(); return; }
+            el.textContent += dots[i++];
+            setTimeout(next, 300);
+        }
+        next();
+    }
+
+    function typeChars(el, str, speed, onDone) {
+        let i = 0;
+        function next() {
+            if (i >= str.length) { onDone(); return; }
+            el.textContent += str[i++];
+            setTimeout(next, speed);
+        }
+        next();
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const hero = document.querySelector('.landing-hero');
         if (!hero) return;
+
+        const signalEl  = hero.querySelector('.landing-hero-signal');
+        const textEl    = hero.querySelector('.signal-text');
+        const cursorEl  = hero.querySelector('.signal-cursor');
+        const card      = hero.querySelector('.landing-hero-card');
+        const holo      = hero.querySelector('.landing-hero-holo');
         const broadcast = document.querySelector('.landing-hero-broadcast');
-        const card    = hero.querySelector('.landing-hero-card');
-        const holo    = hero.querySelector('.landing-hero-holo');
-        const emitterBase = hero.querySelector('.emitter-base');
-        if (card) {
-            card.classList.remove('is-visible');
-            card.classList.remove('is-copy-visible');
-        }
-        if (emitterBase) {
-            emitterBase.classList.remove('is-visible', 'is-glowing');
-        }
-        window.setTimeout(() => {
-            if (broadcast) broadcast.classList.add('is-visible');
-            if (emitterBase) {
-                emitterBase.classList.add('is-visible');
-                window.setTimeout(() => emitterBase.classList.add('is-glowing'), 160);
-            }
-            document.body.classList.remove('emitter-live');
-            window.setTimeout(() => document.body.classList.add('emitter-live'), 420);
-            window.setTimeout(() => {
-                if (card) card.classList.add('is-visible');
-                if (holo) holo.classList.add('is-emitting');
-            }, 220);
-        }, 40);
 
-        const revealCopy = () => {
-            if (!card || card.classList.contains('is-copy-visible')) return;
-            card.classList.add('is-copy-visible');
-        };
+        // Ensure initial hidden state
+        if (card) { card.classList.remove('is-visible', 'is-copy-visible'); }
 
-        window.addEventListener('holo-ready', revealCopy);
-        window.setTimeout(revealCopy, 2200);
+        // Show topbar broadcast text
+        setTimeout(() => { if (broadcast) broadcast.classList.add('is-visible'); }, 40);
+
+        // T=0.3s — show signal label + start cursor blinking
+        setTimeout(() => {
+            if (signalEl) signalEl.classList.add('show');
+            if (cursorEl) cursorEl.classList.add('blink');
+
+            // T=0.6s–1.2s — type dots
+            typeDots(textEl, () => {
+                // T=1.5s — type "receiving signal"
+                setTimeout(() => {
+                    typeChars(textEl, 'receiving signal', 55, () => {
+                        // T=~2.5s — hide cursor
+                        if (cursorEl) cursorEl.classList.remove('blink');
+                        if (cursorEl) cursorEl.classList.add('done');
+
+                        // T=~2.6s — card fades in
+                        setTimeout(() => {
+                            if (card) card.classList.add('is-visible');
+                            if (holo) holo.classList.add('is-emitting');
+
+                            // T=~3.3s — trigger hologram
+                            setTimeout(() => {
+                                window.dispatchEvent(new Event('intro-launch-holo'));
+                            }, 700);
+
+                            // T=~4.3s — info fades in
+                            setTimeout(() => {
+                                if (card) card.classList.add('is-copy-visible');
+
+                                // T=~4.5s — swap label to "signal received"
+                                setTimeout(() => {
+                                    if (signalEl) {
+                                        signalEl.classList.remove('show');
+                                        setTimeout(() => {
+                                            if (textEl) textEl.textContent = '... signal received';
+                                            signalEl.classList.add('show');
+                                        }, 200);
+                                    }
+                                }, 200);
+                            }, 1700);
+                        }, 100);
+                    });
+                }, 300);
+            });
+        }, 300);
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sceneEl = document.getElementById('scene');
-        const headStack = document.getElementById('head-stack');
-        const emitter = document.getElementById('emitter');
-        const faceEl = document.getElementById('face-section');
-        const emitterSection = document.getElementById('emitter-section');
-        const emitterCanvas = document.getElementById('emitter-canvas');
-        const card = document.querySelector('.landing-hero-card');
-        if (!sceneEl || !headStack || !emitter || !emitterCanvas || !faceEl) return;
+(function() {
+    const avatarHead = document.querySelector('.landing-hero-holo .avatar__head');
+    const flickerEl = document.querySelector('.landing-hero-holo .avatar__holo-flicker');
+    const emitterEl = document.querySelector('.landing-hero-holo .avatar__emitter');
+    if (!avatarHead) return;
 
-        const N = 8;
-        const EASE = 0.14;
-        const MAX_Y = 20;
-        const MAX_X = 14;
-        const Z_STEP = 28;
-        const OPACITIES = [1.0, 0.7, 0.5, 0.35, 0.25, 0.18, 0.12, 0.08];
+    flickerEl.style.opacity = '0';
 
-        let layerVids = [];
-        let blobUrl = null;
-        let running = false;
-        let rotX = 0, rotY = 0;
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
+    const scanLines = avatarHead.querySelector('.avatar__head__scan-lines');
+    const NUM_LAYERS = 6;
+    const videos = [];
 
-        const notifyReady = () => window.dispatchEvent(new Event('holo-ready'));
+    for (let i = 0; i < NUM_LAYERS; i++) {
+        const v = document.createElement('video');
+        v.muted = true;
+        v.loop = true;
+        v.playsInline = true;
+        v.preload = 'auto';
+        v.setAttribute('webkit-playsinline', '');
 
-        function loadVideo(blob) {
-            cleanup();
-            blobUrl = URL.createObjectURL(blob);
-
-            let launched = false;
-            const facePivot = document.getElementById('face-pivot');
-            const perspective = facePivot
-                ? parseFloat(getComputedStyle(facePivot).perspective) || 550
-                : 550;
-            for (let i = 0; i < N; i++) {
-                const div = document.createElement('div');
-                div.className = 'layer';
-                const z = -i * Z_STEP;
-                const scale = perspective > 0 ? (perspective - z) / perspective : 1;
-                div.style.transform = `translateZ(${z}px) scale(${scale})`;
-
-                const v = document.createElement('video');
-                v.src = blobUrl;
-                v.muted = true;
-                v.loop = true;
-                v.autoplay = true;
-                v.playsInline = true;
-                v.preload = 'auto';
-                v.setAttribute('muted', '');
-                v.setAttribute('autoplay', '');
-                v.setAttribute('playsinline', '');
-                v.setAttribute('webkit-playsinline', '');
-                v.style.opacity = i === 0 ? '1' : String(OPACITIES[i]);
-                v.style.filter = 'none';
-                v.style.mixBlendMode = 'screen';
-
-                div.appendChild(v);
-                headStack.appendChild(div);
-                layerVids.push(v);
-
-                v.addEventListener('canplay', () => { if (!launched) { launched = true; launch(); } }, { once: true });
-                v.addEventListener('loadeddata', () => { if (!launched) { launched = true; launch(); } }, { once: true });
-                v.load();
-            }
-
-            setTimeout(() => { if (!launched) { launched = true; launch(); } }, 5000);
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        v.src = isSafari ? 'images/head.mp4' : 'images/head.webm';
+        if (isSafari) {
+            v.style.opacity = '0.55';
+            if (i === NUM_LAYERS - 1) v.dataset.safariLast = '1';
         }
-
-        function launch() {
-            layerVids.forEach(v => { v.currentTime = 0; v.play().catch(() => {}); });
-            sceneEl.style.display = 'block';
-
-            faceEl.classList.remove('is-revealing', 'is-revealed', 'is-glitching');
-            faceEl.style.opacity = '0';
-            headStack.style.opacity = '0';
-
-            if (emitterSection) emitterSection.classList.add('is-booting');
-            if (!emitterRunning) {
-                emitterRunning = true;
-                requestAnimationFrame(emitterLoop);
-            }
-
-            const revealDuration = 1600;
-            const glitchDuration = 500;
-
-            resetPointerToCenter();
-
-            setTimeout(() => {
-                if (emitterSection) emitterSection.classList.remove('is-booting');
-                faceEl.classList.add('is-revealing');
-                setTimeout(() => {
-                    faceEl.classList.add('is-glitching');
-                    headStack.style.opacity = '1';
-                    running = true;
-                    requestAnimationFrame(tick);
-                    setTimeout(() => {
-                        faceEl.classList.add('is-revealed');
-                        faceEl.classList.remove('is-revealing', 'is-glitching');
-                        faceEl.style.opacity = '1';
-                        headStack.style.opacity = '1';
-                        notifyReady();
-                    }, glitchDuration);
-                }, revealDuration);
-            }, 750);
+        if (i === NUM_LAYERS - 1) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'avatar__front-layer';
+            avatarHead.appendChild(wrapper);
+            wrapper.appendChild(v);
+        } else {
+            avatarHead.appendChild(v);
         }
+        videos.push(v);
+        v.load();
+    }
 
-        let emitterRunning = false;
-        function emitterLoop() {
-            if (!emitterRunning) return;
-            drawEmitter();
-            requestAnimationFrame(emitterLoop);
+    setInterval(() => {
+        if (!videos[0]) return;
+        const t = videos[0].currentTime;
+        for (let i = 1; i < NUM_LAYERS; i++) {
+            if (videos[i] && videos[i].readyState >= 2 && Math.abs(videos[i].currentTime - t) > 0.12) {
+                videos[i].currentTime = t;
+            }
         }
+    }, 400);
 
-        setInterval(() => {
-            if (!running || !layerVids[0]) return;
-            const t = layerVids[0].currentTime;
-            for (let i = 1; i < N; i++) {
-                const v = layerVids[i];
-                if (v && v.readyState >= 2 && Math.abs(v.currentTime - t) > 0.12) v.currentTime = t;
+    function glitchIn(el, onDone) {
+        const seq = [
+            // [opacity, duration, translateX, skewX]
+            [0,   50,  0,    0],
+            [0.7, 40,  5,    1.5],
+            [0,   60,  0,    0],
+            [0.5, 35, -4,   -1],
+            [0,   55,  0,    0],
+            [0.9, 30,  6,    1.2],
+            [0.3, 45, -3,   -0.8],
+            [1,   35,  4,    0.6],
+            [0,   40,  0,    0],
+            [0.8, 50, -2,   -0.4],
+            [1,   30,  1,    0.2],
+            [0.4, 35, -1,    0],
+            [1,   80,  0,    0],
+        ];
+        let i = 0;
+        function step() {
+            if (i >= seq.length) {
+                el.style.opacity = '1';
+                el.style.transform = '';
+                onDone();
+                return;
             }
-        }, 400);
+            const [op, ms, tx, sk] = seq[i++];
+            el.style.opacity = String(op);
+            el.style.transform = 'translateX(' + tx + 'px) skewX(' + sk + 'deg)';
+            setTimeout(step, ms);
+        }
+        step();
+    }
 
-        let lastGlitch = 0;
-        function glitch(ts) {
-            if (ts - lastGlitch < 2000 + Math.random() * 3000) return;
-            lastGlitch = ts;
-            const picks = [];
-            while (picks.length < 2) {
-                const r = 1 + Math.floor(Math.random() * (N - 1));
-                if (!picks.includes(r)) picks.push(r);
-            }
-            picks.forEach(i => {
-                const v = layerVids[i];
-                if (!v) return;
-                v.style.transform = `translate(${(Math.random() - 0.5) * 28}px,0)`;
-                setTimeout(() => { if (v) v.style.transform = ''; }, 55 + Math.random() * 80);
+    let videoReady = false;
+    let launched = false;
+
+    videos[0].addEventListener('canplay', () => { videoReady = true; }, { once: true });
+
+    function launch() {
+        if (launched) return;
+        launched = true;
+        videos.forEach(v => {
+            const p = v.play();
+            if (p) p.catch(() => {
+                document.addEventListener('click', () => v.play(), { once: true });
+                document.addEventListener('touchstart', () => v.play(), { once: true });
             });
-        }
-
-        const updatePointer = (x, y) => { mouseX = x; mouseY = y; };
-        const resetPointerToCenter = () => {
-            const facePivotEl = document.getElementById('face-pivot');
-            if (!facePivotEl) return;
-            const r = facePivotEl.getBoundingClientRect();
-            updatePointer(r.left + r.width * 0.5, r.top + r.height * 0.42);
-        };
-
-        document.addEventListener('mousemove', e => updatePointer(e.clientX, e.clientY), { passive: true });
-        document.addEventListener('touchmove', e => {
-            if (!e.touches[0]) return;
-            updatePointer(e.touches[0].clientX, e.touches[0].clientY);
-        }, { passive: true });
-        window.addEventListener('resize', () => {
-            resetPointerToCenter();
-            if (typeof syncEmitterSize === 'function') syncEmitterSize();
         });
 
-        function tick(ts) {
-            if (!running) return;
-            requestAnimationFrame(tick);
-            glitch(ts);
-
-            const facePivotEl = document.getElementById('face-pivot');
-            const r = facePivotEl.getBoundingClientRect();
-            const cx = r.left + r.width * 0.5;
-            const cy = r.top + r.height * 0.42;
-
-            const dx = (mouseX - cx) / (window.innerWidth * 0.44);
-            const dy = (mouseY - cy) / (window.innerHeight * 0.44);
-            const d = Math.sqrt(dx * dx + dy * dy);
-            const k = Math.min(d * 1.4, 1.0);
-
-            const tY = dx * MAX_Y * k;
-            const tX = -dy * MAX_X * k;
-
-            rotX += (tX - rotX) * EASE;
-            rotY += (tY - rotY) * EASE;
-
-            headStack.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-
-            const emitRotate = rotY * 0.1;
-            emitter.style.transform = `rotate(${emitRotate}deg)`;
+        // Phase 1: emitter beam boots up — hologram stays hidden
+        if (emitterEl) {
+            emitterEl.classList.add('is-booting');
+            emitterEl.addEventListener('animationend', () => {
+                emitterEl.classList.remove('is-booting');
+                emitterEl.style.opacity = '0.35';
+                emitterEl.style.transform = 'scaleY(0.65)';
+            }, { once: true });
         }
 
-        const eCtx = emitterCanvas.getContext('2d');
-        let EW = 150, EH = 220;
-        let elines = [];
-
-        const syncEmitterSize = () => {
-            const rect = emitter.getBoundingClientRect();
-            if (!rect.width || !rect.height) return;
-            const dpr = window.devicePixelRatio || 1;
-            emitterCanvas.width = Math.max(1, Math.round(rect.width * dpr));
-            emitterCanvas.height = Math.max(1, Math.round(rect.height * dpr));
-            emitterCanvas.style.width = `${rect.width}px`;
-            emitterCanvas.style.height = `${rect.height}px`;
-            eCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            EW = rect.width;
-            EH = rect.height;
-            elines = buildEmitterLines();
-        };
-
-        const NUM_LINES = 40;
-        const buildEmitterLines = () => Array.from({ length: NUM_LINES }, (_, i) => ({
-            y: (i / NUM_LINES) * EH,
-            speed: 0.5 + Math.random() * 1.0,
-            opacity: 0.3 + Math.random() * 0.5,
-            glitchX: 0,
-            glitchTimer: 0,
-            tone: (i % 5 === 0) ? 'yellow' : 'pink',
-        }));
-        syncEmitterSize();
-
-        let emitterTime = 0;
-        function drawEmitter() {
-            emitterTime += 0.016;
-            eCtx.clearRect(0, 0, EW, EH);
-
-            elines.forEach(ln => {
-                ln.y -= ln.speed;
-                if (ln.y < -2) {
-                    ln.y = EH + 2;
-                    ln.speed = 0.5 + Math.random() * 1.0;
-                    ln.opacity = 0.25 + Math.random() * 0.5;
-                    ln.glitchX = 0;
-                    ln.tone = (Math.random() < 0.25) ? 'yellow' : 'pink';
+        // Phase 2: beam is fully formed → glitch hologram in
+        setTimeout(() => {
+            glitchIn(flickerEl, () => {
+                avatarHead.classList.add('is-loaded');
+                const safariLastV = avatarHead.querySelector('[data-safari-last]');
+                if (safariLastV) {
+                    safariLastV.style.filter = 'saturate(0) blur(0.1px) brightness(100%) contrast(200%)';
                 }
+                startTracking();
 
-                if (ln.glitchTimer > 0) {
-                    ln.glitchTimer--;
-                } else if (Math.random() < 0.005) {
-                    ln.glitchX = (Math.random() - 0.5) * 22;
-                    ln.glitchTimer = 2 + Math.floor(Math.random() * 6);
-                } else {
-                    ln.glitchX *= 0.85;
-                }
-
-                const t = ln.y / EH;
-                const lineFade = Math.max(0, 1 - t * 1.1);
-                if (lineFade <= 0.01) return;
-
-                const alpha = ln.opacity * lineFade;
-                const x1 = ln.glitchX;
-                const x2 = EW + ln.glitchX;
-                const grad = eCtx.createLinearGradient(x1, 0, x2, 0);
-
-                if (ln.tone === 'yellow') {
-                    grad.addColorStop(0, `rgba(245,195,118,0)`);
-                    grad.addColorStop(0.18, `rgba(245,195,118,${alpha * 0.7})`);
-                    grad.addColorStop(0.5, `rgba(255,214,138,${alpha})`);
-                    grad.addColorStop(0.82, `rgba(245,195,118,${alpha * 0.7})`);
-                    grad.addColorStop(1, `rgba(245,195,118,0)`);
-                } else {
-                    grad.addColorStop(0, `rgba(211,12,174,0)`);
-                    grad.addColorStop(0.18, `rgba(211,12,174,${alpha * 0.7})`);
-                    grad.addColorStop(0.5, `rgba(236,86,184,${alpha})`);
-                    grad.addColorStop(0.82, `rgba(211,12,174,${alpha * 0.7})`);
-                    grad.addColorStop(1, `rgba(211,12,174,0)`);
-                }
-
-                eCtx.strokeStyle = grad;
-                eCtx.lineWidth = 1;
-                eCtx.beginPath();
-                eCtx.moveTo(x1, ln.y);
-                eCtx.lineTo(x2, ln.y);
-                eCtx.stroke();
+                // Googly eyes easter egg
+                cachedPupils = avatarHead.querySelectorAll('.googly-pupil');
+                avatarHead.addEventListener('click', () => {
+                    const eyes = avatarHead.querySelector('.avatar__googly-eyes');
+                    eyes.style.display = eyes.style.display === 'none' ? '' : 'none';
+                });
             });
+        }, 650);
+    }
 
-            const pulseY = EH - ((emitterTime * 55) % (EH + 30));
-            const pAlpha = Math.max(0, (pulseY / EH));
-            const pulseGrad = eCtx.createLinearGradient(0, pulseY - 10, 0, pulseY + 10);
-            pulseGrad.addColorStop(0, 'rgba(211,12,174,0)');
-            pulseGrad.addColorStop(0.5, `rgba(236,86,184,${0.22 * pAlpha})`);
-            pulseGrad.addColorStop(1, 'rgba(211,12,174,0)');
-            eCtx.fillStyle = pulseGrad;
-            eCtx.fillRect(0, pulseY - 10, EW, 20);
+    window.addEventListener('intro-launch-holo', () => {
+        if (videoReady) {
+            launch();
+        } else {
+            videos[0].addEventListener('canplay', launch, { once: true });
+            setTimeout(launch, 3000);
         }
-
-        function cleanup() {
-            running = false;
-            layerVids.forEach(v => { try { v.pause(); v.src = ''; v.parentNode && v.parentNode.remove(); } catch (e) {} });
-            layerVids = [];
-            while (headStack.firstChild) headStack.removeChild(headStack.firstChild);
-            if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl = null; }
-            rotX = 0; rotY = 0;
-            headStack.style.transform = '';
-            emitter.style.transform = '';
-            emitterRunning = false;
-            eCtx.clearRect(0, 0, EW, EH);
-        }
-
-        fetch('images/latestht.webm')
-            .then(r => {
-                if (!r.ok) throw new Error('Could not load latestht.webm');
-                return r.blob();
-            })
-            .then(blob => loadVideo(blob))
-            .catch(err => {
-                console.error('Hologram load error:', err);
-                sceneEl.style.display = 'block';
-                emitterRunning = true;
-                requestAnimationFrame(emitterLoop);
-            });
     });
+
+    let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+    let tracking = false;
+    let cachedPupils = null;
+
+    document.addEventListener('mousemove', e => {
+        targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+        targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    document.addEventListener('touchmove', e => {
+        targetX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
+        targetY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+
+    function tick() {
+        if (!tracking) return;
+        requestAnimationFrame(tick);
+
+        currentX += (targetX - currentX) * 0.08;
+        currentY += (targetY - currentY) * 0.08;
+
+        const rotY   =  (currentX * 25).toFixed(3);
+        const transX = -(currentX *  3).toFixed(2);
+        const rotX   = -(currentY * 10).toFixed(3);
+        avatarHead.style.transform =
+            `rotateY(${rotY}deg) translateX(${transX}px) rotateX(${rotX}deg)`;
+
+        videos.forEach((v, i) => {
+            const factor = (NUM_LAYERS - 1 - i) / (NUM_LAYERS - 1);
+            const lx = -(currentX * 35 * factor).toFixed(2);
+            const ly = -(currentY * 15 * 0.49 * factor).toFixed(2);
+            v.style.transform = `translate3d(${lx}px, ${ly}px, 0)`;
+        });
+
+        if (emitterEl) {
+            emitterEl.style.transform =
+                `scaleY(0.65) rotate(${(currentX * 2.5).toFixed(2)}deg)`;
+        }
+
+        // Googly eye pupils follow mouse (snap to fixed pos when hovering face)
+        if (cachedPupils && cachedPupils.length) {
+            if (avatarHead.matches(':hover')) {
+                cachedPupils[0].style.transform = 'translate(6px, 0px)';
+                cachedPupils[1].style.transform = 'translate(-5px, 0px)';
+            } else {
+                const PUPIL_RADIUS = 13;
+                const PUPIL_SPEED_X = 14;
+                const PUPIL_SPEED_Y = 8;
+                const PUPIL_MAX_DOWN = 4;
+                const PUPIL_CROSS_CLAMP = PUPIL_RADIUS - 5;
+                const PUPIL_DIAG_LIMIT = 8;
+
+                let px = currentX * PUPIL_SPEED_X;
+                let py = currentY * PUPIL_SPEED_Y;
+                const dist = Math.sqrt(px * px + py * py);
+                if (dist > PUPIL_RADIUS) {
+                    px = px / dist * PUPIL_RADIUS;
+                    py = py / dist * PUPIL_RADIUS;
+                }
+
+                const cpy = py > 0 ? Math.min(py, PUPIL_MAX_DOWN) : py;
+                const lpx = px > 0 ? Math.min(px, PUPIL_CROSS_CLAMP) : px;
+                const rpx = px < 0 ? Math.max(px, -PUPIL_CROSS_CLAMP) : px;
+
+                // Reduce Y when X is large to keep pupils inside eye sockets diagonally
+                const lyRoom = Math.sqrt(Math.max(0, PUPIL_DIAG_LIMIT * PUPIL_DIAG_LIMIT - lpx * lpx));
+                const ryRoom = Math.sqrt(Math.max(0, PUPIL_DIAG_LIMIT * PUPIL_DIAG_LIMIT - rpx * rpx));
+                const lpy = cpy > 0 ? Math.min(cpy, lyRoom) : Math.max(cpy, -lyRoom);
+                const rpy = cpy > 0 ? Math.min(cpy, ryRoom) : Math.max(cpy, -ryRoom);
+
+                cachedPupils[0].style.transform = `translate(${lpx.toFixed(2)}px, ${lpy.toFixed(2)}px)`;
+                cachedPupils[1].style.transform = `translate(${rpx.toFixed(2)}px, ${rpy.toFixed(2)}px)`;
+            }
+        }
+    }
+
+    function startTracking() {
+        tracking = true;
+        requestAnimationFrame(tick);
+    }
+})();
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
