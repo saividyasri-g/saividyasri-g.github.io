@@ -2725,6 +2725,7 @@ body.single-project #header { display: none; }
 
     .nav-center {
         gap: 14px;
+        white-space: normal;
     }
 
     .nav-link,
@@ -2734,6 +2735,7 @@ body.single-project #header { display: none; }
 
     .nav-project {
         gap: 10px;
+        white-space: normal;
     }
 
     .nav-project-label {
@@ -7229,9 +7231,14 @@ body.landing-experiment .landing-hero-holo .avatar__emitter.is-booting {
         position: static;
         width: 100%;
         height: auto;
-        padding: 24px 0 0;
+        padding: 24px max(4vw, 16px) 0;
         align-items: center;
         margin: 24px 0;
+    }
+
+    body.landing-experiment #main {
+        padding-left: var(--space-4);
+        padding-right: var(--space-4);
     }
 
     body.landing-experiment .top-site-links {
