@@ -7664,7 +7664,7 @@ body.single-project .case-subheading {
         right: 20px;
         height: 44px;
         padding: 0 18px;
-        border-radius: var(--radius-full);
+        border-radius: var(--radius-xl);
         background: var(--color-bg-body);
         border: 1px solid var(--color-border-light);
         box-shadow: var(--shadow-md);
@@ -7681,7 +7681,7 @@ body.single-project .case-subheading {
         font-size: 14px;
     }
 
-    .top-site-nav {
+    body.landing-experiment .top-site-nav {
         display: none;
     }
 
