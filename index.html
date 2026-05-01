@@ -1746,21 +1746,18 @@ function glitchOut(el, onDone) {
 (function () {
     var btn   = document.getElementById('mob-menu-btn');
     var modal = document.getElementById('mob-menu-modal');
-    var nav   = document.querySelector('.top-site-nav');
     var label = btn.querySelector('.mob-menu-btn-label');
     var icon  = btn.querySelector('.mob-menu-btn-icon');
 
     function openMenu() {
         modal.classList.add('is-open');
-        if (nav) nav.classList.add('is-hidden');
         btn.setAttribute('aria-expanded', 'true');
         label.textContent = 'Close';
-        icon.className = 'mob-menu-btn-icon';
+        icon.className = 'fa-solid fa-xmark mob-menu-btn-icon';
     }
 
     function closeMenu() {
         modal.classList.remove('is-open');
-        if (nav) nav.classList.remove('is-hidden');
         btn.setAttribute('aria-expanded', 'false');
         label.textContent = 'Menu';
         icon.className = 'fa-solid fa-bars mob-menu-btn-icon';

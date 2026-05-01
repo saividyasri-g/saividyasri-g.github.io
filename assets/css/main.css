@@ -7681,6 +7681,10 @@ body.single-project .case-subheading {
         font-size: 14px;
     }
 
+    .top-site-nav {
+        display: none;
+    }
+
     .mob-menu-modal {
         display: block;
         position: fixed;
@@ -7688,7 +7692,7 @@ body.single-project .case-subheading {
         right: 20px;
         width: 240px;
         border-radius: var(--radius-xl);
-        background: var(--color-bg-card);
+        background: var(--color-bg-body);
         box-shadow: var(--shadow-lg);
         padding: 24px;
         opacity: 0;
@@ -7724,18 +7728,8 @@ body.single-project .case-subheading {
         color: var(--color-text-primary);
     }
 
-    .top-site-logo {
-        display: none;
-    }
-
     .mob-menu-logo {
         display: block;
         margin-bottom: 16px;
-    }
-
-    .top-site-nav.is-hidden {
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s ease;
     }
 }
