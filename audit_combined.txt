@@ -1,0 +1,243 @@
+============================================================
+UNUSED IN ALL MAIN PAGES — safe to remove from main.css
+============================================================
+
+── Unused Custom Properties (10) ──
+  --emitter-base-center-y
+  --emitter-base-h
+  --holo-card-bg-end
+  --holo-card-bg-start
+  --holo-card-border-color
+  --holo-card-border-width
+  --holo-card-radius
+  --holo-divider-color
+  --holo-emitter-offset
+  --holo-emitter-w
+
+── Css Classes Not In Html (153) ──
+  about-active
+  about-avatar
+  about-hero-animate
+  about-hero-avatar
+  about-hero-avatar-wrap
+  about-hero-content
+  about-hero-copy
+  about-hero-dot
+  about-hero-greeting
+  about-hero-inner
+  about-hero-location
+  about-hero-name
+  about-hero-name-wrap
+  about-hero-stat
+  about-hero-stat-icon
+  about-hero-stats
+  about-hero-title
+  about-hero-underline
+  about-hover
+  about-hover-image
+  about-lead
+  about-link
+  about-page
+  about-page-copy
+  about-page-grid
+  about-title
+  actor-item
+  actors-diagram-left
+  actors-diagram-right
+  actors-legend
+  avatar
+  card-stacked-effect
+  card-tags
+  comp-logo
+  copyright
+  course-identified-title
+  course-selection-grid
+  course-selection-summary
+  cs-grid-2col
+  cs-section-title
+  cs-sticky-nav
+  cs-type-body
+  cs-type-card-body
+  cs-type-card-title
+  cs-type-hero-subtitle
+  cs-type-meta-label
+  cs-type-meta-value
+  cs-type-sidebar-link
+  deep-dive-toptext
+  deep-dive-zone-sub
+  env-desc
+  env-heading
+  eval-annotation-lines
+  eval-desc
+  eval-divider
+  eval-info
+  eval-item-title
+  eval-label
+  eval-notes
+  eval-row
+  eval-row-annotated
+  eval-ui
+  eval-ui-annotated
+  experiment-card
+  experiment-card-soon
+  experiment-card-testing
+  experiment-card-tight
+  experiment-gif
+  experiment-inner-frame
+  experiment-media
+  experiment-media-frame
+  experiment-media-gradient
+  experiment-meta
+  experiment-tags
+  experiment-tooltip
+  experiments-active
+  experiments-list-thumb
+  experiments-placeholder
+  experiments-scroll
+  experiments-section
+  fid-highlight
+  fid-section-title
+  fid-strategy-label
+  fid-strong
+  fid-test-label
+  handoff-annotation
+  handoff-badge
+  handoff-badges
+  handoff-callout-dot
+  handoff-callout-header
+  handoff-callout-text
+  handoff-card-2
+  handoff-card-callout
+  hero-grid
+  hero-image
+  hmw-divider
+  hmw-icon
+  hmw-item
+  hmw-label
+  hmw-text
+  icons
+  image-wrapper
+  impact-title
+  insight-3-intro
+  insight-icon
+  investigating-note
+  iter-subtitle
+  label
+  layout-left
+  layout-right
+  legend-items
+  meta-number
+  new-design-tag
+  note-item
+  note-text
+  pc-number-box
+  pf-interlude
+  pill-green
+  pill-grey
+  pill-highlight
+  pill-lightgrey
+  pill-red
+  problem-content-wrapper
+  problem-dark-mode
+  problem-header-block
+  problem-main-title
+  project-card-link
+  project-card-status
+  project-meta
+  projects-active
+  reflection-num
+  role-desc-meta
+  sidebar-connect
+  simple-section
+  site-footer
+  site-footer-connect
+  site-footer-copy
+  site-footer-grid
+  site-footer-icons
+  site-footer-meta
+  site-footer-note
+  site-footer-title
+  strategy-card
+  strategy-label
+  strategy-panel
+  strategy-question
+  strategy-tags
+  top-site-spacer
+  zone-badge
+  zone-item
+  zone-list-header
+  zone-sub
+  zone-text
+
+── Css Ids Not In Html (5) ──
+  about
+  experiments
+  footer
+  header
+  lineShadow
+
+── Unused Keyframes (0) ──
+  (none — all are used somewhere)
+
+── Body State Classes Not In Html (3) ──
+  about-active
+  about-page
+  dark-mode
+
+
+============================================================
+PAGE-SPECIFIC UNUSED (only unused on one main page)
+============================================================
+
+── Unused Custom Properties unused ONLY in index (0) ──
+
+── Unused Custom Properties unused ONLY in project_hmc (0) ──
+
+── Unused Custom Properties unused ONLY in project_tbm (0) ──
+
+── Unused Custom Properties unused ONLY in project_coursecompass (0) ──
+
+── Unused Custom Properties unused ONLY in project_fid (0) ──
+
+── Css Classes Not In Html unused ONLY in index (23) ──
+  cs-body-layout
+  cs-content
+  cs-divider
+  cs-header
+  cs-hero-visual
+  cs-local-sidebar
+  cs-meta-block
+  cs-section
+  cs-subtitle
+  cs-text-intro
+  cs-title-block
+  meta-group
+  nav-arrow
+  nav-arrow-next
+  nav-arrow-prev
+  nav-brand
+  nav-center
+  nav-left
+  nav-link
+  nav-project
+  nav-project-label
+  nav-resume
+  top-back-nav
+
+── Css Classes Not In Html unused ONLY in project_hmc (0) ──
+
+── Css Classes Not In Html unused ONLY in project_tbm (0) ──
+
+── Css Classes Not In Html unused ONLY in project_coursecompass (0) ──
+
+── Css Classes Not In Html unused ONLY in project_fid (0) ──
+
+
+============================================================
+EXPERIMENT PAGES — embedded CSS audit
+============================================================
+
+── expt_hologram ──
+
+── expt_screenprint ──
+
