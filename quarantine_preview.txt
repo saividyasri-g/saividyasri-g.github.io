@@ -1,0 +1,19 @@
+/* TARGET IDENTIFIED: #header */
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+    background: var(--color-bg-body);
+    
+    /* Spacing: 48px Top/Bottom, 32px Left/Right */
+    padding: 48px 32px;
+    
+    text-align: right;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 100;
+}

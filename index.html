@@ -87,7 +87,6 @@
             <section id="landing-experiment" class="landing-hero">
                 <div class="container landing-hero-inner">
                     <div class="landing-hero-content">
-                        <p class="landing-hero-signal" aria-live="polite"><span class="signal-text"></span><span class="signal-cursor"></span></p>
                         <div class="landing-hero-card">
                             <div class="landing-hero-card-left">
                                 <div class="landing-hero-holo">
@@ -110,14 +109,13 @@
                                 <div class="landing-hero-copy">
                                     <p class="landing-hero-intro">Sai Vidyasri Giridharan <span class="landing-hero-pronouns">(she/her)</span></p>
                                     <p class="landing-hero-subtitle">Designing for 5+ years</p>
-                                    <div class="landing-hero-divider"></div>
                                     <div class="landing-hero-meta">
                                         <div>
-                                            <p class="landing-meta-label">Previously at</p>
+                                            <p class="landing-meta-label">Previously</p>
                                             <p class="landing-meta-value">Fidelity Investments</p>
                                         </div>
                                         <div>
-                                            <p class="landing-meta-label">Graduated with</p>
+                                            <p class="landing-meta-label">Background</p>
                                             <p class="landing-meta-value">
                                                 <span>MS | Product &amp; Service Innovation @ CMU</span>
                                                 <span>M.Des | Human Centered Design @ SMI, India</span>
@@ -586,9 +584,6 @@
         const hero = document.querySelector('.landing-hero');
         if (!hero) return;
 
-        const signalEl  = hero.querySelector('.landing-hero-signal');
-        const textEl    = hero.querySelector('.signal-text');
-        const cursorEl  = hero.querySelector('.signal-cursor');
         const card      = hero.querySelector('.landing-hero-card');
         const holo      = hero.querySelector('.landing-hero-holo');
         const broadcast = document.querySelector('.landing-hero-broadcast');
@@ -599,51 +594,20 @@
         // Show topbar broadcast text
         setTimeout(() => { if (broadcast) broadcast.classList.add('is-visible'); }, 40);
 
-        // T=0.3s — show signal label + start cursor blinking
+        // Card fades in
         setTimeout(() => {
-            if (signalEl) signalEl.classList.add('show');
-            if (cursorEl) cursorEl.classList.add('blink');
+            if (card) card.classList.add('is-visible');
+            if (holo) holo.classList.add('is-emitting');
 
-            // T=0.6s–1.2s — type dots, then beep sequence, then "receiving signal"
-            typeDots(textEl, () => {
-                typeChars(textEl, 'beep..boop..beep..', 55, () => {
-                    setTimeout(() => {
-                        textEl.textContent = '';
-                        typeChars(textEl, 'receiving signal', 55, () => {
-                            // Hide cursor
-                            if (cursorEl) cursorEl.classList.remove('blink');
-                            if (cursorEl) cursorEl.classList.add('done');
+            // Trigger hologram
+            setTimeout(() => {
+                window.dispatchEvent(new Event('intro-launch-holo'));
+            }, 700);
 
-                            // Card fades in
-                            setTimeout(() => {
-                                if (card) card.classList.add('is-visible');
-                                if (holo) holo.classList.add('is-emitting');
-
-                                // Trigger hologram
-                                setTimeout(() => {
-                                    window.dispatchEvent(new Event('intro-launch-holo'));
-                                }, 700);
-
-                                // Info fades in
-                                setTimeout(() => {
-                                    if (card) card.classList.add('is-copy-visible');
-
-                                    // Swap label to final text
-                                    setTimeout(() => {
-                                        if (signalEl) {
-                                            signalEl.classList.remove('show');
-                                            setTimeout(() => {
-                                                if (textEl) textEl.textContent = '... meet the signal source';
-                                                signalEl.classList.add('show');
-                                            }, 200);
-                                        }
-                                    }, 200);
-                                }, 1700);
-                            }, 100);
-                        });
-                    }, 400);
-                });
-            });
+            // Info fades in
+            setTimeout(() => {
+                if (card) card.classList.add('is-copy-visible');
+            }, 1000);
         }, 300);
     });
 </script>
