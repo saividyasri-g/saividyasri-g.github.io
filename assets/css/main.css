@@ -954,9 +954,9 @@ body { display: flex; flex-direction: column; }
 
 #projects .project-card {
     display: flex; align-items: center; 
-    gap: 80px; /* Multiple of 8 */
+    gap: var(--space-12);
     margin-bottom: 0; background: transparent;
-    border: none; padding-left: 40px;
+    border: none; padding-left: var(--space-10);
     width: 100%; max-width: none;
 }
 
@@ -3121,6 +3121,10 @@ body.single-project #header {  display: none;  }
     .problem-cards-grid {
         grid-template-columns: 1fr; /* Stack vertically */
     }
+
+    .project-hmc .problem-cards-grid {
+        grid-template-columns: 1fr;
+    }
     
     .pc-body {
         font-size: var(--font-size-xl);
@@ -4150,15 +4154,10 @@ body.dark-mode .solution-heading { color: var(--color-bg-card); }
 @media screen and (max-width: 1024px) {
     .actors-header, .actors-grid {
         grid-template-columns: 1fr;
-        gap: var(--space-10);
     }
     
     .actors-grid {
         grid-template-columns: 1fr;
-    }
-
-    .actors-diagram-card {
-        padding: 24px;
     }
 
     .actors-diagram-content {
@@ -4167,11 +4166,12 @@ body.dark-mode .solution-heading { color: var(--color-bg-card); }
     }
 
 
-
     .actors-bottom-row {
         grid-template-columns: 1fr;
+        grid-template-areas:
+            "handoff"
+            "insight";
         gap: var(--space-6);
-        padding: 28px;
     }
 
     .role-desc-grid {
@@ -5208,7 +5208,6 @@ body.project-hmc .workflow-card.card-dark .wf-label.label-before {
 
 .final-visual.final-visual-left {
     justify-content: flex-start;
-    padding-left: 32px;
 }
 
 .final-visual.final-visual-left .fit-lottie {
@@ -5237,7 +5236,7 @@ body.project-hmc .workflow-card.card-dark .wf-label.label-before {
 
 .final-content {
     flex: 0.8; /* Text takes 40% width */
-    padding: 64px;
+    padding: 24px;
 }
 
 .final-heading {
@@ -5273,19 +5272,26 @@ body.project-hmc .workflow-card.card-dark .wf-label.label-before {
         padding: 32px;
     }
 
+    .project-hmc .final-card {
+        padding: 32px;
+    }
+
     .final-visual {
         width: 100%;
         min-height: 300px;
-        padding: 40px;
     }
 
     .final-content {
         width: 100%;
-        padding: 40px 32px;
+        padding: 24px 0px;
     }
 
     .final-heading {
         font-size: var(--font-size-2xl);
+    }
+
+    .project-hmc .final-heading {
+        font-size: var(--font-size-xl);
     }
 }
 .meta-label {
@@ -5548,6 +5554,21 @@ body.landing-experiment {
     --emitter-inner-ellipse-scale: 0.9;
     --emitter-beam-scale: 0.85;
     --landing-topbar-height: 64px;
+    --landing-topbar-min-height: var(--landing-topbar-height);
+    --landing-topbar-pad-block: 14px;
+    --landing-topbar-pad-inline: 56px;
+    --landing-topbar-grid-row: var(--landing-topbar-height);
+    --landing-project-card-title-size: var(--font-size-2xl);
+    --landing-project-card-title-line-height: var(--font-leading-tight);
+    --landing-project-card-title-weight: var(--font-weight-bold);
+    --landing-project-card-title-color: var(--color-text-primary);
+    --landing-project-card-index-size: var(--font-size-base);
+    --landing-project-card-body-size: var(--font-size-lg);
+    --landing-project-card-body-line-height: var(--font-leading-normal);
+    --landing-project-card-body-weight: var(--font-weight-regular);
+    --landing-project-card-body-color: var(--color-text-secondary);
+    --landing-project-card-body-pad-inline-end: clamp(10px, 1.6vw, 22px);
+    --landing-project-card-body-max-width: none;
     --landing-sidebar-start-y: 60px;
     --landing-content-start-y: 130px;
     --landing-card-radius: 18px;
@@ -5571,7 +5592,7 @@ body.landing-experiment .screen-wrap {
 body.landing-experiment #wrapper.screen {
     display: grid;
     grid-template-columns: 220px 1fr;
-    grid-template-rows: var(--landing-topbar-height) 1fr;
+    grid-template-rows: var(--landing-topbar-grid-row) 1fr;
     grid-template-areas:
         "topbar topbar"
         "nav main";
@@ -5587,7 +5608,7 @@ body.landing-experiment #wrapper.screen {
 }
 
 body.landing-experiment.view-expt #wrapper.screen {
-    grid-template-rows: var(--landing-topbar-height) 1fr;
+    grid-template-rows: var(--landing-topbar-grid-row) 1fr;
     grid-template-areas:
         "topbar topbar"
         "nav main";
@@ -5693,9 +5714,9 @@ body.landing-experiment .landing-topbar {
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    height: var(--landing-topbar-height);
+    min-height: var(--landing-topbar-min-height);
     box-sizing: border-box;
-    padding: 14px 56px;
+    padding: var(--landing-topbar-pad-block) var(--landing-topbar-pad-inline);
     background: transparent;
     border-bottom: 1px solid rgba(197, 4, 165, 0.14);
     box-shadow: 0 0 20px rgba(197, 4, 165, 0.05);
@@ -6119,33 +6140,37 @@ body.landing-experiment #experiments-panel .experiments-list-body {
 body.landing-experiment #experiments-panel .experiments-list-copy h3 {
     margin: 0 0 20px;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: var(--font-size-2xl);
-    line-height: 1.12;
-    color: var(--color-text-primary);
+    font-size: var(--landing-project-card-title-size);
+    line-height: var(--landing-project-card-title-line-height);
+    font-weight: var(--landing-project-card-title-weight);
+    color: var(--landing-project-card-title-color);
 }
 
 body.landing-experiment #experiments-panel .experiments-list-copy p {
     margin: 0;
     font-family: 'Barlow', sans-serif;
-    font-size: var(--font-size-md);
-    line-height: var(--font-leading-normal);
-    color: rgba(124, 124, 122, 0.92);
+    font-size: var(--landing-project-card-body-size);
+    line-height: var(--landing-project-card-body-line-height);
+    font-weight: var(--landing-project-card-body-weight);
+    color: var(--landing-project-card-body-color);
     max-width: 660px;
 }
 
 
 
-body.landing-experiment #experiments-panel .card-preview {
+body.landing-experiment #experiments-panel .expt-preview {
     width: 180px;
     height: 120px;
     overflow: hidden;
     position: relative;
-    border-radius: 3px;
+    border-radius: inherit;
     pointer-events: none;
     flex-shrink: 0;
+    max-width: 100%;
+    align-self: stretch;
 }
 
-body.landing-experiment #experiments-panel .card-preview iframe {
+body.landing-experiment #experiments-panel .expt-preview iframe {
     width: 1280px;
     height: 853px;
     transform: scale(0.14);
@@ -6609,7 +6634,7 @@ body.landing-experiment.view-work #projects.work-panel .projects-title {
 body.landing-experiment #projects.work-panel .project-card {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-3);
     padding: 0;
     background: transparent;
     border: none;
@@ -6623,7 +6648,7 @@ body.landing-experiment #projects.work-panel .project-card-meta {
     align-items: center;
     justify-content: flex-start;
     font-family: 'Barlow', sans-serif;
-    font-size: var(--font-size-base);
+    font-size: var(--landing-project-card-index-size);
     letter-spacing: 0.08em;
     margin-left:8px;
     margin-bottom: 8px;
@@ -6682,20 +6707,26 @@ body.landing-experiment #projects.work-panel .card-content {
 }
 
 body.landing-experiment #projects.work-panel .project-card h3 {
-    font-size: 28px;
-    line-height: 1.25;
-    color: #2b2b2b;
+    font-size: var(--landing-project-card-title-size);
+    line-height: var(--landing-project-card-title-line-height);
+    font-weight: var(--landing-project-card-title-weight);
+    color: var(--landing-project-card-title-color);
     max-width: none;
     margin: 0;
 }
 
 body.landing-experiment #projects.work-panel .project-card p:not(.project-card-tags-inline):not(.project-card-delivery) {
-    font-size: var(--font-size-lg);
-    line-height: var(--font-leading-normal);
-    color: rgba(47, 47, 47, 0.7);
+    font-family: 'Barlow', sans-serif;
+    font-size: var(--landing-project-card-body-size);
+    font-weight: var(--landing-project-card-body-weight);
+    line-height: var(--landing-project-card-body-line-height);
+    color: var(--landing-project-card-body-color);
+    text-align: left;
+    display: block;
+    width: 100%;
     margin: 0;
-    padding-right: clamp(10px, 1.6vw, 22px);
-    max-width: none;
+    padding-inline-end: var(--landing-project-card-body-pad-inline-end);
+    max-width: var(--landing-project-card-body-max-width);
 }
 
 body.landing-experiment #projects.work-panel .project-card p.project-card-delivery {
@@ -6717,14 +6748,6 @@ body.landing-experiment #projects.work-panel .project-card-tags-inline {
     color: rgba(47, 47, 47, 0.7);
     margin: 0;
     line-height: 1.4;
-}
-
-body.landing-experiment #projects.work-panel .card-content h3 {
-    margin: 0;
-}
-
-body.landing-experiment #projects.work-panel .card-content p {
-    margin: 0;
 }
 
 body.landing-experiment .global-footer {
@@ -7317,6 +7340,13 @@ body.landing-experiment .landing-hero-holo .avatar__emitter.is-booting {
 @media (max-width: 900px) {
     body.landing-experiment {
         --landing-topbar-height: 50px;
+        --landing-topbar-min-height: var(--landing-topbar-height);
+        --landing-topbar-pad-block: 10px;
+        --landing-topbar-pad-inline: 24px;
+        --landing-topbar-grid-row: auto;
+        --landing-project-card-title-size: var(--font-size-xl);
+        --landing-project-card-index-size: var(--font-size-sm);
+        --landing-project-card-body-size: var(--font-size-md);
         --landing-sidebar-start-y: 20px;
         --landing-content-start-y: 28px;
     }
@@ -7326,7 +7356,7 @@ body.landing-experiment .landing-hero-holo .avatar__emitter.is-booting {
     }
     body.landing-experiment #wrapper.screen {
         grid-template-columns: 1fr;
-        grid-template-rows: var(--landing-topbar-height) auto 1fr;
+        grid-template-rows: var(--landing-topbar-grid-row) auto 1fr;
         grid-template-areas:
             "topbar"
             "nav"
@@ -7359,7 +7389,7 @@ body.landing-experiment .landing-hero-holo .avatar__emitter.is-booting {
     }
 
     body.landing-experiment .landing-topbar {
-        padding: 10px 24px;
+        padding: var(--landing-topbar-pad-block) var(--landing-topbar-pad-inline);
         gap: var(--space-3);
     }
 
@@ -7394,6 +7424,10 @@ body.landing-experiment .landing-hero-holo .avatar__emitter.is-booting {
         margin-bottom: 8px;
     }
 
+    body.landing-experiment #projects.work-panel .project-card-index {
+        display: none;
+    }
+
     body.landing-experiment #experiments-panel.experiments-panel {
         padding: 8px 0 88px;
     }
@@ -7411,17 +7445,6 @@ body.landing-experiment .landing-hero-holo .avatar__emitter.is-booting {
         gap: 14px;
         grid-template-columns: 1fr 72px;
     }
-
-    body.landing-experiment #experiments-panel .experiments-list-copy h3 {
-        font-size: 26px;
-    }
-
-    body.landing-experiment #experiments-panel .experiments-list-copy p {
-        font-size: 15px;
-        line-height: 1.4;
-    }
-
-
 
     body.landing-experiment.view-work {
         --work-card-height: clamp(300px, 52vh, 440px);
@@ -7852,16 +7875,34 @@ body.single-project .case-subheading {
         color: var(--color-text-primary);
     }
 
+    .mob-menu-link.active {
+        color: var(--color-text-primary);
+        font-weight: var(--font-weight-medium);
+        text-shadow: 0 0 6px rgba(197, 4, 165, 0.18);
+    }
+
+    body.landing-experiment.view-work .mob-menu-link.active,
+    body.landing-experiment.view-about .mob-menu-link.active {
+        color: var(--color-text-primary);
+    }
+
     .mob-menu-logo {
         display: block;
         margin-bottom: 16px;
     }
+
+    .mob-menu-logo:hover,
+    .mob-menu-logo.clicked {
+        box-shadow:
+          0 0 0 1px rgba(197, 4, 165, 0.18),
+          0 0 14px rgba(197, 4, 165, 0.18);
+    }
 }
 
 /* =========================================
-   MASTER MOBILE OVERRIDES (Max 768px)
+   MASTER MOBILE OVERRIDES (Max 1024px)
    ========================================= */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
     
     .single-project .top-back-nav {
         display: none !important;
@@ -7871,25 +7912,89 @@ body.single-project .case-subheading {
         padding-top: 0 !important;
     }
 
+    .single-project #main {
+        padding-left: 24px;
+        padding-right: 24px;
+        box-sizing: border-box;
+    }
+
     .single-project .cs-hero-visual {
         margin-top: 0 !important;
+        margin-left: -24px;
+        margin-right: -24px;
+        width: calc(100% + 48px);
+    }
+
+    .single-project .cs-body-layout {
+        display: block;
+    }
+
+    .single-project .cs-header.container,
+    .single-project .cs-body-layout.container,
+    .single-project .cs-divider {
+        padding-left: 0;
+        padding-right: 0;
     }
 
     .single-project .cs-local-sidebar {
+        --sidebar-edge-left: max(0px, env(safe-area-inset-left));
+        --sidebar-edge-right: max(0px, env(safe-area-inset-right));
+        --sidebar-trailing-space: 32px;
         position: sticky;
-        top: 0;
+        top: max(0px, env(safe-area-inset-top));
         z-index: 1100;
         background: var(--color-bg-body);
-        margin: 0 -24px 32px -24px;
-        padding: 16px 24px;
+        margin: 0 0 32px 0;
+        width: 100%;
+        box-sizing: border-box;
+        padding-block: 16px;
+        padding-inline: var(--sidebar-edge-left) var(--sidebar-edge-right);
+        overflow: visible;
+    }
+
+    .single-project .cs-local-sidebar .sticky-wrapper {
         overflow-x: auto;
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
+        scroll-padding-inline: var(--sidebar-edge-left) var(--sidebar-edge-right);
+        scroll-padding-inline-end: calc(var(--sidebar-edge-right) + var(--sidebar-trailing-space));
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .single-project .cs-local-sidebar .sticky-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+    .single-project .cs-local-sidebar.is-stuck {
+        position: fixed;
+        top: max(0px, env(safe-area-inset-top));
+        left: 24px;
+        right: 24px;
+        margin: 0;
+    }
+
+    .single-project .cs-local-sidebar-pin-spacer {
+        width: 100%;
+        height: 0;
+        pointer-events: none;
+    }
+
+    .single-project .cs-local-sidebar-sentinel {
+        width: 100%;
+        height: 1px;
+        pointer-events: none;
     }
 
     .single-project .cs-local-sidebar ul {
-        display: flex;
+        display: inline-flex;
         flex-direction: row;
+        flex-wrap: nowrap;
         gap: 8px;
+        width: max-content;
+        min-width: max-content;
+        padding-right: var(--sidebar-trailing-space);
     }
 
     .single-project .cs-local-sidebar li {
@@ -7897,17 +8002,35 @@ body.single-project .case-subheading {
         margin-bottom: 0;
     }
 
+    .single-project .cs-local-sidebar li:last-child {
+        margin-right: 8px;
+    }
+
+    .single-project .cs-body-layout > .cs-local-sidebar,
+    .single-project .cs-body-layout > .cs-content {
+        min-width: 0;
+    }
+
     .single-project .cs-local-sidebar a {
         padding: 10px 16px;
         white-space: nowrap;
-        background-color: var(--color-bg-surface-warm);
-        border-radius: var(--radius-full);
-        font-size: var(--font-size-sm);
+        background-color: transparent;
+        border-radius: 0;
+        font-size: var(--font-size-md);
+        color: var(--color-text-muted);
+        font-weight: var(--font-weight-regular);
+        letter-spacing: -0.5px;
+        min-height: 0;
+        min-width: 0;
+        line-height: normal;
+        -webkit-appearance: none;
+        appearance: none;
     }
 
     .single-project .cs-local-sidebar a.active {
-        background-color: var(--color-text-primary);
-        color: var(--color-bg-body);
+        background-color: transparent;
+        color: var(--color-text-primary);
+        font-weight: var(--font-weight-medium);
     }
 
    /* 1. Fix the 100vh scrolling bug & restrict horizontal bleed */

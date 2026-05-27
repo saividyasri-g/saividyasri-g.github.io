@@ -272,7 +272,7 @@
                                     <h3>Hologram Projection</h3>
                                     <p>Project any image or video as a layered holographic rendering.</p>
                                 </div>
-                                <div class="card-preview" aria-hidden="true">
+                                <div class="expt-preview" aria-hidden="true">
                                     <iframe
                                         data-src="expt/hologram-expt/hologram.html"
                                         scrolling="no"
@@ -295,7 +295,7 @@
                                     <h3>Screenprint Studio</h3>
                                     <p>A live halftone renderer inspired by risograph printing. Upload, tune, export.</p>
                                 </div>
-                                <div class="card-preview" aria-hidden="true">
+                                <div class="expt-preview" aria-hidden="true">
                                     <iframe
                                         data-src="expt/screenprint-expt/screenprint.html"
                                         scrolling="no"
@@ -318,7 +318,7 @@
                                     <h3>Is it art?</h3>
                                     <p>Visual snippets, playful sketches, and side-work fragments.</p>
                                 </div>
-                                <div class="card-preview" aria-hidden="true">
+                                <div class="expt-preview" aria-hidden="true">
                                     <iframe
                                         data-src="https://www.instagram.com/imafartisttoo/embed"
                                         scrolling="no"
@@ -855,7 +855,7 @@ function glitchOut(el, onDone) {
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const body = document.body;
-        const viewLinks = document.querySelectorAll('.top-site-links a[data-view], .top-site-logo[data-view]');
+        const viewLinks = document.querySelectorAll('.top-site-links a[data-view], .top-site-logo[data-view], .mob-menu-link[data-view], .mob-menu-logo[data-view]');
         const mainScroller = document.querySelector('#wrapper.screen #main');
         const workPanel = document.querySelector('.work-panel');
         const exptPanel = document.querySelector('.experiments-panel');
@@ -1502,7 +1502,7 @@ function glitchOut(el, onDone) {
       });
     }, { rootMargin: '200px' });
 
-    document.querySelectorAll('.card-preview').forEach(card => {
+    document.querySelectorAll('.expt-preview').forEach(card => {
       observer.observe(card);
     });
 </script>
@@ -1660,7 +1660,7 @@ function glitchOut(el, onDone) {
 
 <!-- Mobile floating menu -->
 <div id="mob-menu-modal" class="mob-menu-modal" role="dialog" aria-label="Navigation menu">
-    <a href="#home" class="mob-menu-logo" aria-label="Home">
+    <a href="#home" class="mob-menu-logo" data-view="home" aria-label="Home">
         <svg class="logo-svg" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
             <defs>
                 <clipPath id="mob-logo-sq-clip">
@@ -1695,9 +1695,9 @@ function glitchOut(el, onDone) {
         </svg>
     </a>
     <nav class="mob-menu-nav">
-        <a href="#work"  class="mob-menu-link">work</a>
-        <a href="#expt"  class="mob-menu-link">experiments</a>
-        <a href="#about" class="mob-menu-link">about</a>
+        <a href="#work"  class="mob-menu-link" data-view="work">work</a>
+        <a href="#expt"  class="mob-menu-link" data-view="expt">experiments</a>
+        <a href="#about" class="mob-menu-link" data-view="about">about</a>
         <a href="assets/media/resume.pdf" class="mob-menu-link" target="_blank" rel="noopener noreferrer">resume</a>
     </nav>
 </div>
