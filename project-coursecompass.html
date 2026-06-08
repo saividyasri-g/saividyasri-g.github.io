@@ -254,6 +254,20 @@
             </div>
         </div>
     </footer>
+    <script src="assets/js/single-project-sidebar-stick.js"></script>
+    <script src="assets/js/single-project-mobile-menu.js"></script>
     <script src="assets/js/footer-reveal.js"></script>
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        const scrollProjectToTop = () => {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        };
+        window.addEventListener('pageshow', scrollProjectToTop);
+        document.addEventListener('DOMContentLoaded', scrollProjectToTop);
+    </script>
 </body>
 </html>

@@ -961,7 +961,6 @@
                                     
                                     <div class="findings-top-bar">
                                         <h4 class="findings-title">Findings</h4>
-                                        <span class="aha-moment">The aha moment! ⤵</span>
                                     </div>
 
                                     <div class="findings-grid">
@@ -980,6 +979,7 @@
                                         </div>
 
                                         <div class="find-card">
+                                            <span class="aha-moment aha-moment-mobile">The aha moment! ⤵</span>
                                             <p class="find-text">
                                                 <strong>Priority in service operations is time- and context-driven, not status-driven.</strong>
                                                 A job card's urgency may shift depending on time of day, customer presence, and workload.
@@ -1165,7 +1165,17 @@
     </footer>
 
     <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        const scrollProjectToTop = () => {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        };
+        window.addEventListener('pageshow', scrollProjectToTop);
         document.addEventListener("DOMContentLoaded", function() {
+            scrollProjectToTop();
             const body = document.body;
             
             // 1. Get all links in the sidebar
@@ -1280,7 +1290,9 @@
                 }, { passive: true });
             }
         });
-    </script>       
+    </script>
+    <script src="assets/js/single-project-sidebar-stick.js"></script>
+    <script src="assets/js/single-project-mobile-menu.js"></script>
     <script src="assets/js/footer-reveal.js"></script>
 
 </body>

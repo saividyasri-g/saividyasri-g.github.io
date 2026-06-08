@@ -26,10 +26,6 @@
    
     <div class="screen-wrap">
     <div id="wrapper" class="screen">
-        <div class="screen-corner screen-corner--tl"></div>
-        <div class="screen-corner screen-corner--tr"></div>
-        <div class="screen-corner screen-corner--bl"></div>
-        <div class="screen-corner screen-corner--br"></div>
         <div class="crt-overlay" aria-hidden="true"></div>    
         <div class="landing-topbar" role="banner">
                 <span class="landing-topbar-icon" aria-hidden="true"></span>
@@ -87,7 +83,6 @@
             <section id="landing-experiment" class="landing-hero">
                 <div class="container landing-hero-inner">
                     <div class="landing-hero-content">
-                        <p class="landing-hero-signal" aria-live="polite"><span class="signal-text"></span><span class="signal-cursor"></span></p>
                         <div class="landing-hero-card">
                             <div class="landing-hero-card-left">
                                 <div class="landing-hero-holo">
@@ -110,14 +105,13 @@
                                 <div class="landing-hero-copy">
                                     <p class="landing-hero-intro">Sai Vidyasri Giridharan <span class="landing-hero-pronouns">(she/her)</span></p>
                                     <p class="landing-hero-subtitle">Designing for 5+ years</p>
-                                    <div class="landing-hero-divider"></div>
                                     <div class="landing-hero-meta">
                                         <div>
-                                            <p class="landing-meta-label">Previously at</p>
+                                            <p class="landing-meta-label">Previously</p>
                                             <p class="landing-meta-value">Fidelity Investments</p>
                                         </div>
                                         <div>
-                                            <p class="landing-meta-label">Graduated with</p>
+                                            <p class="landing-meta-label">Background</p>
                                             <p class="landing-meta-value">
                                                 <span>MS | Product &amp; Service Innovation @ CMU</span>
                                                 <span>M.Des | Human Centered Design @ SMI, India</span>
@@ -274,7 +268,7 @@
                                     <h3>Hologram Projection</h3>
                                     <p>Project any image or video as a layered holographic rendering.</p>
                                 </div>
-                                <div class="card-preview" aria-hidden="true">
+                                <div class="expt-preview" aria-hidden="true">
                                     <iframe
                                         data-src="expt/hologram-expt/hologram.html"
                                         scrolling="no"
@@ -297,7 +291,7 @@
                                     <h3>Screenprint Studio</h3>
                                     <p>A live halftone renderer inspired by risograph printing. Upload, tune, export.</p>
                                 </div>
-                                <div class="card-preview" aria-hidden="true">
+                                <div class="expt-preview" aria-hidden="true">
                                     <iframe
                                         data-src="expt/screenprint-expt/screenprint.html"
                                         scrolling="no"
@@ -320,7 +314,7 @@
                                     <h3>Is it art?</h3>
                                     <p>Visual snippets, playful sketches, and side-work fragments.</p>
                                 </div>
-                                <div class="card-preview" aria-hidden="true">
+                                <div class="expt-preview" aria-hidden="true">
                                     <iframe
                                         data-src="https://www.instagram.com/imafartisttoo/embed"
                                         scrolling="no"
@@ -380,7 +374,7 @@
                                 </div>
                             </div>
                             <div class="about-intro-v2-right">
-                                <h1 class="about-intro-v2-title">Hello! I’m Sai <span class="about-intro-v2-pronunciation">(/sai/ -- rhymes with "hi")</span></h1>
+                                <h1 class="about-intro-v2-title">Hello, I’m Sai <span class="about-intro-v2-pronunciation">(/sai/ -- rhymes with "hi")</span></h1>
                                 <p class="about-intro-v2-lead">
                                 I design end-to-end product solutions to be intuitive and delightful. Along the way, I like having a good time with the
                                 <span class="about-intro-v2-hover" tabindex="0" data-stack-items="assets/media/about/teamfun1.mp4,assets/media/about/teamfun2.gif,assets/media/about/teamfun3.jpeg,assets/media/about/teamfun4.jpeg">people I build them with.</span>
@@ -586,9 +580,6 @@
         const hero = document.querySelector('.landing-hero');
         if (!hero) return;
 
-        const signalEl  = hero.querySelector('.landing-hero-signal');
-        const textEl    = hero.querySelector('.signal-text');
-        const cursorEl  = hero.querySelector('.signal-cursor');
         const card      = hero.querySelector('.landing-hero-card');
         const holo      = hero.querySelector('.landing-hero-holo');
         const broadcast = document.querySelector('.landing-hero-broadcast');
@@ -599,51 +590,20 @@
         // Show topbar broadcast text
         setTimeout(() => { if (broadcast) broadcast.classList.add('is-visible'); }, 40);
 
-        // T=0.3s — show signal label + start cursor blinking
+        // Card fades in
         setTimeout(() => {
-            if (signalEl) signalEl.classList.add('show');
-            if (cursorEl) cursorEl.classList.add('blink');
+            if (card) card.classList.add('is-visible');
+            if (holo) holo.classList.add('is-emitting');
 
-            // T=0.6s–1.2s — type dots, then beep sequence, then "receiving signal"
-            typeDots(textEl, () => {
-                typeChars(textEl, 'beep..boop..beep..', 55, () => {
-                    setTimeout(() => {
-                        textEl.textContent = '';
-                        typeChars(textEl, 'receiving signal', 55, () => {
-                            // Hide cursor
-                            if (cursorEl) cursorEl.classList.remove('blink');
-                            if (cursorEl) cursorEl.classList.add('done');
+            // Trigger hologram
+            setTimeout(() => {
+                window.dispatchEvent(new Event('intro-launch-holo'));
+            }, 700);
 
-                            // Card fades in
-                            setTimeout(() => {
-                                if (card) card.classList.add('is-visible');
-                                if (holo) holo.classList.add('is-emitting');
-
-                                // Trigger hologram
-                                setTimeout(() => {
-                                    window.dispatchEvent(new Event('intro-launch-holo'));
-                                }, 700);
-
-                                // Info fades in
-                                setTimeout(() => {
-                                    if (card) card.classList.add('is-copy-visible');
-
-                                    // Swap label to final text
-                                    setTimeout(() => {
-                                        if (signalEl) {
-                                            signalEl.classList.remove('show');
-                                            setTimeout(() => {
-                                                if (textEl) textEl.textContent = '... meet the signal source';
-                                                signalEl.classList.add('show');
-                                            }, 200);
-                                        }
-                                    }, 200);
-                                }, 1700);
-                            }, 100);
-                        });
-                    }, 400);
-                });
-            });
+            // Info fades in
+            setTimeout(() => {
+                if (card) card.classList.add('is-copy-visible');
+            }, 1000);
         }, 300);
     });
 </script>
@@ -891,13 +851,14 @@ function glitchOut(el, onDone) {
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const body = document.body;
-        const viewLinks = document.querySelectorAll('.top-site-links a[data-view], .top-site-logo[data-view]');
+        const viewLinks = document.querySelectorAll('.top-site-links a[data-view], .top-site-logo[data-view], .mob-menu-link[data-view], .mob-menu-logo[data-view]');
         const mainScroller = document.querySelector('#wrapper.screen #main');
         const workPanel = document.querySelector('.work-panel');
         const exptPanel = document.querySelector('.experiments-panel');
         const aboutPanel = document.querySelector('.about-panel');
         const heroPanel = document.querySelector('.landing-hero');
         const logo = document.querySelector('.top-site-logo');
+        const mobileMenuLogo = document.querySelector('.mob-menu-logo');
 
         const replayPanelFade = (panel) => {
             if (!panel) return;
@@ -938,6 +899,9 @@ function glitchOut(el, onDone) {
                 if (!isHome) {
                     logo.classList.remove('clicked');
                 }
+            }
+            if (mobileMenuLogo) {
+                mobileMenuLogo.classList.toggle('clicked', isHome);
             }
             viewLinks.forEach(link => {
                 if (!link.dataset.view) return;
@@ -1538,7 +1502,7 @@ function glitchOut(el, onDone) {
       });
     }, { rootMargin: '200px' });
 
-    document.querySelectorAll('.card-preview').forEach(card => {
+    document.querySelectorAll('.expt-preview').forEach(card => {
       observer.observe(card);
     });
 </script>
@@ -1696,7 +1660,7 @@ function glitchOut(el, onDone) {
 
 <!-- Mobile floating menu -->
 <div id="mob-menu-modal" class="mob-menu-modal" role="dialog" aria-label="Navigation menu">
-    <a href="#home" class="mob-menu-logo" aria-label="Home">
+    <a href="#home" class="mob-menu-logo" data-view="home" aria-label="Home">
         <svg class="logo-svg" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
             <defs>
                 <clipPath id="mob-logo-sq-clip">
@@ -1731,9 +1695,9 @@ function glitchOut(el, onDone) {
         </svg>
     </a>
     <nav class="mob-menu-nav">
-        <a href="#work"  class="mob-menu-link">work</a>
-        <a href="#expt"  class="mob-menu-link">experiments</a>
-        <a href="#about" class="mob-menu-link">about</a>
+        <a href="#work"  class="mob-menu-link" data-view="work">work</a>
+        <a href="#expt"  class="mob-menu-link" data-view="expt">experiments</a>
+        <a href="#about" class="mob-menu-link" data-view="about">about</a>
         <a href="assets/media/resume.pdf" class="mob-menu-link" target="_blank" rel="noopener noreferrer">resume</a>
     </nav>
 </div>
@@ -1746,14 +1710,21 @@ function glitchOut(el, onDone) {
 (function () {
     var btn   = document.getElementById('mob-menu-btn');
     var modal = document.getElementById('mob-menu-modal');
+    var logo  = modal.querySelector('.mob-menu-logo');
     var label = btn.querySelector('.mob-menu-btn-label');
     var icon  = btn.querySelector('.mob-menu-btn-icon');
+
+    function syncLogoState() {
+        if (!logo) return;
+        logo.classList.toggle('clicked', document.body.classList.contains('view-home'));
+    }
 
     function openMenu() {
         modal.classList.add('is-open');
         btn.setAttribute('aria-expanded', 'true');
         label.textContent = 'Close';
         icon.className = 'fa-solid fa-xmark mob-menu-btn-icon';
+        syncLogoState();
     }
 
     function closeMenu() {
@@ -1768,8 +1739,24 @@ function glitchOut(el, onDone) {
         modal.classList.contains('is-open') ? closeMenu() : openMenu();
     });
 
+    if (logo) {
+        logo.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.body.classList.add('view-home');
+            syncLogoState();
+            closeMenu();
+            if (window.location.pathname.slice(-10) !== 'index.html') {
+                window.location.href = 'index.html';
+            }
+        });
+    }
+
     modal.querySelectorAll('.mob-menu-link').forEach(function (a) {
-        a.addEventListener('click', closeMenu);
+        a.addEventListener('click', function () {
+            closeMenu();
+            syncLogoState();
+        });
     });
 
     document.addEventListener('click', function (e) {
