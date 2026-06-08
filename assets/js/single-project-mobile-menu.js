@@ -9,8 +9,41 @@
   modal.setAttribute('role', 'dialog');
   modal.setAttribute('aria-label', 'Navigation menu');
   modal.innerHTML = `
+    <a href="index.html#home" class="mob-menu-logo" aria-label="Home">
+      <svg class="logo-svg" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="mob-logo-sq-clip-project">
+            <rect width="36" height="36" rx="6"></rect>
+          </clipPath>
+        </defs>
+        <g clip-path="url(#mob-logo-sq-clip-project)">
+          <rect width="36" height="36" fill="transparent"></rect>
+          <g class="scan-track">
+            <line x1="0" y1="-9" x2="36" y2="-9" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="-6" x2="36" y2="-6" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="-3" x2="36" y2="-3" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="0" x2="36" y2="0" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="3" x2="36" y2="3" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="6" x2="36" y2="6" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="9" x2="36" y2="9" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="12" x2="36" y2="12" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="15" x2="36" y2="15" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="18" x2="36" y2="18" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="21" x2="36" y2="21" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="24" x2="36" y2="24" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="27" x2="36" y2="27" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="30" x2="36" y2="30" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="33" x2="36" y2="33" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="36" x2="36" y2="36" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="39" x2="36" y2="39" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="42" x2="36" y2="42" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+            <line x1="0" y1="45" x2="36" y2="45" stroke="rgba(197,4,165,0.14)" stroke-width="0.5"></line>
+          </g>
+        </g>
+        <text class="logo-text" x="18" y="22" text-anchor="middle" font-family="Barlow,sans-serif" font-size="11" font-weight="700" letter-spacing="0.5" fill="#C504A5">.svg</text>
+      </svg>
+    </a>
     <nav class="mob-menu-nav">
-      <a href="index.html#home" class="mob-menu-link">home</a>
       <a href="index.html#work" class="mob-menu-link">work</a>
       <a href="index.html#expt" class="mob-menu-link">experiments</a>
       <a href="index.html#about" class="mob-menu-link">about</a>

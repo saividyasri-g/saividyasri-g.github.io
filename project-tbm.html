@@ -246,7 +246,7 @@
                         <div class="comp-grid">
                             <div class="comp-left">
                                 <div class="comp-sticky">
-                                    <p class="comp-intro">I observed that,</p>
+                                    <p class="pf-label">I observed that,</p>
                                     <p class="comp-highlight">
                                         competitors introduced users to dashboards and management tools early in onboarding, allowing professionals to experience potential value before committing to detailed configuration.
                                     </p>
@@ -460,8 +460,17 @@
     </footer>
 
     <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        const scrollProjectToTop = () => {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        };
+        window.addEventListener('pageshow', scrollProjectToTop);
         document.addEventListener("DOMContentLoaded", function() {
-            const body = document.body;
+            scrollProjectToTop();
             const sidebarLinks = document.querySelectorAll('.cs-local-sidebar a');
             const setActiveSidebarLink = (id) => {
                 sidebarLinks.forEach(link => link.classList.remove('active'));
@@ -498,31 +507,152 @@
                 });
             });
 
-            const darkSections = [
-                document.getElementById('reflection')
-            ].filter(Boolean);
+            const compSection = document.getElementById('competitor-analysis');
+            const compRight = compSection ? compSection.querySelector('.comp-right') : null;
+            const mobileCompQuery = window.matchMedia('(max-width: 1024px)');
+            if (compSection && compRight) {
+                let horizontalDistance = 0;
+                let compStart = 0;
+                let compRaf = 0;
+                let touchState = null;
 
-            if (darkSections.length) {
-                const updateDarkMode = () => {
-                    const anyActive = darkSections.some(section => {
-                        const rect = section.getBoundingClientRect();
-                        return rect.top < window.innerHeight * 0.55 && rect.bottom > window.innerHeight * 0.45;
-                    });
-                    body.classList.toggle('dark-mode-active', anyActive);
+                const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+                const getDocumentTop = (element) => {
+                    let top = 0;
+                    let current = element;
+                    while (current) {
+                        top += current.offsetTop || 0;
+                        current = current.offsetParent;
+                    }
+                    return top;
+                };
+                const isTouchInsideSection = (event) => {
+                    const target = event.target;
+                    return target instanceof Element && compSection.contains(target);
+                };
+                const resetTouchState = () => {
+                    touchState = null;
                 };
 
-                const darkObserver = new IntersectionObserver(() => {
-                    updateDarkMode();
-                }, {
-                    root: null,
-                    threshold: 0,
-                    rootMargin: "-20% 0px -60% 0px"
-                });
+                const measureCompScroll = () => {
+                    if (!mobileCompQuery.matches) {
+                        horizontalDistance = 0;
+                        compRight.scrollLeft = 0;
+                        return;
+                    }
 
-                darkSections.forEach(section => darkObserver.observe(section));
-                window.addEventListener('scroll', updateDarkMode, { passive: true });
-                window.addEventListener('resize', updateDarkMode);
-                updateDarkMode();
+                    const stickyTop = parseFloat(getComputedStyle(compRight).top) || 0;
+                    const sectionTop = getDocumentTop(compSection);
+                    horizontalDistance = Math.max(0, compRight.scrollWidth - compRight.clientWidth);
+                    compStart = sectionTop - stickyTop;
+                    compRight.scrollLeft = clamp(compRight.scrollLeft, 0, horizontalDistance);
+                };
+
+                const syncCompScroll = () => {
+                    compRaf = 0;
+                    if (!mobileCompQuery.matches || horizontalDistance <= 0) {
+                        compRight.scrollLeft = 0;
+                        return;
+                    }
+
+                    const progress = clamp((window.scrollY - compStart) / horizontalDistance, 0, 1);
+                    compRight.scrollLeft = progress * horizontalDistance;
+                };
+
+                const consumeTouchDelta = (deltaY) => {
+                    if (!deltaY || horizontalDistance <= 0) return deltaY;
+
+                    const currentScrollLeft = compRight.scrollLeft;
+                    const nextScrollLeft = clamp(currentScrollLeft + deltaY, 0, horizontalDistance);
+                    const consumed = nextScrollLeft - currentScrollLeft;
+
+                    if (consumed !== 0) {
+                        compRight.scrollLeft = nextScrollLeft;
+                    }
+
+                    return deltaY - consumed;
+                };
+
+                // Mobile swipes move the carousel first, then release leftover motion back to the page.
+                const scrollPageBy = (deltaY) => {
+                    if (!deltaY) return;
+                    window.scrollBy(0, deltaY);
+                };
+
+                const onTouchStart = (event) => {
+                    if (!mobileCompQuery.matches || horizontalDistance <= 0 || !isTouchInsideSection(event)) {
+                        resetTouchState();
+                        return;
+                    }
+
+                    const touch = event.touches && event.touches[0];
+                    if (!touch) return;
+
+                    touchState = {
+                        startX: touch.clientX,
+                        startY: touch.clientY,
+                        lastX: touch.clientX,
+                        lastY: touch.clientY,
+                        locked: false
+                    };
+                };
+
+                const onTouchMove = (event) => {
+                    if (!touchState || !mobileCompQuery.matches || horizontalDistance <= 0) return;
+
+                    const touch = event.touches && event.touches[0];
+                    if (!touch) return;
+
+                    const totalDeltaX = touch.clientX - touchState.startX;
+                    const totalDeltaY = touch.clientY - touchState.startY;
+
+                    if (!touchState.locked) {
+                        if (Math.abs(totalDeltaX) < 6 && Math.abs(totalDeltaY) < 6) {
+                            return;
+                        }
+
+                        if (Math.abs(totalDeltaX) > Math.abs(totalDeltaY)) {
+                            resetTouchState();
+                            return;
+                        }
+
+                        touchState.locked = true;
+                    }
+
+                    event.preventDefault();
+
+                    const deltaY = touchState.lastY - touch.clientY;
+                    touchState.lastX = touch.clientX;
+                    touchState.lastY = touch.clientY;
+
+                    const leftover = consumeTouchDelta(deltaY);
+                    scrollPageBy(leftover);
+                };
+
+                const onTouchEnd = () => {
+                    resetTouchState();
+                };
+
+                const requestCompSync = () => {
+                    if (compRaf) return;
+                    compRaf = window.requestAnimationFrame(syncCompScroll);
+                };
+
+                measureCompScroll();
+                requestCompSync();
+                window.addEventListener('scroll', requestCompSync, { passive: true });
+                window.addEventListener('resize', () => {
+                    measureCompScroll();
+                    requestCompSync();
+                });
+                window.addEventListener('load', () => {
+                    measureCompScroll();
+                    requestCompSync();
+                });
+                document.addEventListener('touchstart', onTouchStart, { passive: true });
+                document.addEventListener('touchmove', onTouchMove, { passive: false });
+                document.addEventListener('touchend', onTouchEnd, { passive: true });
+                document.addEventListener('touchcancel', onTouchEnd, { passive: true });
             }
 
             const topNav = document.querySelector('.top-back-nav');

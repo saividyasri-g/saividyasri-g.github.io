@@ -26,10 +26,6 @@
    
     <div class="screen-wrap">
     <div id="wrapper" class="screen">
-        <div class="screen-corner screen-corner--tl"></div>
-        <div class="screen-corner screen-corner--tr"></div>
-        <div class="screen-corner screen-corner--bl"></div>
-        <div class="screen-corner screen-corner--br"></div>
         <div class="crt-overlay" aria-hidden="true"></div>    
         <div class="landing-topbar" role="banner">
                 <span class="landing-topbar-icon" aria-hidden="true"></span>
@@ -378,7 +374,7 @@
                                 </div>
                             </div>
                             <div class="about-intro-v2-right">
-                                <h1 class="about-intro-v2-title">Hello! I’m Sai <span class="about-intro-v2-pronunciation">(/sai/ -- rhymes with "hi")</span></h1>
+                                <h1 class="about-intro-v2-title">Hello, I’m Sai <span class="about-intro-v2-pronunciation">(/sai/ -- rhymes with "hi")</span></h1>
                                 <p class="about-intro-v2-lead">
                                 I design end-to-end product solutions to be intuitive and delightful. Along the way, I like having a good time with the
                                 <span class="about-intro-v2-hover" tabindex="0" data-stack-items="assets/media/about/teamfun1.mp4,assets/media/about/teamfun2.gif,assets/media/about/teamfun3.jpeg,assets/media/about/teamfun4.jpeg">people I build them with.</span>
@@ -862,6 +858,7 @@ function glitchOut(el, onDone) {
         const aboutPanel = document.querySelector('.about-panel');
         const heroPanel = document.querySelector('.landing-hero');
         const logo = document.querySelector('.top-site-logo');
+        const mobileMenuLogo = document.querySelector('.mob-menu-logo');
 
         const replayPanelFade = (panel) => {
             if (!panel) return;
@@ -902,6 +899,9 @@ function glitchOut(el, onDone) {
                 if (!isHome) {
                     logo.classList.remove('clicked');
                 }
+            }
+            if (mobileMenuLogo) {
+                mobileMenuLogo.classList.toggle('clicked', isHome);
             }
             viewLinks.forEach(link => {
                 if (!link.dataset.view) return;
@@ -1710,14 +1710,21 @@ function glitchOut(el, onDone) {
 (function () {
     var btn   = document.getElementById('mob-menu-btn');
     var modal = document.getElementById('mob-menu-modal');
+    var logo  = modal.querySelector('.mob-menu-logo');
     var label = btn.querySelector('.mob-menu-btn-label');
     var icon  = btn.querySelector('.mob-menu-btn-icon');
+
+    function syncLogoState() {
+        if (!logo) return;
+        logo.classList.toggle('clicked', document.body.classList.contains('view-home'));
+    }
 
     function openMenu() {
         modal.classList.add('is-open');
         btn.setAttribute('aria-expanded', 'true');
         label.textContent = 'Close';
         icon.className = 'fa-solid fa-xmark mob-menu-btn-icon';
+        syncLogoState();
     }
 
     function closeMenu() {
@@ -1732,8 +1739,24 @@ function glitchOut(el, onDone) {
         modal.classList.contains('is-open') ? closeMenu() : openMenu();
     });
 
+    if (logo) {
+        logo.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.body.classList.add('view-home');
+            syncLogoState();
+            closeMenu();
+            if (window.location.pathname.slice(-10) !== 'index.html') {
+                window.location.href = 'index.html';
+            }
+        });
+    }
+
     modal.querySelectorAll('.mob-menu-link').forEach(function (a) {
-        a.addEventListener('click', closeMenu);
+        a.addEventListener('click', function () {
+            closeMenu();
+            syncLogoState();
+        });
     });
 
     document.addEventListener('click', function (e) {

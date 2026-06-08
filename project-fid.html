@@ -421,7 +421,17 @@
     </footer>
 
     <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        const scrollProjectToTop = () => {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        };
+        window.addEventListener('pageshow', scrollProjectToTop);
         document.addEventListener("DOMContentLoaded", function() {
+            scrollProjectToTop();
             const sidebarLinks = document.querySelectorAll('.cs-local-sidebar a');
             const setActiveSidebarLink = (id) => {
                 sidebarLinks.forEach(link => link.classList.remove('active'));
