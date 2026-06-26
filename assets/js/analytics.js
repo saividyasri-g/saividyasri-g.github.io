@@ -1,16 +1,51 @@
-// PostHog Analytics Setup
-!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]]),t[o.length-1]]=a[o.join(".")]}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com",".i.posthog.com")+"/decide/?v=3",p.onload=function(){e.capturePageview=function(t,o){var n=[];t&&(n[0]=t),o&&(n[1]=o),e("capture",n)},e.identify=function(t,o,n){var p=[];t&&(p.push(t),o&&(p.push(o),n&&p.push(n))),e("identify",p)},e.reset=function(t){e("reset",t)},e.register_once=function(t,o,n){e("register_once",t,o,n)},e.register=function(t,o){e("register",t,o)},e.unregister=function(t){e("unregister",t)},e.opt_out_capturing=function(){e("opt_out_capturing")},e.opt_in_capturing=function(){e("opt_in_capturing")},e.has_opted_out_capturing=function(){return e("has_opted_out_capturing")},e.has_opted_in_capturing=function(){return e("has_opted_in_capturing")},e.get_distinct_id=function(){return e("get_distinct_id")},e.get_session_id=function(){return e("get_session_id")},e.get_properties=function(){return e("get_properties")},e.barrier=function(t){e("_barrier",t)},e.group=function(t,o,n){e("group",t,o,n)},e.set_group=function(t,o,n){e("set_group",t,o,n)},e.reset_group=function(t){e("reset_group",t)},e.delete_group=function(t,o){e("delete_group",t,o)};var r="capture identify reset register register_once unregister opt_out_capturing opt_in_capturing has_opted_out_capturing has_opted_in_capturing get_distinct_id get_session_id get_properties barrier group set_group reset_group delete_group".split(" ");for(var i=0;i<r.length;i++)g(e,r[i])},e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+!(function (t, e) {
+  var o, n, p, r;
+  e.__SV ||
+    ((window.posthog = e),
+    (e._i = []),
+    (e.init = function (i, s, a) {
+      function g(t, e) {
+        var o = e.split(".");
+        (2 == o.length && ((t = t[o[0]]), (e = o[1])),
+          (t[e] = function () {
+            t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+          }));
+      }
+      (((p = t.createElement("script")).type = "text/javascript"),
+        (p.crossOrigin = "anonymous"),
+        (p.async = !0),
+        (p.src =
+          s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js"),
+        (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r));
+      var u = e;
+      for (
+        void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+          u.people = u.people || [],
+          u.toString = function (t) {
+            var e = "posthog";
+            return ("posthog" !== a && (e += "." + a), t || (e += " (stub)"), e);
+          },
+          u.people.toString = function () {
+            return u.toString(1) + ".people (stub)";
+          },
+          o =
+            "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),
+          n = 0;
+        n < o.length;
+        n++
+      )
+        g(u, o[n]);
+      e._i.push([i, s, a]);
+    }),
+    (e.__SV = 1));
+})(document, window.posthog || []);
 
-// Initialize PostHog with free tier config
-posthog.init('phc_tkexiQSSBUEiAQCWDod7Kz82PWqdAfvQG6cSU426Ao7o', {
-  api_host: 'https://us.i.posthog.com',
+posthog.init("phc_tkexiQSSBUEiAQCWDod7Kz82PWqdAfvQG6cSU426Ao7o", {
+  api_host: "https://us.i.posthog.com",
+  defaults: "2026-05-30",
   capture_pageview: true,
   session_recording: {
     maskAllInputs: false,
-    maskInputFn: function(text) {
-      // Don't mask anything by default - be transparent
-      return text;
-    }
   }
 });
 
