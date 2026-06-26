@@ -14,14 +14,15 @@ posthog.init('phc_tkexiQSSBUEiAQCWDod7Kz82PWqdAfvQG6cSU426Ao7o', {
   }
 });
 
-// Google Analytics 4 Setup
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-QT6ZD43HGK', {
-  'page_path': window.location.pathname,
-  'anonymize_ip': true
-});
+// Google Analytics 4 - gtag is loaded via script tag in HTML
+// Wait for gtag to be available before using it
+function waitForGtag(callback) {
+  if (typeof gtag !== 'undefined') {
+    callback();
+  } else {
+    setTimeout(() => waitForGtag(callback), 100);
+  }
+}
 
 // Utility: Get UTM parameters from URL
 function getUTMParameters() {
@@ -81,11 +82,13 @@ function initSectionTracking() {
           page_type: getPageType()
         });
 
-        // Also send to GA4
-        gtag('event', 'scroll_to_section', {
-          section: sectionName,
-          project: projectName
-        });
+        // Also send to GA4 if available
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'scroll_to_section', {
+            section: sectionName,
+            project: projectName
+          });
+        }
 
         // Unobserve after triggering (only track once per section)
         observer.unobserve(entry.target);
@@ -118,10 +121,12 @@ function initResumeTracking() {
         location: link.className || 'navigation'
       });
 
-      gtag('event', 'file_download', {
-        file_name: 'resume.pdf',
-        location: projectName
-      });
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'file_download', {
+          file_name: 'resume.pdf',
+          location: projectName
+        });
+      }
     });
   });
 }
