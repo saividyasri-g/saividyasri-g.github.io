@@ -1,0 +1,19 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "color-named": "never",
+    "color-no-invalid-hex": true,
+    "at-rule-no-unknown": [true, { "ignoreAtRules": ["theme"] }],
+    "no-duplicate-selectors": null
+  },
+  "overrides": [
+    {
+      "files": ["src/components/**/*.css", "src/pages/**/*.css"],
+      "rules": {
+        "unit-disallowed-list": ["px"],
+        "color-no-invalid-hex": true,
+        "color-named": "never"
+      }
+    }
+  ]
+}

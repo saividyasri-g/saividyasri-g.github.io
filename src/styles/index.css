@@ -1,0 +1,65 @@
+@import url("tailwindcss");
+@import url("./tokens.css");
+
+@theme inline {
+  /* Fonts */
+  --font-sans: 'Hanken Grotesk', 'Helvetica Neue', helvetica, arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Type scale — overrides Tailwind defaults with our 4-multiple steps */
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-base: var(--text-base);
+  --text-lg: var(--text-lg);
+  --text-xl: var(--text-xl);
+  --text-2xl: var(--text-2xl);
+  --text-3xl: var(--text-3xl);
+  --text-4xl: var(--text-4xl);
+
+  /* Spacing */
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-10: var(--space-10);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+
+  /* Radius */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-2xl: var(--radius-2xl);
+  --radius-full: var(--radius-full);
+
+  /* Easing */
+  --ease-standard: var(--ease-standard);
+}
+
+/* Base */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-text-body);
+  background: var(--color-surface-page);
+  transition: var(--transition-theme);
+}
+
+::selection {
+  background: var(--color-highlight-bg);
+  color: var(--color-highlight-text);
+}
+
+a { text-decoration: none; }

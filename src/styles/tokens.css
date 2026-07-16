@@ -1,0 +1,201 @@
+/* ─── Primitives ──────────────────────────────────────────── */
+
+/* Raw values. Never used directly in components. */
+
+:root {
+  /* Type scale — 4-multiple steps */
+  --primitive-size-8: 8px;
+  --primitive-size-12: 12px;
+  --primitive-size-16: 16px;
+  --primitive-size-20: 20px;
+  --primitive-size-28: 28px;
+  --primitive-size-32: 32px;
+  --primitive-size-36: 36px;
+  --primitive-size-40: 40px;
+
+  /* Spacing — 4/8px grid (carried forward from main.css) */
+  --primitive-space-1: 4px;
+  --primitive-space-2: 8px;
+  --primitive-space-3: 12px;
+  --primitive-space-4: 16px;
+  --primitive-space-5: 20px;
+  --primitive-space-6: 24px;
+  --primitive-space-8: 32px;
+  --primitive-space-10: 40px;
+  --primitive-space-12: 48px;
+  --primitive-space-16: 64px;
+
+  /* Radius (carried forward from main.css + new design values) */
+  --primitive-radius-2: 2px;
+  --primitive-radius-3: 3px;
+  --primitive-radius-4: 4px;
+  --primitive-radius-8: 8px;
+  --primitive-radius-10: 10px;
+  --primitive-radius-11: 11px;
+  --primitive-radius-12: 12px;
+  --primitive-radius-14: 14px;
+  --primitive-radius-16: 16px;
+  --primitive-radius-20: 20px;
+  --primitive-radius-24: 24px;
+  --primitive-radius-full: 999px;
+
+  /* Motion */
+  --primitive-ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --primitive-duration-fast: 0.3s;
+  --primitive-duration-toggle: 0.32s;
+  --primitive-duration-theme: 0.45s;
+  --primitive-duration-hover: 0.55s;
+
+  /* Light palette */
+  --primitive-light-page: #f5f6f7;
+  --primitive-light-sidebar: #eceef0;
+  --primitive-light-main: #f7f8f9;
+  --primitive-light-card: #fff;
+  --primitive-light-card-hover: #fff;
+  --primitive-light-text: #191b1e;
+  --primitive-light-title: #111316;
+  --primitive-light-secondary: #6a7077;
+  --primitive-light-meta: #9aa0a7;
+  --primitive-light-faint: #b6bbc1;
+  --primitive-light-hair: #e6e8eb;
+  --primitive-light-hair-hover: #d0d5da;
+  --primitive-light-hl-bg: #e5ebf5;
+  --primitive-light-hl-text: #375070;
+  --primitive-light-tag-border: #e2e5e8;
+  --primitive-light-knob: #fff;
+  --primitive-light-stripe-a: #f0f1f3;
+  --primitive-light-stripe-b: #f6f7f8;
+  --primitive-light-toggle-track: #e6e8eb;
+  --primitive-light-accent: #46617f;
+
+  /* Dark palette */
+  --primitive-dark-page: #0c0f16;
+  --primitive-dark-sidebar: #10141d;
+  --primitive-dark-main: #0c0f16;
+  --primitive-dark-card: #1a2030;
+  --primitive-dark-card-hover: #212840;
+  --primitive-dark-text: #eaeef5;
+  --primitive-dark-title: #f1f4f9;
+  --primitive-dark-secondary: #96a0b2;
+  --primitive-dark-meta: #6d7789;
+  --primitive-dark-faint: #525c6e;
+  --primitive-dark-hair: #28303f;
+  --primitive-dark-hair-hover: #333d4f;
+  --primitive-dark-hl-bg: #1c2c44;
+  --primitive-dark-hl-text: #a8c0e0;
+  --primitive-dark-tag-border: #2d3646;
+  --primitive-dark-knob: #212840;
+  --primitive-dark-stripe-a: #252e3d;
+  --primitive-dark-stripe-b: #2a3444;
+  --primitive-dark-toggle-track: #28303f;
+  --primitive-dark-accent: #8fa6c8;
+}
+
+/* ─── Semantics — light mode (default) ───────────────────── */
+
+/* Meaning-mapped tokens. Components consume only these. */
+
+:root,
+[data-theme="light"] {
+  --color-surface-page: var(--primitive-light-page);
+  --color-surface-sidebar: var(--primitive-light-sidebar);
+  --color-surface-main: var(--primitive-light-main);
+  --color-surface-card: var(--primitive-light-card);
+  --color-surface-card-hover: var(--primitive-light-card-hover);
+  --color-text-body: var(--primitive-light-text);
+  --color-text-title: var(--primitive-light-title);
+  --color-text-secondary: var(--primitive-light-secondary);
+  --color-text-meta: var(--primitive-light-meta);
+  --color-text-faint: var(--primitive-light-faint);
+  --color-border-hair: var(--primitive-light-hair);
+  --color-border-hair-hover: var(--primitive-light-hair-hover);
+  --color-border-tag: var(--primitive-light-tag-border);
+  --color-highlight-bg: var(--primitive-light-hl-bg);
+  --color-highlight-text: var(--primitive-light-hl-text);
+  --color-accent: var(--primitive-light-accent);
+  --color-knob: var(--primitive-light-knob);
+  --color-toggle-track: var(--primitive-light-toggle-track);
+  --color-stripe-a: var(--primitive-light-stripe-a);
+  --color-stripe-b: var(--primitive-light-stripe-b);
+
+  /* REPLACE-ME accent — deliberately loud so accidental ship is impossible */
+
+  /* --color-accent: #ff00cc; */
+}
+
+/* ─── Semantics — dark mode ──────────────────────────────── */
+
+[data-theme="dark"] {
+  --color-surface-page: var(--primitive-dark-page);
+  --color-surface-sidebar: var(--primitive-dark-sidebar);
+  --color-surface-main: var(--primitive-dark-main);
+  --color-surface-card: var(--primitive-dark-card);
+  --color-surface-card-hover: var(--primitive-dark-card-hover);
+  --color-text-body: var(--primitive-dark-text);
+  --color-text-title: var(--primitive-dark-title);
+  --color-text-secondary: var(--primitive-dark-secondary);
+  --color-text-meta: var(--primitive-dark-meta);
+  --color-text-faint: var(--primitive-dark-faint);
+  --color-border-hair: var(--primitive-dark-hair);
+  --color-border-hair-hover: var(--primitive-dark-hair-hover);
+  --color-border-tag: var(--primitive-dark-tag-border);
+  --color-highlight-bg: var(--primitive-dark-hl-bg);
+  --color-highlight-text: var(--primitive-dark-hl-text);
+  --color-accent: var(--primitive-dark-accent);
+  --color-knob: var(--primitive-dark-knob);
+  --color-toggle-track: var(--primitive-dark-toggle-track);
+  --color-stripe-a: var(--primitive-dark-stripe-a);
+  --color-stripe-b: var(--primitive-dark-stripe-b);
+}
+
+/* ─── Semantic aliases (spacing, type, radius, motion) ────── */
+
+/* These don't change per theme — exposed as semantic names for component use */
+
+:root {
+  /* Type scale */
+  --text-xs: var(--primitive-size-8);
+  --text-sm: var(--primitive-size-12);
+  --text-base: var(--primitive-size-16);
+  --text-lg: var(--primitive-size-20);
+  --text-xl: var(--primitive-size-28);
+  --text-2xl: var(--primitive-size-32);
+  --text-3xl: var(--primitive-size-36);
+  --text-4xl: var(--primitive-size-40);
+
+  /* Spacing */
+  --space-1: var(--primitive-space-1);
+  --space-2: var(--primitive-space-2);
+  --space-3: var(--primitive-space-3);
+  --space-4: var(--primitive-space-4);
+  --space-5: var(--primitive-space-5);
+  --space-6: var(--primitive-space-6);
+  --space-8: var(--primitive-space-8);
+  --space-10: var(--primitive-space-10);
+  --space-12: var(--primitive-space-12);
+  --space-16: var(--primitive-space-16);
+
+  /* Radius */
+  --radius-highlight: var(--primitive-radius-2);
+  --radius-tag: var(--primitive-radius-3);
+  --radius-sm: var(--primitive-radius-4);
+  --radius-md: var(--primitive-radius-8);
+  --radius-card: var(--primitive-radius-10);
+  --radius-btn: var(--primitive-radius-11);
+  --radius-widget: var(--primitive-radius-12);
+  --radius-project-card: var(--primitive-radius-14);
+  --radius-lg: var(--primitive-radius-16);
+  --radius-toggle: var(--primitive-radius-20);
+  --radius-2xl: var(--primitive-radius-24);
+  --radius-full: var(--primitive-radius-full);
+
+  /* Motion */
+  --ease-standard: var(--primitive-ease-standard);
+  --duration-fast: var(--primitive-duration-fast);
+  --duration-toggle: var(--primitive-duration-toggle);
+  --duration-theme: var(--primitive-duration-theme);
+  --duration-hover: var(--primitive-duration-hover);
+
+  /* Transition shorthand for theme-swappable props */
+  --transition-theme: background var(--duration-theme), color var(--duration-theme), border-color var(--duration-theme);
+}
