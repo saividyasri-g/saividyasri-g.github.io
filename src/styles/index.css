@@ -2,9 +2,9 @@
 @import url("./tokens.css");
 
 @theme inline {
-  /* Fonts */
-  --font-sans: 'Hanken Grotesk', 'Helvetica Neue', helvetica, arial, sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  /* Fonts — point to the :root vars defined in tokens.css */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 
   /* Type scale — overrides Tailwind defaults with our 4-multiple steps */
   --text-xs: var(--text-xs);
@@ -63,3 +63,135 @@ body {
 }
 
 a { text-decoration: none; }
+
+/* ─── Fill-sweep button effect ───────────────────────────── */
+
+/*
+ * Animates only opacity + transform (compositor thread only — no layout).
+ * The cubic-bezier overshoot (1.22 final value) gives the elastic "pop".
+ * padding-bottom: 100% forces the pseudo-element into a square sized to its
+ * own width, which overflow: hidden on the parent clips to the button height.
+ * At our button proportions (44px tall × ~100–160px wide) this clips cleanly.
+ */
+
+.fill-btn {
+  --fill-color: var(--primitive-light-secondary);
+  --fill-opacity-target: 1;
+  --text-on-fill: var(--color-surface-page);
+}
+
+/* Project cards: same sweep, but 10% opacity — keeps text readable at any color */
+.fill-btn--subtle {
+  --fill-opacity-target: 0.1;
+}
+
+
+/* Default label colour — overridden below for nav states */
+.fill-btn .fill-btn-label {
+  color: var(--color-text-secondary);
+  transition: color 0.18s ease-out;
+}
+
+/* Nav: inactive links are visually lighter */
+.nav-link .fill-btn-label { color: var(--color-text-meta); }
+
+/* Nav: active link is clearly selected */
+.nav-link.nav--active .fill-btn-label { color: var(--color-text-title); }
+
+.fill-btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  padding-bottom: 100%;
+  background-color: var(--fill-color);
+  opacity: 0;
+  transform: translateY(-50%) rotate(5deg) scaleX(0.25);
+  transform-origin: 50% 50%;
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.25s cubic-bezier(0.605, 0.425, 0.325, 1.22);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.fill-btn:hover::before,
+.fill-btn:focus-visible::before {
+  opacity: var(--fill-opacity-target);
+  transform: translateY(-50%) rotate(0deg) scaleX(1);
+}
+
+/* Text/icon color flip — only for full-opacity fills (buttons, nav) */
+.fill-btn:not(.fill-btn--subtle):hover .fill-btn-label,
+.fill-btn:not(.fill-btn--subtle):focus-visible .fill-btn-label {
+  color: var(--text-on-fill);
+}
+
+/* Project card border hover via CSS — no JS needed */
+.fill-btn--card:hover,
+.fill-btn--card:focus-visible {
+  border-color: var(--color-border-hair-hover) !important;
+}
+
+/* Thumbnail zoom on card hover */
+.fill-btn--card:hover .card-thumb,
+.fill-btn--card:focus-visible .card-thumb {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill-btn::before,
+  .card-thumb {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Responsive layout ──────────────────────────────────── */
+
+/* Two-column sidebar+main grid used on landing and case study pages.
+   No max-width here — the sidebar background must bleed to the left viewport edge.
+   Content inside the main column constrains its own width. */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  min-height: 100vh;
+}
+
+/* Case study grid sits below a full-width hero — no min-height needed */
+.layout-grid-body {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+}
+
+@media (width <= 1024px) {
+  .layout-grid,
+  .layout-grid-body {
+    grid-template-columns: 1fr;
+  }
+
+  /* Project card: image above text on mobile */
+  .project-card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* Sidebar becomes a normal block (not sticky/full-height) on small screens */
+  .layout-sidebar {
+    position: static !important;
+    height: auto !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--color-border-hair);
+  }
+
+  /* Tighten main-area padding on tablet/mobile */
+  .layout-main-pad {
+    padding-left: var(--space-6) !important;
+    padding-right: var(--space-6) !important;
+  }
+
+  .layout-header-pad {
+    padding-left: var(--space-6) !important;
+    padding-right: var(--space-6) !important;
+  }
+}

@@ -37,10 +37,11 @@ const links = [
 export default function LandingSidebar() {
   return (
     <aside
+      className="layout-sidebar"
       style={{
         background: 'var(--color-surface-sidebar)',
         borderRight: '1px solid var(--color-border-hair)',
-        padding: 'var(--space-6) 44px var(--space-12)',
+        padding: '31px 44px var(--space-12)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -81,17 +82,6 @@ export default function LandingSidebar() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <span
-            style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: 'var(--text-sm)',
-              fontWeight: 500,
-              color: 'var(--color-text-secondary)',
-              transition: 'var(--transition-theme)',
-            }}
-          >
-            Connect with me
-          </span>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
             {links.map(link => (
               <Button key={link.label} href={link.href}>

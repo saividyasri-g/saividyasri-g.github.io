@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Header from '../components/layout/Header'
 import LandingSidebar from '../components/layout/LandingSidebar'
 
 interface Project {
@@ -40,16 +39,22 @@ const projects: Project[] = [
   },
 ]
 
-function ProjectCard({ project }: { project: Project }) {
-  const [hovered, setHovered] = useState(false)
+interface CardProps {
+  project: Project
+  dimmed: boolean
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+}
+
+function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps) {
+  const [imgLoaded, setImgLoaded] = useState(false)
 
   const stripesBg =
     'repeating-linear-gradient(135deg, var(--color-stripe-a) 0px, var(--color-stripe-a) 8px, var(--color-stripe-b) 8px, var(--color-stripe-b) 16px)'
 
   return (
     <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className="project-card-grid fill-btn fill-btn--subtle fill-btn--card"
       style={{
         position: 'relative',
         overflow: 'hidden',
@@ -57,33 +62,22 @@ function ProjectCard({ project }: { project: Project }) {
         gridTemplateColumns: 'minmax(0, 1.02fr) 1fr',
         gap: '56px',
         alignItems: 'center',
-        background: 'var(--color-surface-card)',
-        border: `1px solid ${hovered ? 'var(--color-border-hair-hover)' : 'var(--color-border-hair)'}`,
+        background: 'var(--color-surface-main)',
+        border: '1px solid var(--color-border-hair)',
         borderRadius: 'var(--radius-project-card)',
         padding: '28px',
         cursor: project.comingSoon ? 'default' : 'pointer',
-        transition: `border-color var(--duration-hover) var(--ease-standard)`,
+        opacity: dimmed ? 0.45 : 1,
+        transition: `border-color var(--duration-hover) var(--ease-standard), opacity 0.3s ease-out`,
       }}
       onClick={() => { if (!project.comingSoon && project.href !== '#') window.location.hash = project.href.replace('#', '') }}
       role={project.comingSoon ? undefined : 'link'}
       tabIndex={project.comingSoon ? undefined : 0}
       onKeyDown={e => { if (!project.comingSoon && (e.key === 'Enter' || e.key === ' ')) window.location.hash = project.href.replace('#', '') }}
       aria-label={project.comingSoon ? undefined : `View case study: ${project.title}`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
-      {/* Sweep overlay */}
-      <span
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'var(--color-surface-sidebar)',
-          transform: hovered ? 'scale(1)' : 'scale(0)',
-          transformOrigin: 'bottom left',
-          transition: `transform var(--duration-hover) var(--ease-standard)`,
-          zIndex: 0,
-        }}
-      />
-
       {/* Image column */}
       <div
         style={{
@@ -93,31 +87,58 @@ function ProjectCard({ project }: { project: Project }) {
           borderRadius: 'var(--radius-card)',
           overflow: 'hidden',
           border: '1px solid var(--color-border-hair)',
-          background: project.img ? '#0e1116' : 'var(--color-surface-card)',
-          backgroundImage: project.img ? `url(${project.img})` : stripesBg,
-          backgroundSize: project.img ? 'cover' : 'auto',
-          backgroundPosition: 'center',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           transition: 'var(--transition-theme)',
         }}
         role="img"
         aria-label={project.imgAlt || undefined}
       >
-        {!project.img && (
-          <span
+        {/* Stripe placeholder — fades out once image loads */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: project.img ? stripesBg : 'var(--color-surface-card)',
+            backgroundSize: 'auto',
+            opacity: project.img && imgLoaded ? 0 : 1,
+            transition: 'opacity 0.4s ease-out',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {!project.img && (
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 'var(--text-xs)',
+                letterSpacing: '.14em',
+                textTransform: 'uppercase' as const,
+                color: 'var(--color-text-meta)',
+                transition: 'var(--transition-theme)',
+              }}
+            >
+              {project.comingSoon ? 'Coming soon' : 'Case study'}
+            </span>
+          )}
+        </div>
+
+        {/* Real image — fades in on load, scales on card hover */}
+        {project.img && (
+          <img
+            src={project.img}
+            alt={project.imgAlt}
+            className="card-thumb"
+            onLoad={() => setImgLoaded(true)}
             style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'var(--text-xs)',
-              letterSpacing: '.14em',
-              textTransform: 'uppercase' as const,
-              color: 'var(--color-text-meta)',
-              transition: 'var(--transition-theme)',
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              opacity: imgLoaded ? 1 : 0,
+              transition: 'opacity 0.5s ease-out, transform 0.55s var(--ease-standard)',
             }}
-          >
-            {project.comingSoon ? 'Coming soon' : 'Case study'}
-          </span>
+          />
         )}
       </div>
 
@@ -143,7 +164,7 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
         <h3
           style={{
-            fontSize: '30px',
+            fontSize: '28px',
             lineHeight: 1.16,
             fontWeight: 600,
             letterSpacing: '-0.02em',
@@ -158,7 +179,7 @@ function ProjectCard({ project }: { project: Project }) {
         {project.desc && (
           <p
             style={{
-              fontSize: 'var(--text-lg)',
+              fontSize: 'var(--text-base)',
               lineHeight: 1.55,
               fontWeight: 400,
               color: 'var(--color-text-secondary)',
@@ -176,6 +197,8 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 export default function Home() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+
   return (
     <div
       style={{
@@ -184,23 +207,20 @@ export default function Home() {
         transition: 'var(--transition-theme)',
       }}
     >
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '360px 1fr',
-          minHeight: '100vh',
-          maxWidth: '1400px',
-          margin: '0 auto',
-        }}
-      >
+      <div className="layout-grid">
         <LandingSidebar />
 
         <main style={{ background: 'var(--color-surface-main)', transition: 'var(--transition-theme)' }}>
-          <Header />
-          <div style={{ padding: 'var(--space-12) var(--space-12) 88px' }}>
+          <div className="layout-main-pad" style={{ padding: '88px var(--space-12) 88px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
-              {projects.map(project => (
-                <ProjectCard key={project.title} project={project} />
+              {projects.map((project, i) => (
+                <ProjectCard
+                  key={project.title}
+                  project={project}
+                  dimmed={hoveredIndex !== null && hoveredIndex !== i}
+                  onMouseEnter={() => setHoveredIndex(i)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                />
               ))}
             </div>
           </div>

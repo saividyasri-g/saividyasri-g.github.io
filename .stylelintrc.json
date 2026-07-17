@@ -4,7 +4,8 @@
     "color-named": "never",
     "color-no-invalid-hex": true,
     "at-rule-no-unknown": [true, { "ignoreAtRules": ["theme"] }],
-    "no-duplicate-selectors": null
+    "no-duplicate-selectors": null,
+    "selector-class-pattern": null
   },
   "overrides": [
     {

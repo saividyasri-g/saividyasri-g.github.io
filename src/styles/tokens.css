@@ -3,6 +3,10 @@
 /* Raw values. Never used directly in components. */
 
 :root {
+  /* Fonts — defined here so var(--font-sans/mono) works in all CSS contexts */
+  --font-sans: 'Hanken Grotesk', 'Helvetica Neue', helvetica, arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
   /* Type scale — 4-multiple steps */
   --primitive-size-8: 8px;
   --primitive-size-12: 12px;

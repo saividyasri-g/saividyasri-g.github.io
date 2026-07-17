@@ -4,22 +4,25 @@ import ThemeToggle from '../ui/ThemeToggle'
 interface NavItem {
   label: string
   to: string
+  noActive?: boolean
 }
 
 interface HeaderProps {
   items?: NavItem[]
   style?: React.CSSProperties
+  className?: string
 }
 
 const defaultItems: NavItem[] = [
   { label: 'Work', to: '/' },
-  { label: 'Experiments', to: '/#experiments' },
-  { label: 'About', to: '/#about' },
+  { label: 'Experiments', to: '/#experiments', noActive: true },
+  { label: 'About', to: '/#about', noActive: true },
 ]
 
-export default function Header({ items = defaultItems, style }: HeaderProps) {
+export default function Header({ items = defaultItems, style, className }: HeaderProps) {
   return (
     <header
+      className={className}
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -33,20 +36,29 @@ export default function Header({ items = defaultItems, style }: HeaderProps) {
         ...style,
       }}
     >
-      <nav style={{ display: 'flex', gap: '34px', fontSize: 'var(--text-base)' }}>
+      <nav style={{ display: 'flex', gap: '20px', fontSize: 'var(--text-base)' }}>
         {items.map(item => (
           <NavLink
             key={item.label}
             to={item.to}
-            style={({ isActive }) => ({
-              color: isActive ? 'var(--color-text-title)' : 'var(--color-text-secondary)',
+            end
+            className={({ isActive }) =>
+              ['fill-btn', 'fill-btn--subtle', 'nav-link', (!item.noActive && isActive) ? 'nav--active' : ''].filter(Boolean).join(' ')
+            }
+            style={{
+              position: 'relative',
+              overflow: 'hidden',
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '4px 10px',
+              borderRadius: 'var(--radius-sm)',
               textDecoration: 'none',
-              paddingBottom: '2px',
-              borderBottom: isActive ? '1px solid var(--color-text-title)' : '1px solid transparent',
               transition: 'var(--transition-theme)',
-            })}
+            }}
           >
-            {item.label}
+            <span className="fill-btn-label" style={{ position: 'relative', zIndex: 1 }}>
+              {item.label}
+            </span>
           </NavLink>
         ))}
       </nav>

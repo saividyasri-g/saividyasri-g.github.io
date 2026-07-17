@@ -1,4 +1,3 @@
-import Header from '../../components/layout/Header'
 import { Overview, Metric, BeforeAfter, Outline, Learning } from '../../components/case-study'
 
 const outlineItems = [
@@ -18,7 +17,6 @@ const overviewItems = [
 
 const sectionStyle: React.CSSProperties = {
   padding: '52px 0',
-  borderTop: '1px solid var(--color-border-hair)',
   scrollMarginTop: '90px',
 }
 
@@ -107,12 +105,10 @@ export default function HeroMotoCorp() {
         transition: 'var(--transition-theme)',
       }}
     >
-      <Header
-        style={{ padding: 'var(--space-5) var(--space-12) var(--space-5) calc(360px + var(--space-12))' }}
-      />
 
-      {/* Hero section — full width above the sidebar grid */}
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+
+      {/* Hero section — full width, sidebar grid bleeds to left viewport edge */}
+      <div>
         <section
           style={{
             padding: 'var(--space-10) 60px var(--space-8)',
@@ -124,9 +120,10 @@ export default function HeroMotoCorp() {
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: 'var(--text-sm)',
-                letterSpacing: '.16em',
+                fontWeight: 500,
+                letterSpacing: '.09em',
                 textTransform: 'uppercase' as const,
-                color: 'var(--color-text-meta)',
+                color: 'var(--color-text-secondary)',
                 marginBottom: '22px',
                 transition: 'var(--transition-theme)',
               }}
@@ -163,14 +160,14 @@ export default function HeroMotoCorp() {
         </section>
 
         {/* Sidebar + main body grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr' }}>
+        <div className="layout-grid-body">
           <Outline
             items={outlineItems}
             nextProject={{ label: 'Builder Market', href: '#' }}
           />
 
           <main style={{ background: 'var(--color-surface-main)', minWidth: 0, transition: 'var(--transition-theme)' }}>
-            <div style={{ padding: 'var(--space-10) var(--space-12) 60px', maxWidth: '900px' }}>
+            <div className="layout-main-pad" style={{ padding: 'var(--space-10) var(--space-12) 60px', maxWidth: '900px' }}>
 
               {/* 01 — Overview */}
               <section id="overview" style={sectionStyle}>

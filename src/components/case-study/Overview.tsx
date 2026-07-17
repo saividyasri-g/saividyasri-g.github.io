@@ -13,8 +13,6 @@ export default function Overview({ items }: OverviewProps) {
       style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${Math.min(items.length, 4)}, 1fr)`,
-        borderTop: '1px solid var(--color-border-hair)',
-        borderBottom: '1px solid var(--color-border-hair)',
         transition: 'var(--transition-theme)',
       }}
     >
@@ -23,10 +21,11 @@ export default function Overview({ items }: OverviewProps) {
           <div
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 'var(--text-xs)',
-              letterSpacing: '.12em',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 500,
+              letterSpacing: '.09em',
               textTransform: 'uppercase' as const,
-              color: 'var(--color-text-meta)',
+              color: 'var(--color-text-secondary)',
               marginBottom: 'var(--space-2)',
               transition: 'var(--transition-theme)',
             }}
@@ -35,7 +34,7 @@ export default function Overview({ items }: OverviewProps) {
           </div>
           <div
             style={{
-              fontSize: 'var(--text-sm)',
+              fontSize: 'var(--text-base)',
               lineHeight: 1.45,
               color: 'var(--color-text-body)',
               transition: 'var(--transition-theme)',

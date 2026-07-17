@@ -31,8 +31,9 @@ export default function Outline({ items, nextProject }: OutlineProps) {
 
   return (
     <aside
+      className="layout-sidebar"
       style={{
-        background: 'var(--color-surface-sidebar)',
+        background: 'transparent',
         borderRight: '1px solid var(--color-border-hair)',
         padding: 'var(--space-8) 44px var(--space-10)',
         display: 'flex',
@@ -45,21 +46,6 @@ export default function Outline({ items, nextProject }: OutlineProps) {
       }}
     >
       <div>
-        <div
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 'var(--text-xs)',
-            letterSpacing: '.14em',
-            textTransform: 'uppercase' as const,
-            color: 'var(--color-text-faint)',
-            marginTop: '34px',
-            paddingTop: 'var(--space-5)',
-            borderTop: '1px solid var(--color-border-hair)',
-            transition: 'var(--transition-theme)',
-          }}
-        >
-          On this page
-        </div>
         <nav style={{ display: 'flex', flexDirection: 'column', marginTop: 'var(--space-2)' }}>
           {items.map(item => {
             const on = active === item.id
