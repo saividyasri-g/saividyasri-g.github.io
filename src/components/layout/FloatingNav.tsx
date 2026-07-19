@@ -4,7 +4,7 @@ import ThemeToggle from '../ui/ThemeToggle'
 const navItems = [
   { label: 'Work', to: '/', noActive: false },
   { label: 'Experiments', to: '/#experiments', noActive: true },
-  { label: 'About', to: '/#about', noActive: true },
+  { label: 'About', to: '/about', noActive: false },
 ]
 
 export default function FloatingNav() {

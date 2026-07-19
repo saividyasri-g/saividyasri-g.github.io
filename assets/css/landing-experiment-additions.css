@@ -1,0 +1,596 @@
+/*
+  Landing positioning experiment — additions only.
+  Scoped entirely to index.html (body.landing-experiment). Do not port
+  selectors here into main.css without re-checking they can't match
+  project-*.html pages.
+*/
+
+/* Hero: icon-only quick-links row (location / LinkedIn / GitHub / Resume) */
+.landing-hero-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6, 20px);
+    margin-top: var(--space-2, 8px);
+}
+
+.landing-hero-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-text-secondary, #8a8a94);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+}
+
+.landing-hero-links a:hover {
+    color: var(--color-text-primary, #1a1a1f);
+}
+
+.landing-hero-links svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+/*
+  ── Continuous-scroll home view ──
+  view-home only. main.css treats view-home as a fixed, non-scrolling
+  "screen" (overflow:hidden everywhere) with nav as a left sidebar column,
+  and #projects.work-panel forced display:none outside view-work. All of
+  that is overridden below, scoped strictly to body.landing-experiment.view-home
+  so view-work/view-expt/view-about keep their existing sidebar-nav /
+  panel-switch behavior untouched.
+*/
+
+/* Compact hero so there's something to scroll past quickly.
+   Card shell is flattened to white; the hologram's mix-blend-mode:multiply
+   effect (main.css ~6900/6956/6967) depends on a colored backdrop to render
+   its tinted look, so .landing-hero-card-left (the column wrapping just the
+   hologram) keeps the original pink gradient instead of going white too. */
+body.landing-experiment.view-home .landing-hero-card {
+    max-width: 960px;
+    width: 100%;
+    /* .landing-hero-content (its parent) is a flex column with the default
+       align-items:flex-start, so without this the 960px-capped card just
+       sits flush against the container's left edge instead of centered —
+       harmless when the card filled most of the width, but glaring once
+       .intro-pending scales it up ~25% around its own center: whatever
+       offset already existed from true center gets carried straight
+       through (scaling doesn't recenter it), pushing the card noticeably
+       past the left edge of the viewport pre-scroll. */
+    margin: 0 auto;
+    grid-template-columns: 240px 1fr;
+    padding: 0.75rem 0.75rem;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border-light, #e5e5e5);
+    box-shadow: none;
+}
+
+body.landing-experiment.view-home .landing-hero-card-left {
+    background: linear-gradient(170deg,
+        rgba(230,210,225,0.4) 0%,
+        rgba(220,195,215,0.25) 50%,
+        rgba(235,220,232,0.3) 100%);
+    border-radius: var(--radius-xl);
+    padding: 0.75rem;
+}
+
+body.landing-experiment.view-home .landing-hero-holo .avatar-wrapper {
+    width: min(150px, 100%);
+}
+
+/* Hologram is a fixed-pixel box (main.css:6876/7015) whose own transform
+   is overwritten every mousemove frame by index.html's parallax script —
+   so it can't be shrunk with transform:scale (would be stomped each tick).
+   Resizing width/height directly is safe: the JS only ever touches
+   `.style.transform`, and the video layers inside are percentage-sized so
+   they rescale correctly. 0.5 scale factor, halving the original 260x320 /
+   140x160 dimensions exactly. */
+body.landing-experiment.view-home .landing-hero-holo .avatar__head {
+    width: 130px;
+    height: 160px;
+}
+
+body.landing-experiment.view-home .landing-hero-holo .avatar__emitter {
+    width: 70px;
+    height: 80px;
+    margin-top: 5px;
+    margin-bottom: -12px;
+}
+
+/* Googly-eyes Easter egg (click the avatar) used fixed pixel coordinates
+   tuned for the original 260x320 head — halved to match. */
+body.landing-experiment.view-home .googly-eyes-svg {
+    width: 75px;
+    left: 28px;
+    top: 59px;
+}
+
+body.landing-experiment.view-home .googly-pupil {
+    width: 7px;
+    height: 6px;
+}
+
+body.landing-experiment.view-home .googly-pupil--left {
+    left: 50px;
+    top: 70px;
+}
+
+body.landing-experiment.view-home .googly-pupil--right {
+    left: 77px;
+    top: 71px;
+}
+
+/* Work section joins the scroll flow beneath the hero, instead of
+   being a hidden panel only reachable via the old view-work tab switch. */
+body.landing-experiment.view-home {
+    --work-card-height: clamp(320px, 50vh, 480px);
+    --work-card-gap: clamp(24px, 4vh, 40px);
+    --home-nav-height: 64px;
+    --home-nav-padding-top: 40px;
+    /* Tight gap used both above the docked card (nav bottom -> card top) and
+       below it (card bottom -> followup copy top). Reused as the fixed
+       card's `top` offset in .intro-docked below, so the in-flow -> fixed
+       handoff lands exactly where the card already visually is (no jump). */
+    --hero-dock-gap: 12px;
+    /* Viewport offset where the docked card's top edge sits (nav + tight
+       gap). Shared by .landing-hero's pre-dock padding-top and the fixed
+       card's `top` in .intro-docked, below, so both agree exactly. */
+    --hero-dock-top: calc(var(--home-nav-height) + var(--home-nav-padding-top) + var(--hero-dock-gap));
+}
+
+/* Page background: solid white for the home view only */
+body.landing-experiment.view-home,
+body.landing-experiment.view-home #wrapper.screen,
+body.landing-experiment.view-home #main {
+    background: #FFFFFF;
+}
+
+/* #wrapper.screen's base grid (main.css:5310) reserves a 220px first column
+   for the old left-sidebar nav ("nav main" grid-template-areas) and #main
+   is pinned to that second "main" column. Home view's nav is `position:
+   fixed` instead (a horizontal top bar, not a grid column), but the grid
+   still reserves that 220px track whether or not anything occupies it —
+   so #main (and everything inside it: hero, work panel, followup copy)
+   was rendering shifted 220px right, with a dead empty strip on the left.
+   Collapse to a single-column grid for view-home so #main spans full width. */
+body.landing-experiment.view-home #wrapper.screen {
+    grid-template-columns: 1fr;
+    /* Base rule (main.css:5313) also reserves a `--landing-topbar-grid-row`
+       row track for "topbar" — same issue as the column fix above, just on
+       the other axis: that row stays reserved (and empty) since our nav is
+       `position: fixed`, not a grid participant, pushing #main's own box
+       down by that amount for no reason. Collapse to a single row too. */
+    grid-template-rows: 1fr;
+    grid-template-areas: "main";
+}
+
+/* Let the hero sit at its natural height instead of filling/clipping to the
+   viewport, positioned exactly --home-nav-gap below the nav (nav's own
+   height now includes its --home-nav-padding-top, so that's added here too
+   or the nav growing taller would eat into the 40px gap below it) */
+body.landing-experiment.view-home .landing-hero {
+    flex: 0 0 auto;
+    max-height: none;
+    overflow: visible;
+    padding-top: var(--hero-dock-top);
+}
+
+/* Pre-scroll only: fills at least one viewport height so #projects.work-
+   panel/.landing-hero-followup-copy (which immediately follow in the
+   scroll flow) never peek into view on load — they only appear once the
+   user actually scrolls. Scoped to .intro-pending, not the base rule
+   above, since the hero is a plain in-flow element once revealed (nothing
+   ever un-sets a min-height:100vh that applies unconditionally) — leaving
+   it on permanently was leaving a ~900px dead zone below the docked card,
+   the full unused remainder of that 100vh. */
+body.landing-experiment.view-home.intro-pending .landing-hero {
+    min-height: 100vh;
+}
+
+/* Followup copy: sits directly below .landing-hero in the DOM (a sibling,
+   not nested inside it) so .landing-hero's own opacity/transform fade
+   system (index.html's replayPanelFade(), replayed every time the user
+   navigates back to view-home) never touches it. */
+body.landing-experiment.view-home .landing-hero-followup-copy {
+    max-width: 960px;
+    width: 100%;
+    /* Hero card is a plain in-flow element (see note above the nav rule),
+       so this sibling just needs its own small top gap, the same tight
+       constant used above/below the card everywhere else — no measured
+       spacer needed, since nothing is taken out of flow here. */
+    margin: var(--hero-dock-gap) auto 0;
+    color: var(--color-text-secondary, #55555f);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Hero content type: Plus Jakarta Sans (the site's headers/UI typeface,
+   per main.css's own "ONLY IMPORT: Barlow (Body) and Plus Jakarta Sans
+   (Headers/UI)" comment) instead of main.css's Barlow/DM Sans defaults
+   for this block specifically. */
+body.landing-experiment.view-home .landing-hero-intro,
+body.landing-experiment.view-home .landing-hero-links a {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+body.landing-experiment.view-home .landing-hero-intro {
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-leading-normal);
+}
+
+/* #main becomes the real scroll container for this view (same pattern
+   already used by view-work/view-expt/view-about — see main.css ~5651).
+   main.css:5342's base rule sets `padding: var(--landing-content-start-y)
+   80px 24px 40px` (tuned for the old sidebar layout) — we only used to
+   override left/right here, so its padding-top/padding-bottom longhands
+   kept applying underneath, stacking on top of .landing-hero's own
+   padding-top (which already reserves exactly the nav+gap offset) and
+   adding an unwanted extra gap above everything. Zero both out here. */
+body.landing-experiment.view-home #main {
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: max(6vw, 48px);
+    padding-right: max(6vw, 48px);
+}
+
+/* Nav: horizontal top bar instead of the left sidebar, home view only.
+   NOTE: main.css:5359 has "body.landing-experiment #wrapper.screen > * {
+   position: relative; z-index: 2; }" — that selector carries an ID
+   (#wrapper), giving it specificity (1,2,1), which beats every
+   .top-site-nav{...} rule (max (0,2,1), no ID) including this one, for
+   BOTH properties it sets. `position` already needed !important above (a
+   nav that silently stayed position:relative never left the grid). The
+   same rule also puts #main — a sibling and *also* a direct child of
+   #wrapper.screen — at the SAME z-index:2, and since #main comes later in
+   the DOM, it wins the stacking tie-break and paints over the nav as you
+   scroll. z-index needs the same !important treatment for the same reason. */
+body.landing-experiment.view-home .top-site-nav {
+    position: fixed !important;
+    /* Comfortably above anything in the page-content stacking order (see
+       #main/#wrapper.screen note above — #main and everything inside it
+       tops out at z-index:2 in this same parent stacking context, so this
+       just needs to clear that; 1100 matches the site's other fixed-nav
+       z-index elsewhere for consistency). */
+    z-index: 1100 !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-height: var(--home-nav-height);
+    flex-direction: row;
+    /* Centers the nav's own children (logo + links) as a group, replacing
+       main.css's base `justify-content: space-between` (tuned for the old
+       sidebar layout's edge-aligned logo/links). */
+    justify-content: center;
+    align-items: center;
+    padding: var(--home-nav-padding-top) 0 0;
+    gap: var(--space-8, 32px);
+    /* Solid, not transparent: z-index alone only controls paint *order*
+       (nav paints after/above #main's subtree) — without an opaque fill,
+       scrolled content would still show through nav's own box wherever it
+       has no other opaque layer. Matches the view-home page background
+       (set above) rather than the site-wide --color-bg-body off-white, so
+       there's no seam between the nav and the page beneath it. */
+    background: #FFFFFF;
+}
+
+body.landing-experiment.view-home .top-site-links {
+    flex-direction: row;
+    gap: var(--space-8, 32px);
+}
+
+body.landing-experiment.view-home #projects.work-panel {
+    display: flex;
+    background: transparent;
+    min-height: 0;
+    padding: 64px 0 clamp(88px, 12vh, 140px);
+}
+
+/* main.css's #projects.work-panel .container is max-width:960px but
+   margin:0 — same 960px cap as .landing-hero-card, but without the
+   auto-centering, so it sat flush against #main's left padding instead of
+   centered like the hero above it. Centers the project-card column so its
+   960px matches the hero's alignment, not just its width. */
+body.landing-experiment.view-home #projects.work-panel .container {
+    margin: 0 auto;
+}
+
+/* ── Scroll-triggered hero intro ──
+   body ships with .intro-pending already in the HTML (see index.html) so
+   this state paints on frame one — no JS-added-class flash. assets/js/
+   landing-intro.js removes it on the user's first scroll input (and adds
+   .intro-revealed as a permanent marker) — one-time, never reverses.
+
+   Nav is position:fixed (main.css/.top-site-nav override above) so it's
+   already out of document flow; collapsing it to 0 height + opacity 0 here
+   is enough to satisfy "hidden, not just transparent". The hero's own
+   docked padding-top (the .landing-hero rule above, calc(nav+gap)) is left
+   untouched — removing .intro-pending just lets that pre-existing rule
+   win again, so nav-grow and hero-dock read as one continuous motion. */
+body.landing-experiment.view-home.intro-pending .top-site-nav {
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Vertically center the card in the viewport pre-scroll. align-items isn't
+   transitionable, so this switch (and the min-height:100vh above) snaps
+   instantly the moment .intro-pending is removed — but that's already how
+   min-height:100vh behaves here, and it happens below the fold (the card's
+   own reveal motion is carried entirely by padding-top, which keeps
+   transitioning smoothly from whatever value was computed at that instant
+   down to --hero-dock-top), so the snap itself is never visible. */
+body.landing-experiment.view-home.intro-pending .landing-hero {
+    align-items: center;
+    padding-top: 0;
+}
+
+/* .landing-hero-card already owns `transform: translateY(20px)/(0)` for
+   its own is-visible fade (main.css:6677/6712) — compose the intro shrink
+   into that same transform rather than setting `transform` again, or one
+   rule would silently clobber the other. scale(1.25) -> scale(1) reads as
+   "shrinks ~20%" (1 - 1/1.25 = 20%) landing exactly on the already-tuned
+   compact resting size, so no separate final-state rule is needed. */
+body.landing-experiment.view-home.intro-pending .landing-hero-card.is-visible {
+    transform: translateY(0) scale(1.25);
+}
+
+/* Resting transform-origin is top-center (below) so the post-scroll shrink
+   anchors its top edge under the nav. But while still centered pre-scroll,
+   a top-anchored scale(1.25) only grows the box downward, pushing its
+   visual center ~35px below the flex-centered layout center. Symmetric
+   "center" origin here keeps the scale-up visually centered to match the
+   align-items:center above; it reverts to top-center the instant
+   .intro-pending is removed, same non-transitioned snap as the
+   align-items/min-height changes at that boundary. */
+body.landing-experiment.view-home.intro-pending .landing-hero-card {
+    transform-origin: center;
+}
+
+body.landing-experiment.view-home.intro-pending #projects.work-panel,
+body.landing-experiment.view-home.intro-pending .landing-hero-followup-copy {
+    opacity: 0;
+    transform: translateY(24px);
+    pointer-events: none;
+}
+
+/* Transitions live on the unqualified selectors so removing .intro-pending
+   animates every property back to its resting view-home value at once. */
+body.landing-experiment.view-home .top-site-nav {
+    transition:
+        opacity 0.8s cubic-bezier(0.22,1,0.36,1),
+        min-height 0.8s cubic-bezier(0.22,1,0.36,1),
+        padding 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+
+body.landing-experiment.view-home .landing-hero {
+    transition: padding-top 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+
+body.landing-experiment.view-home .landing-hero-card {
+    transform-origin: top center;
+}
+
+body.landing-experiment.view-home .landing-hero-card.is-visible {
+    transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.1s;
+}
+
+/* ~150ms stagger behind the nav/hero motion for the layered-reveal feel. */
+body.landing-experiment.view-home #projects.work-panel,
+body.landing-experiment.view-home .landing-hero-followup-copy {
+    transition:
+        opacity 0.8s cubic-bezier(0.22,1,0.36,1) 0.15s,
+        transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.15s;
+}
+
+/* Hero is a plain, normal-flow element for the entire lifetime of the
+   view — never position:sticky/fixed, and never made so via a shared
+   wrapper with the nav. Only .top-site-nav (above) is fixed. Once revealed,
+   .landing-hero's padding-top (--hero-dock-top, set above) docks the card
+   tight under the nav, but it's still just flow layout: as the user keeps
+   scrolling, .landing-hero (and the card inside it) scrolls up and away
+   like any normal block, while the nav — in its own fixed box, not sharing
+   any positioned ancestor with the hero — stays put. */
+
+/* ════════════════════════════════════════════════════════════════════
+   COMPONENT: Project case-study card
+   Where used: index.html home view, #projects.work-panel (the "Featured
+   Projects" list — 4 shipped-project cards plus 1 .coming-soon card).
+   Markup: .project-card > .project-card-shell (bordered card body) >
+     .card-image (grey block, left) > .card-image-frame (white panel,
+       clips the thumbnail) > lottie-player
+     .card-content (white block, right) >
+       .project-card-tags (tag-chip row) > .project-card-tag (each chip)
+       h3 (title), .project-card-description (outcome line),
+       .project-card-view-link ("View work", omitted on .coming-soon)
+   Reuses the site's existing 4/8px --space-* scale and --color--font-* tokens everywhere a match exists. Status: proposed, not yet committed
+   to design-system-log.md — see that file for the committed record once
+   confirmed.
+   ════════════════════════════════════════════════════════════════════ */
+body.landing-experiment.view-home {
+    /* The brief's ~36px/~44px/~27px don't land on the site's 4/8px grid
+       (nearest: 32/40/28) — rounded to the grid per this project's stated
+       design-ops convention rather than adding one-off arbitrary values.
+       --pc-tag-size and --pc-body-size have no matching token on the
+       shared --font-size-* scale (14/18px) so are new, component-local
+       values, spec-exact. */
+    --pc-image-pad: var(--space-8);      /* 32px — left grey block padding (spec ~36px) */
+    --pc-content-pad-y: var(--space-10); /* 40px — right column vertical padding (spec ~44px) */
+    --pc-content-pad-x: var(--space-12); /* 48px — right column horizontal padding (spec 48px, exact) */
+    --pc-tag-size: var(--font-size-xs); /* 12px */
+    /* 2026-07-14: bumped to the site's --font-size-3xl (32px) token and
+       bold weight to match the reference screenshot Sai shared, which
+       runs larger/bolder than the original text brief's "~27px medium" —
+       treating the visual reference as the more current source of truth. */
+    --pc-title-size: var(--font-size-3xl); /* 32px */
+    --pc-body-size: 15px;                /* spec-exact */
+}
+
+/* Card shell: border color/weight AND radius both matched to
+   .landing-hero-card (var(--color-border-light), var(--radius-xl)) so the
+   project cards read as the same family of bordered card as the hero
+   above them. No shadow. Two-column grid, image column slightly narrower
+   than the text column (0.85:1.15) — visual weight instead comes from the
+   grey/white color contrast between the two columns (below), not from
+   column size. align-items:stretch (not main.css's base `center`) so both
+   columns share the row's full height, which is what lets .card-content
+   center its own children vertically within that height (its
+   `justify-content: center`, further down).
+   overflow:hidden is required here specifically because this shell (unlike
+   the hero card) has flush, zero-padding/zero-gap children touching its
+   edges — without it, the grey/white blocks' own square corners would
+   poke out past the shell's rounded ones. */
+body.landing-experiment #projects.work-panel .project-card-shell {
+    grid-template-columns: minmax(220px, 0.85fr) minmax(280px, 1.15fr);
+    gap: 0;
+    padding: 0;
+    border: 1px solid var(--color-border-light, #e5e5e5);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: #FFFFFF;
+    box-shadow: none;
+    min-height: 0;
+    align-items: stretch;
+}
+
+/* Left column: muted grey block (the site's --color-bg-body token) with
+   generous padding, wrapping a white backing panel that actually frames/
+   clips the thumbnail — the grey only shows as a border around the white
+   panel, giving the thumbnail visual weight via contrast. */
+body.landing-experiment #projects.work-panel .card-image {
+    aspect-ratio: auto;
+    background: var(--color-bg-body);
+    padding: var(--pc-image-pad);
+    border-radius: 0;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.landing-experiment #projects.work-panel .card-image-frame {
+    width: 100%;
+    aspect-ratio: 6 / 5;
+    background: #FFFFFF;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.landing-experiment #projects.work-panel .card-image-frame lottie-player,
+body.landing-experiment #projects.work-panel .card-image-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: none; /* overrides main.css:6430's scale(0.9) zoom-out */
+}
+
+/* Right column: white background, generous padding, content vertically
+   centered as a group (flex column + justify-content:center) in the
+   order: tag row -> title -> description -> "View work" link. */
+body.landing-experiment #projects.work-panel .card-content {
+    background: #FFFFFF;
+    padding: var(--pc-content-pad-y) var(--pc-content-pad-x);
+    gap: var(--space-4);
+    justify-content: center;
+}
+
+/* Tag-chip row: replaces the old pipe-joined .project-card-tags-inline
+   single string with real separate elements (flex + gap, not commas/
+   pipes), so tags wrap individually on narrow widths instead of breaking
+   mid-string. Plus Jakarta Sans matches the site's headers/UI typeface
+   (main.css's "ONLY IMPORT: Barlow (Body) and Plus Jakarta Sans
+   (Headers/UI)" comment) rather than the mono treatment used before. */
+body.landing-experiment #projects.work-panel .project-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3); /* 8px row-gap / 12px column-gap */
+    margin: 0;
+}
+
+body.landing-experiment #projects.work-panel .project-card-tag {
+    font-family: 'Barlow', sans-serif;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+}
+
+/* Several tags here are themselves two words ("Enterprise Design",
+   "Service Design"), so adjacent chips with no separator read as one
+   run-on string ("Enterprise Design Service Design"). A small middot
+   between chips (not on the last one) restores scannability without
+   adding a heavier pill/background treatment the brief didn't ask for. */
+body.landing-experiment #projects.work-panel .project-card-tag:not(:last-child)::after {
+    content: '\00B7';
+    margin-left: var(--space-3);
+    color: var(--color-border-light, #d8d8d5);
+}
+
+body.landing-experiment #projects.work-panel .project-card h3 {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-leading-normal);
+    color: var(--color-text-primary);
+    max-width: none;
+    margin: 0;
+}
+
+body.landing-experiment #projects.work-panel .project-card-description {
+    font-family: 'Barlow', sans-serif;
+    font-size: var(--font-size-xs);
+    line-height: var(--font-leading-normal);
+    color: var(--color-text-secondary);
+    max-width: none;
+    margin: 0;
+}
+
+/* "View work": a real, separately-focusable/navigable link (not just the
+   whole card's synthetic click handler in index.html), sitting a bit
+   apart from the description via the row's own --space-4 gap plus this
+   extra top margin. Omitted on .coming-soon cards (no real destination
+   yet) — that card keeps its existing hover tooltip instead. */
+body.landing-experiment #projects.work-panel .project-card-view-link {
+    display: inline-block;
+    width: fit-content;
+    margin-top: var(--space-2);
+    font-family: 'Barlow', sans-serif;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-accent-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Tablet/mobile: main.css already collapses this shell's grid to a single
+   column at (max-width: 1024px) — but that rule sits inside main.css,
+   loaded before this file, so this file's own unconditional
+   grid-template-columns (above) was winning the cascade at EVERY width
+   (media queries don't add specificity — only source order broke the
+   tie, and this file loads after main.css regardless of which rule is
+   media-guarded). Re-declaring the 1fr collapse here, inside our own
+   matching media query, is what actually restores mobile stacking —
+   this is now the last matching rule in the cascade at this width. */
+@media (max-width: 1024px) {
+    body.landing-experiment #projects.work-panel .project-card-shell {
+        grid-template-columns: 1fr;
+    }
+
+    body.landing-experiment #projects.work-panel .card-image {
+        padding: var(--space-5); /* 20px */
+    }
+    body.landing-experiment #projects.work-panel .card-content {
+        padding: var(--space-6) var(--space-5); /* 24px / 20px */
+    }
+}
