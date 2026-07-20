@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import LandingSidebar from '../components/layout/LandingSidebar'
 import { useTheme } from '../context/ThemeContext'
 
@@ -57,6 +57,172 @@ const values = [
     desc: 'Intuition is the outcome of reflection and introspection; taste is a sacred quality of a person. Both are strengths I actively cultivate.',
   },
 ]
+
+const NUM_LAYERS = 6
+const VIDEO_SRC = '/assets/media/hologram/head.webm'
+// Head: 260×320 scaled to 60% → 156×192. Emitter: 140×96 scaled to 60% → 84×58.
+const HEAD_W = 156, HEAD_H = 192
+const EMIT_W = 84,  EMIT_H = 58
+
+function HoloAvatar() {
+  const { theme } = useTheme()
+  const headRef  = useRef<HTMLDivElement>(null)
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>(Array(NUM_LAYERS).fill(null))
+  const rafRef   = useRef<number>(0)
+  const targetX  = useRef(0), targetY = useRef(0)
+  const currentX = useRef(0), currentY = useRef(0)
+  const [isEmitting, setIsEmitting] = useState(false)
+  const [isLoaded,   setIsLoaded]   = useState(false)
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setIsEmitting(true), 300)
+    const t2 = setTimeout(() => setIsLoaded(true), 1350)
+
+    const onMove = (e: MouseEvent) => {
+      targetX.current = (e.clientX / window.innerWidth  - 0.5) * 2
+      targetY.current = (e.clientY / window.innerHeight - 0.5) * 2
+    }
+    document.addEventListener('mousemove', onMove)
+
+    const tick = () => {
+      currentX.current += (targetX.current - currentX.current) * 0.08
+      currentY.current += (targetY.current - currentY.current) * 0.08
+      const cx = currentX.current, cy = currentY.current
+
+      if (headRef.current) {
+        headRef.current.style.transform =
+          `rotateY(${(cx * 25).toFixed(2)}deg) translateX(${(-cx * 3).toFixed(2)}px) rotateX(${(-cy * 10).toFixed(2)}deg)`
+      }
+      for (let i = 0; i < NUM_LAYERS - 1; i++) {
+        const v = videoRefs.current[i]
+        if (!v) continue
+        const factor = (NUM_LAYERS - 1 - i) / (NUM_LAYERS - 1)
+        v.style.transform =
+          `translate3d(${(-cx * 35 * factor).toFixed(2)}px, ${(-cy * 7.35 * factor).toFixed(2)}px, 0)`
+      }
+      rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+
+    return () => {
+      clearTimeout(t1); clearTimeout(t2)
+      document.removeEventListener('mousemove', onMove)
+      cancelAnimationFrame(rafRef.current)
+    }
+  }, [])
+
+  // Light mode: use a very light blue so multiply doesn't darken the face.
+  // Dark mode: use the site accent (medium blue) for a luminous glow via screen.
+  const holoColor = theme === 'dark' ? 'var(--color-accent)' : 'var(--color-highlight-bg)'
+
+  const ghostStyle: React.CSSProperties = {
+    position: 'absolute', inset: 0,
+    width: '100%', height: '100%',
+    objectFit: 'contain', objectPosition: '50% 38%',
+    display: 'block',
+    opacity: 0.35,
+    filter: 'saturate(0) blur(0.75px) brightness(130%) contrast(180%)',
+    mixBlendMode: 'multiply',
+    transition: 'transform 0.1s ease-out',
+  }
+
+  const frontVideoStyle: React.CSSProperties = {
+    position: 'absolute', inset: 0,
+    width: '100%', height: '100%',
+    objectFit: 'contain', objectPosition: '50% 38%',
+    display: 'block',
+    opacity: 0.6,
+    filter: isLoaded
+      ? 'saturate(0) brightness(100%) contrast(200%)'
+      : 'saturate(0) blur(1.75px) brightness(130%) contrast(180%)',
+    mixBlendMode: 'multiply',
+    transition: isLoaded
+      ? 'transform 0.1s ease-out, filter 0.3s ease 0.8s'
+      : 'transform 0.1s ease-out',
+  }
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: isEmitting ? 1 : 0,
+        transition: 'opacity 0.6s ease',
+      }}
+    >
+      {/* Head — horizontally and vertically centered */}
+      <div
+        ref={headRef}
+        style={{
+          position: 'relative',
+          width: `${HEAD_W}px`, height: `${HEAD_H}px`,
+          transformOrigin: '50% 40%',
+          maskImage: 'radial-gradient(ellipse 65% 75% at 50% 50%, black 45%, transparent 85%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 65% 75% at 50% 50%, black 45%, transparent 85%)',
+        }}
+      >
+        {[0, 1, 2, 3, 4].map(i => (
+          <video
+            key={i}
+            ref={el => { videoRefs.current[i] = el }}
+            src={VIDEO_SRC}
+            autoPlay loop muted playsInline
+            style={ghostStyle}
+          />
+        ))}
+
+        {/* Front layer */}
+        <div
+          style={{
+            position: 'absolute', inset: 0,
+            zIndex: 20,
+            background: holoColor,
+            maskImage: 'radial-gradient(ellipse 75% 60% at 50% 45%, black 30%, transparent 80%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 75% 60% at 50% 45%, black 30%, transparent 80%)',
+          }}
+        >
+          <video
+            ref={el => { videoRefs.current[5] = el }}
+            src={VIDEO_SRC}
+            autoPlay loop muted playsInline
+            style={frontVideoStyle}
+          />
+        </div>
+
+        {/* Scanlines */}
+        <div
+          style={{
+            position: 'absolute', inset: 0,
+            zIndex: 25, pointerEvents: 'none',
+            background: 'repeating-linear-gradient(to bottom, rgba(0,0,0,0.032) 0px, rgba(0,0,0,0.032) 1px, transparent 1px, transparent 3px)',
+            maskImage: 'radial-gradient(ellipse 65% 75% at 50% 40%, black 45%, transparent 85%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 65% 75% at 50% 40%, black 45%, transparent 85%)',
+          }}
+        />
+      </div>
+
+      {/* Emitter — pinned to bottom-center of the left column */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: `${EMIT_W}px`, height: `${EMIT_H}px`,
+          background: holoColor,
+          clipPath: 'polygon(0 0, 100% 0, 65% 100%, 35% 100%)',
+          maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%)',
+          opacity: 0.5,
+          transition: 'var(--transition-theme)',
+        }}
+      />
+    </div>
+  )
+}
 
 function SectionHeader({ label }: { label: string }) {
   return (
@@ -213,9 +379,6 @@ function ValueCard({
   )
 }
 
-const stripesBg =
-  'repeating-linear-gradient(135deg, var(--color-stripe-a) 0px, var(--color-stripe-a) 8px, var(--color-stripe-b) 8px, var(--color-stripe-b) 16px)'
-
 const monoLabel: React.CSSProperties = {
   fontFamily: 'var(--font-mono)',
   fontSize: '10px',
@@ -227,7 +390,6 @@ const monoLabel: React.CSSProperties = {
 }
 
 export default function About() {
-  const { theme } = useTheme()
   const [toolkitHover, setToolkitHover] = useState<number | null>(null)
   const [principlesHover, setPrinciplesHover] = useState<number | null>(null)
   const [valuesHover, setValuesHover] = useState<number | null>(null)
@@ -253,6 +415,7 @@ export default function About() {
 
         <main style={{ background: 'var(--color-surface-main)', transition: 'var(--transition-theme)' }}>
           <div className="layout-main-pad" style={{ padding: '88px var(--space-12) 88px' }}>
+          <div style={{ maxWidth: '860px' }}>
 
             {/* ── Hero identity card ── */}
             <section
@@ -266,58 +429,18 @@ export default function About() {
                 transition: 'var(--transition-theme)',
               }}
             >
-              {/* Left — photo placeholder with accent tint + scanlines */}
+              {/* Left — hologram avatar */}
               <div
                 style={{
                   position: 'relative',
-                  background: stripesBg,
+                  background: 'var(--color-surface-card)',
                   borderRight: '1px solid var(--color-border-hair)',
-                  minHeight: '320px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '0',
+                  minHeight: '360px',
+                  overflow: 'hidden',
                   transition: 'var(--transition-theme)',
                 }}
               >
-                {/* Accent tint backdrop — the mix-blend-mode on the video reads this colour */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'var(--color-accent)',
-                    opacity: theme === 'dark' ? 0.22 : 0.18,
-                    pointerEvents: 'none',
-                    transition: 'var(--transition-theme)',
-                  }}
-                />
-                {/* Scanlines */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'repeating-linear-gradient(to bottom, rgba(0,0,0,0.032) 0px, rgba(0,0,0,0.032) 1px, transparent 1px, transparent 3px)',
-                    pointerEvents: 'none',
-                    zIndex: 1,
-                  }}
-                />
-                {/* Avatar video — blend mode creates the accent tint against the backdrop */}
-                <video
-                  src="/assets/media/hologram/head.webm"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  style={{
-                    position: 'relative',
-                    zIndex: 2,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'contain',
-                    display: 'block',
-                    mixBlendMode: theme === 'dark' ? 'screen' : 'multiply',
-                  }}
-                />
+                <HoloAvatar />
               </div>
 
               {/* Right — name / role / previously / education */}
@@ -520,6 +643,7 @@ export default function About() {
               </div>
             </section>
 
+          </div>
           </div>
         </main>
       </div>
