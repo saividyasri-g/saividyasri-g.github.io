@@ -35,7 +35,7 @@ export default function Outline({ items, nextProject }: OutlineProps) {
       style={{
         background: 'transparent',
         borderRight: '1px solid var(--color-border-hair)',
-        padding: 'var(--space-8) 44px var(--space-10)',
+        padding: 'var(--space-8) 44px var(--space-10) 30px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -53,17 +53,25 @@ export default function Outline({ items, nextProject }: OutlineProps) {
               <a
                 key={item.id}
                 href={`#${item.id}`}
+                className="fill-btn fill-btn--subtle fill-btn--left"
+                onClick={e => {
+                  e.preventDefault()
+                  document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                }}
                 style={{
                   position: 'relative',
+                  overflow: 'hidden',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
                   padding: '11px 0 11px 18px',
+                  borderRadius: 'var(--radius-sm)',
                   fontSize: 'var(--text-base)',
                   fontWeight: on ? 600 : 400,
                   color: on ? 'var(--color-text-title)' : 'var(--color-text-secondary)',
                   textDecoration: 'none',
                   transition: 'color var(--duration-fast)',
+                  cursor: 'pointer',
                 }}
               >
                 <span
@@ -80,17 +88,19 @@ export default function Outline({ items, nextProject }: OutlineProps) {
                     transition: `height var(--duration-fast) var(--ease-standard)`,
                   }}
                 />
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'var(--text-xs)',
-                    letterSpacing: '.06em',
-                    color: on ? 'var(--color-accent)' : 'var(--color-text-faint)',
-                    transition: 'color var(--duration-fast)',
-                  }}
-                >
-                  {item.num}
-                </span>
+                {item.num && (
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 'var(--text-xs)',
+                      letterSpacing: '.06em',
+                      color: on ? 'var(--color-accent)' : 'var(--color-text-faint)',
+                      transition: 'color var(--duration-fast)',
+                    }}
+                  >
+                    {item.num}
+                  </span>
+                )}
                 {item.label}
               </a>
             )

@@ -128,6 +128,17 @@ a { text-decoration: none; }
   color: var(--text-on-fill);
 }
 
+/* Left-to-right fill variant — sweeps from left edge instead of center */
+.fill-btn--left::before {
+  transform: translateY(-50%) rotate(5deg) scaleX(0);
+  transform-origin: 0% 50%;
+}
+
+.fill-btn--left:hover::before,
+.fill-btn--left:focus-visible::before {
+  transform: translateY(-50%) rotate(0deg) scaleX(1);
+}
+
 /* Project card border hover via CSS — no JS needed */
 .fill-btn--card:hover,
 .fill-btn--card:focus-visible {
