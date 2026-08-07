@@ -120,7 +120,6 @@ function HoloAvatar() {
     width: '100%', height: '100%',
     objectFit: 'contain', objectPosition: '50% 38%',
     display: 'block',
-    opacity: 0.35,
     filter: 'saturate(0) blur(0.75px) brightness(130%) contrast(180%)',
     mixBlendMode: 'multiply',
     transition: 'transform 0.1s ease-out',
@@ -160,17 +159,17 @@ function HoloAvatar() {
           position: 'relative',
           width: `${HEAD_W}px`, height: `${HEAD_H}px`,
           transformOrigin: '50% 40%',
-          maskImage: 'radial-gradient(ellipse 65% 75% at 50% 50%, black 45%, transparent 85%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 65% 75% at 50% 50%, black 45%, transparent 85%)',
+          maskImage: 'radial-gradient(ellipse 65% 65% at 50% 38%, black 40%, transparent 78%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 65% 65% at 50% 38%, black 40%, transparent 78%)',
         }}
       >
-        {[0, 1, 2, 3, 4].map(i => (
+        {[0.5, 0.5, 0.6, 0.7, 0.7].map((opacity, i) => (
           <video
             key={i}
             ref={el => { videoRefs.current[i] = el }}
             src={VIDEO_SRC}
             autoPlay loop muted playsInline
-            style={ghostStyle}
+            style={{ ...ghostStyle, opacity }}
           />
         ))}
 
@@ -180,8 +179,8 @@ function HoloAvatar() {
             position: 'absolute', inset: 0,
             zIndex: 20,
             background: holoColor,
-            maskImage: 'radial-gradient(ellipse 75% 60% at 50% 45%, black 30%, transparent 80%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 75% 60% at 50% 45%, black 30%, transparent 80%)',
+            maskImage: 'radial-gradient(ellipse 75% 55% at 50% 38%, black 28%, transparent 75%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 75% 55% at 50% 38%, black 28%, transparent 75%)',
           }}
         >
           <video
@@ -198,8 +197,8 @@ function HoloAvatar() {
             position: 'absolute', inset: 0,
             zIndex: 25, pointerEvents: 'none',
             background: 'repeating-linear-gradient(to bottom, rgba(0,0,0,0.032) 0px, rgba(0,0,0,0.032) 1px, transparent 1px, transparent 3px)',
-            maskImage: 'radial-gradient(ellipse 65% 75% at 50% 40%, black 45%, transparent 85%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 65% 75% at 50% 40%, black 45%, transparent 85%)',
+            maskImage: 'radial-gradient(ellipse 65% 65% at 50% 38%, black 40%, transparent 78%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 65% 65% at 50% 38%, black 40%, transparent 78%)',
           }}
         />
       </div>
@@ -415,7 +414,7 @@ export default function About() {
 
         <main style={{ background: 'var(--color-surface-main)', transition: 'var(--transition-theme)' }}>
           <div className="layout-main-pad" style={{ padding: '88px var(--space-12) 88px' }}>
-          <div style={{ maxWidth: '860px' }}>
+          <div className="layout-content">
 
             {/* ── Hero identity card ── */}
             <section

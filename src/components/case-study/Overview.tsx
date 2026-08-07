@@ -20,7 +20,7 @@ export default function Overview({ items }: OverviewProps) {
         <div key={item.label} style={{ padding: '18px 20px 18px 0' }}>
           <div
             style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 'var(--text-sm)',
               fontWeight: 500,
               letterSpacing: '.09em',

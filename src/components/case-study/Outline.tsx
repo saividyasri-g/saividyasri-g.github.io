@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 interface OutlineItem {
   id: string
@@ -13,6 +13,9 @@ interface OutlineProps {
 
 export default function Outline({ items, nextProject }: OutlineProps) {
   const [active, setActive] = useState(items[0]?.id ?? '')
+  const [indicator, setIndicator] = useState({ top: 0, height: 0 })
+  const navRef = useRef<HTMLElement>(null)
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
 
   useEffect(() => {
     const ids = items.map(i => i.id)
@@ -29,31 +32,54 @@ export default function Outline({ items, nextProject }: OutlineProps) {
     return () => observer.disconnect()
   }, [items])
 
+  useLayoutEffect(() => {
+    const measure = () => {
+      const link = linkRefs.current[active]
+      if (!link) return
+      setIndicator({ top: link.offsetTop + (link.offsetHeight - 20) / 2, height: 20 })
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [active])
+
   return (
     <aside
       className="layout-sidebar"
       style={{
         background: 'transparent',
-        borderRight: '1px solid var(--color-border-hair)',
-        padding: 'var(--space-8) 44px var(--space-10) 30px',
+        paddingTop: 'var(--space-10)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        position: 'sticky',
-        top: '70px',
-        height: 'calc(100vh - 70px)',
+        alignSelf: 'flex-start',
         transition: 'var(--transition-theme)',
       }}
     >
       <div>
-        <nav style={{ display: 'flex', flexDirection: 'column', marginTop: 'var(--space-2)' }}>
+        <nav ref={navRef} style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginTop: 'var(--space-2)' }}>
+          <span
+            aria-hidden
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              width: '2px',
+              height: `${indicator.height}px`,
+              background: 'var(--color-accent)',
+              borderRadius: 'var(--radius-highlight)',
+              transform: `translateY(${indicator.top}px)`,
+              transition: `transform var(--duration-fast) var(--ease-standard)`,
+            }}
+          />
           {items.map(item => {
             const on = active === item.id
             return (
               <a
                 key={item.id}
+                ref={el => { linkRefs.current[item.id] = el }}
                 href={`#${item.id}`}
-                className="fill-btn fill-btn--subtle fill-btn--left"
+                className="fill-btn fill-btn--subtle fill-btn--right"
                 onClick={e => {
                   e.preventDefault()
                   document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -63,10 +89,12 @@ export default function Outline({ items, nextProject }: OutlineProps) {
                   overflow: 'hidden',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '12px',
-                  padding: '11px 0 11px 18px',
+                  justifyContent: 'flex-end',
+                  textAlign: 'right',
+                  gap: '8px',
+                  padding: '8px 8px 8px 0',
                   borderRadius: 'var(--radius-sm)',
-                  fontSize: 'var(--text-base)',
+                  fontSize: 'var(--text-sm)',
                   fontWeight: on ? 600 : 400,
                   color: on ? 'var(--color-text-title)' : 'var(--color-text-secondary)',
                   textDecoration: 'none',
@@ -74,20 +102,6 @@ export default function Outline({ items, nextProject }: OutlineProps) {
                   cursor: 'pointer',
                 }}
               >
-                <span
-                  aria-hidden
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: '50%',
-                    width: '2px',
-                    height: on ? '20px' : '0px',
-                    background: 'var(--color-accent)',
-                    borderRadius: 'var(--radius-highlight)',
-                    transform: 'translateY(-50%)',
-                    transition: `height var(--duration-fast) var(--ease-standard)`,
-                  }}
-                />
                 {item.num && (
                   <span
                     style={{

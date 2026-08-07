@@ -37,6 +37,9 @@
 
   /* Easing */
   --ease-standard: var(--ease-standard);
+
+  /* Tracking */
+  --tracking-badge-label: var(--tracking-badge-label);
 }
 
 /* Base */
@@ -139,6 +142,17 @@ a { text-decoration: none; }
   transform: translateY(-50%) rotate(0deg) scaleX(1);
 }
 
+/* Right-to-left fill variant — sweeps from right edge instead of center */
+.fill-btn--right::before {
+  transform: translateY(-50%) rotate(5deg) scaleX(0);
+  transform-origin: 100% 50%;
+}
+
+.fill-btn--right:hover::before,
+.fill-btn--right:focus-visible::before {
+  transform: translateY(-50%) rotate(0deg) scaleX(1);
+}
+
 /* Project card border hover via CSS — no JS needed */
 .fill-btn--card:hover,
 .fill-btn--card:focus-visible {
@@ -160,25 +174,100 @@ a { text-decoration: none; }
 
 /* ─── Responsive layout ──────────────────────────────────── */
 
+/* Inner content constraint — caps readable width on large screens.
+   Wrap the content inside .layout-main-pad with this class. */
+.layout-content {
+  max-width: 860px;
+  width: 100%;
+}
+
+.layout-content--centered {
+  margin: 0 auto;
+}
+
+/* Case-study text column — every case-study page uses this instead of the
+   base 860px .layout-content cap. Narrower than that, on purpose: all text
+   (paragraphs, headings, metadata grids, card grids) defaults to this width.
+   Home/About are untouched, still using the base .layout-content cap. */
+.layout-content--prose {
+  max-width: var(--content-width-prose);
+}
+
+/* Lets a diagram/image card run wider than the narrow prose column it sits
+   inside, while staying centered on the same axis as that column. Standard
+   breakout technique: margin-left:50% + translateX(-50%) re-centers the
+   child on its (centered) parent's own center point, regardless of the
+   child's width — independent of how narrow the parent actually is.
+   width MUST be viewport-relative (100vw), not 100%: a percentage width
+   resolves against the parent's own (narrow) box, so it could never exceed
+   it — that's what actually let the child grow wider in the first place.
+   The max-width min() then caps that back down: without it the child would
+   render at the full 100vw and overflow whenever the real available
+   main-column width is narrower (e.g. common laptop widths where the
+   sidebar + padding already eat into the space). The calc() offsets mirror
+   the exact sidebar-reserve (--content-width-outline) and gap
+   (--space-8 — must match .layout-grid-body's gap below) plus the padding
+   tokens .layout-main-pad already uses, at each breakpoint below.
+   The clamp() is the actual visual target size (see tokens.css) — the
+   calc() alongside it is purely a safety net, not a design choice.
+   NOTE: --space-8 (32px) is a much smaller buffer than this formula had
+   when overlap was last an active problem (see git history — it needed
+   ~80px against a 920-960px media width). Safe today only because every
+   DiagramSection/Media caller currently passes wide={false}/omits Media.
+   If any caller re-enables the wide breakout, re-check this gap against
+   --content-width-media-max before assuming it still clears the sidebar. */
+.diagram-breakout {
+  width: 100vw;
+  max-width: min(
+    clamp(var(--content-width-media-min), var(--content-width-media-preferred), var(--content-width-media-max)),
+    calc(100vw - var(--content-width-outline) - var(--space-8) - 2 * var(--space-12))
+  );
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
 /* Two-column sidebar+main grid used on landing and case study pages.
    No max-width here — the sidebar background must bleed to the left viewport edge.
    Content inside the main column constrains its own width. */
 .layout-grid {
   display: grid;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: clamp(300px, 25vw, 460px) 1fr;
   min-height: 100vh;
 }
 
-/* Case study grid sits below a full-width hero — no min-height needed */
+/* Case study sidebar + content, laid out as one centered flex pair (Linear
+   docs TOC pattern) — not a fixed rail with a reserved gutter. Both items
+   shrink-to-fit their own content (main must NOT be flex:1 — see the page
+   files), so their combined width is what justify-content:center centers.
+   This gap also doubles as the sidebar's buffer against .diagram-breakout
+   images growing left of the text column (see that rule's comment) — it's
+   only safe at 32px because nothing currently uses the wide breakout. */
 .layout-grid-body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--space-8);
+}
+
+.layout-sidebar {
+  position: sticky;
+  top: 70px;
+  width: var(--content-width-outline);
+  flex-shrink: 0;
+}
+
+/* Responsive annotation grids — columns defined by CSS, not inline styles */
+.annotation-grid {
   display: grid;
-  grid-template-columns: 360px 1fr;
 }
 
 @media (width <= 1024px) {
-  .layout-grid,
-  .layout-grid-body {
+  .layout-grid {
     grid-template-columns: 1fr;
+  }
+
+  .layout-grid-body {
+    flex-direction: column;
   }
 
   /* Project card: image above text on mobile */
@@ -189,9 +278,9 @@ a { text-decoration: none; }
 
   /* Sidebar becomes a normal block (not sticky/full-height) on small screens */
   .layout-sidebar {
+    width: 100%;
     position: static !important;
     height: auto !important;
-    border-right: none !important;
     border-bottom: 1px solid var(--color-border-hair);
   }
 
@@ -204,5 +293,44 @@ a { text-decoration: none; }
   .layout-header-pad {
     padding-left: var(--space-6) !important;
     padding-right: var(--space-6) !important;
+  }
+
+  /* Sidebar reserve drops to 0 at this breakpoint (.layout-grid-body below) —
+     mirror that here so the breakout's overflow safety net stays accurate. */
+  .diagram-breakout {
+    max-width: min(var(--content-width-media-max), calc(100vw - 2 * var(--space-6)));
+  }
+}
+
+@media (width <= 768px) {
+  /* Hide case-study outline sidebar on phones */
+  .layout-sidebar {
+    display: none !important;
+  }
+
+  /* Tighter padding for phones */
+  .layout-main-pad {
+    padding-left: var(--space-4) !important;
+    padding-right: var(--space-4) !important;
+  }
+
+  .layout-header-pad {
+    padding-left: var(--space-4) !important;
+    padding-right: var(--space-4) !important;
+  }
+
+  .diagram-breakout {
+    max-width: min(var(--content-width-media-max), calc(100vw - 2 * var(--space-4)));
+  }
+
+  /* Annotation grids collapse to a single column */
+  .annotation-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Diagram header: title stacks above badges */
+  .diagram-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
   }
 }

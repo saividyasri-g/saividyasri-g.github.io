@@ -15,7 +15,7 @@ export default function Learning({ children }: LearningProps) {
         lineHeight: 1.5,
         fontWeight: 500,
         color: 'var(--color-text-title)',
-        maxWidth: '640px',
+        maxWidth: 'var(--content-width-prose)',
         transition: 'var(--transition-theme)',
       }}
     >

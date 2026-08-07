@@ -14,6 +14,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.6.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3"
@@ -45,7 +46,14 @@
     "vitest": "^3.2.4"
   },
   "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix"],
-    "*.css": ["stylelint --fix"]
+    "*.{ts,tsx}": [
+      "eslint --fix"
+    ],
+    "*.css": [
+      "stylelint --fix"
+    ]
+  },
+  "allowScripts": {
+    "@lottiefiles/react-lottie-player@3.6.0": true
   }
 }

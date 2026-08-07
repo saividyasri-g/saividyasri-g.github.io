@@ -6,10 +6,12 @@
   /* Fonts — defined here so var(--font-sans/mono) works in all CSS contexts */
   --font-sans: 'Hanken Grotesk', 'Helvetica Neue', helvetica, arial, sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
+  --font-eyebrow: var(--font-sans);
 
   /* Type scale — 4-multiple steps */
   --primitive-size-8: 8px;
   --primitive-size-12: 12px;
+  --primitive-size-14: 14px; /* deliberate exception to the 4px grid — see --text-sm */
   --primitive-size-16: 16px;
   --primitive-size-20: 20px;
   --primitive-size-28: 28px;
@@ -28,6 +30,7 @@
   --primitive-space-10: 40px;
   --primitive-space-12: 48px;
   --primitive-space-16: 64px;
+  --primitive-space-20: 80px;
 
   /* Radius (carried forward from main.css + new design values) */
   --primitive-radius-2: 2px;
@@ -42,6 +45,9 @@
   --primitive-radius-20: 20px;
   --primitive-radius-24: 24px;
   --primitive-radius-full: 999px;
+
+  /* Badge label letter-spacing */
+  --primitive-tracking-badge-label: 0.09em;
 
   /* Motion */
   --primitive-ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -117,6 +123,7 @@
   --color-highlight-bg: var(--primitive-light-hl-bg);
   --color-highlight-text: var(--primitive-light-hl-text);
   --color-accent: var(--primitive-light-accent);
+  --color-diagram-title: var(--primitive-light-title);
   --color-knob: var(--primitive-light-knob);
   --color-toggle-track: var(--primitive-light-toggle-track);
   --color-stripe-a: var(--primitive-light-stripe-a);
@@ -146,6 +153,7 @@
   --color-highlight-bg: var(--primitive-dark-hl-bg);
   --color-highlight-text: var(--primitive-dark-hl-text);
   --color-accent: var(--primitive-dark-accent);
+  --color-diagram-title: var(--primitive-dark-title);
   --color-knob: var(--primitive-dark-knob);
   --color-toggle-track: var(--primitive-dark-toggle-track);
   --color-stripe-a: var(--primitive-dark-stripe-a);
@@ -158,8 +166,8 @@
 
 :root {
   /* Type scale */
-  --text-xs: var(--primitive-size-8);
-  --text-sm: var(--primitive-size-12);
+  --text-xs: var(--primitive-size-12);
+  --text-sm: var(--primitive-size-14);
   --text-base: var(--primitive-size-16);
   --text-lg: var(--primitive-size-20);
   --text-xl: var(--primitive-size-28);
@@ -178,6 +186,7 @@
   --space-10: var(--primitive-space-10);
   --space-12: var(--primitive-space-12);
   --space-16: var(--primitive-space-16);
+  --space-20: var(--primitive-space-20);
 
   /* Radius */
   --radius-highlight: var(--primitive-radius-2);
@@ -193,6 +202,33 @@
   --radius-2xl: var(--primitive-radius-24);
   --radius-full: var(--primitive-radius-full);
 
+  /* Content width — deliberate exception to the 4/8px grid, same as --text-sm.
+     Prose scales in `ch` (relative to the element's own font-size) so headings,
+     body copy, and captions each scale together. Bringhurst's strict ~75-char
+     ceiling (61ch in this font, after correcting for the ch/glyph mismatch —
+     see git history) read as too narrow in practice: against the page's own
+     padding/gaps and the wider media column, it felt like mostly empty space
+     around a small island of text. 80ch trades some of that strict-measure
+     correctness for a fuller, better-balanced column. */
+  --content-width-prose: 80ch;
+
+  /* Media width scales with the viewport instead of jumping straight to a
+     flat cap — a flat 960px read as too big on laptop-width screens (barely
+     any smaller than on a large monitor) and still a bit much even at the
+     top end. clamp() ramps smoothly between min and max as the window
+     resizes: mostly-min on laptops (~840px, a modest ~4% wider than the
+     text column), scaling up through ~1400-1533px windows, capped at max
+     on large monitors. All three are tokens — easy to retune by feel.
+     (Overlap-safety math from git history still holds: even at max, 920px
+     needs far less buffer than the old 960px did.) */
+  --content-width-media-min: 840px;
+  --content-width-media-preferred: 60vw;
+  --content-width-media-max: 920px;
+  --content-width-outline: 240px;
+
+  /* Badge tracking */
+  --tracking-badge-label: var(--primitive-tracking-badge-label);
+
   /* Motion */
   --ease-standard: var(--primitive-ease-standard);
   --duration-fast: var(--primitive-duration-fast);
@@ -202,4 +238,12 @@
 
   /* Transition shorthand for theme-swappable props */
   --transition-theme: background var(--duration-theme), color var(--duration-theme), border-color var(--duration-theme);
+}
+
+/* Below this width, revert the smallest type steps to their original compact sizes */
+@media (width <= 768px) {
+  :root {
+    --text-xs: var(--primitive-size-8);
+    --text-sm: var(--primitive-size-12);
+  }
 }

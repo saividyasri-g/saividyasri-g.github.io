@@ -41,7 +41,7 @@ export default function LandingSidebar() {
       style={{
         background: 'var(--color-surface-sidebar)',
         borderRight: '1px solid var(--color-border-hair)',
-        padding: '31px 44px var(--space-12)',
+        padding: 'var(--space-8) var(--space-10) var(--space-10)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -75,8 +75,8 @@ export default function LandingSidebar() {
             transition: 'var(--transition-theme)',
           }}
         >
-          Product Designer transforming data-heavy tools to be easy to act on,
-          and structuring complex workflows for efficiency.
+          I'm a Product Designer based in SF.<br />
+          I help make complex, data-heavy tools to be intuitive and effortless to work with.
         </p>
       </div>
 
