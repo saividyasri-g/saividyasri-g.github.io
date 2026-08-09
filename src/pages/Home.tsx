@@ -10,6 +10,7 @@ interface Project {
   img: string | null
   href: string
   comingSoon?: boolean
+  imgContained?: boolean
 }
 
 const projects: Project[] = [
@@ -40,10 +41,11 @@ const projects: Project[] = [
   {
     tags: ['Enterprise', 'Compliance', 'Fidelity'],
     title: 'Redesign of a Compliance Enterprise System',
-    desc: 'Restructuring a legacy regulatory operations tool — severity-tiered alerting, a unified exception queue, and structured decision logging that closed the audit trail.',
-    img: '/fidelity/thumbnail.svg',
+    desc: 'Restructuring a legacy compliance supervision tool that reduced the completion time of supervision review tasks by 30%.',
+    img: '/fidelity/thumbnail.png',
     imgAlt: 'Fidelity compliance system redesign — dashboard overview',
     href: '#/fidelity',
+    imgContained: true,
   },
 ]
 
@@ -101,9 +103,9 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps)
           style={{
             position: 'absolute',
             inset: 0,
-            background: project.img ? stripesBg : 'var(--color-surface-card)',
-            opacity: project.img && imgLoaded ? 0 : 1,
-            transition: 'opacity 0.4s ease-out',
+            background: project.imgContained ? 'var(--color-surface-card)' : project.img ? stripesBg : 'var(--color-surface-card)',
+            opacity: project.img && imgLoaded && !project.imgContained ? 0 : 1,
+            transition: 'opacity 0.4s ease-out, background var(--transition-theme)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -133,10 +135,10 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps)
             onLoad={() => setImgLoaded(true)}
             style={{
               position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
+              inset: project.imgContained ? 'var(--space-5)' : 0,
+              width: project.imgContained ? 'calc(100% - 2 * var(--space-5))' : '100%',
+              height: project.imgContained ? 'calc(100% - 2 * var(--space-5))' : '100%',
+              objectFit: project.imgContained ? 'contain' : 'cover',
               opacity: imgLoaded ? 1 : 0,
               transition: 'opacity 0.5s ease-out, transform 0.55s var(--ease-standard)',
             }}
@@ -151,7 +153,7 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps)
             <span
               key={tag}
               style={{
-                fontFamily: 'var(--font-mono)',
+                fontFamily: 'var(--font-sans)',
                 fontSize: 'var(--text-xs)',
                 fontWeight: 500,
                 letterSpacing: '.09em',
@@ -235,7 +237,7 @@ export default function Home() {
             transition: 'var(--transition-theme)',
           }}
         >
-          I'm a Product Designer based in SF.<br />
+          I'm a Product Designer based in San Francisco.<br />
           I help make complex, data-heavy tools to be intuitive and effortless to work with.
         </p>
 
@@ -245,7 +247,7 @@ export default function Home() {
 
         <div id="home-inline-nav-sentinel" aria-hidden style={{ height: 1 }} />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-6)', alignItems: 'start', marginTop: 'var(--space-10)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: '1fr', gap: 'var(--space-6)', marginTop: 'var(--space-10)' }}>
           {projects.map((project, i) => (
             <ProjectCard
               key={project.title}

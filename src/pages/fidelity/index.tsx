@@ -14,6 +14,7 @@ import {
 } from '../../components/case-study'
 
 const outlineItems = [
+  { id: 'overview',        num: '', label: 'Overview' },
   { id: 'context',         num: '', label: 'Context' },
   { id: 'users',           num: '', label: 'Users' },
   { id: 'scope',           num: '', label: 'Scope' },
@@ -143,11 +144,20 @@ export default function Fidelity() {
       {/* ── Hero image (full-bleed, outside the sidebar+content pair) ── */}
       <section style={{ paddingTop: 'var(--space-10)' }}>
         <div className="layout-header-pad" style={{ padding: '0 var(--space-12)' }}>
-          <img
-            src="/fidelity/thumbnail.jpeg"
-            alt="Fidelity compliance system redesign — dashboard overview"
-            style={{ width: '100%', display: 'block', borderRadius: 'var(--radius-card)' }}
-          />
+          <div
+            style={{
+              background: 'var(--color-surface-card)',
+              borderRadius: 'var(--radius-card)',
+              padding: 'var(--space-8)',
+              transition: 'var(--transition-theme)',
+            }}
+          >
+            <img
+              src="/fidelity/thumbnail.png"
+              alt="Fidelity compliance system redesign — dashboard overview"
+              style={{ width: '50%', display: 'block', borderRadius: 'var(--radius-sm)', margin: '0 auto' }}
+            />
+          </div>
         </div>
       </section>
 
@@ -159,20 +169,7 @@ export default function Fidelity() {
           <div className="layout-main-pad" style={{ padding: 'var(--space-10) var(--space-12) 60px' }}>
             <div className="layout-content layout-content--centered layout-content--prose">
 
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--text-sm)',
-                fontWeight: 500,
-                letterSpacing: '.09em',
-                textTransform: 'uppercase' as const,
-                color: 'var(--color-text-secondary)',
-                marginBottom: '22px',
-                transition: 'var(--transition-theme)',
-              }}
-            >
-              Fidelity Investments · 2024
-            </div>
+            <section id="overview">
             <h1
               style={{
                 fontSize: 'var(--text-xl)',
@@ -214,6 +211,7 @@ export default function Fidelity() {
                 <p style={{ ...pStyle, margin: 0 }}>Product Manager, Business Analysts, Engineering Team</p>
               </div>
             </div>
+            </section>
 
             {/* ════════════════════════════════════════ */}
             {/* CONTEXT                                 */}
@@ -228,19 +226,6 @@ export default function Fidelity() {
                 </p>
                 <p style={pStyle}>
                   The tool supports supervision: the compliance review a designated supervisor performs on an associate after an incident is flagged. Roughly 4,000 employees used it daily.
-                </p>
-                <p
-                  style={{
-                    ...proseStyle,
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: 'var(--text-sm)',
-                    letterSpacing: '.02em',
-                    fontStyle: 'italic',
-                    color: 'var(--color-text-meta)',
-                    margin: 0,
-                  }}
-                >
-                  Screens in this case study are simplified recreations. Original interfaces are confidential.
                 </p>
                 <div style={{ width: '110%', marginLeft: '-5%' }}>
                   <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)', marginTop: 'var(--space-5)' }}>
@@ -271,7 +256,8 @@ export default function Fidelity() {
                     Note
                   </span>
                   <p style={{ ...pStyle, margin: 0, maxWidth: 'none' }}>
-                    This case study covers the Associate tab, where the review task lives. The Supervisor tab, which supports oversight of managers, is a separate workflow and is not covered here.
+                    This case study covers the Associate tab, where the review task lives. The Supervisor tab, which supports oversight of managers, is a separate workflow and is not covered here.{' '}
+                    <span style={{ color: 'var(--color-text-body)' }}>Screens in this case study are simplified recreations. Original interfaces are confidential.</span>
                   </p>
                 </div>
               </Block>
@@ -298,12 +284,15 @@ export default function Fidelity() {
                     fontWeight: 500,
                     lineHeight: 1.35,
                     color: 'var(--color-diagram-title)',
-                    margin: 'var(--space-8) 0 12px',
+                    margin: 'var(--space-8) 0 8px',
                     transition: 'var(--transition-theme)',
                   }}
                 >
-                  Review flow takes two path: one is incident-review and associate-review. Both flows were designed to supervise associates based on incident frequency, trends and severity.
+                  Review flow takes two paths: incident-review and associate-review.
                 </h3>
+                <p style={{ ...pStyle, margin: '0 0 12px' }}>
+                  Both flows were designed to supervise associates based on incident frequency, trends and severity.
+                </p>
                 <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)' }}>
                   <img src="/fidelity/review-task-flow.png" alt="Incident-review and associate-review task flows" style={{ display: 'block', width: '100%' }} />
                 </div>
@@ -319,7 +308,7 @@ export default function Fidelity() {
                 header="Redesign with the existing data structure and no new analysis."
               >
                 <p style={{ ...pStyle, margin: 0 }}>
-                  Timeline was 4 sprints for development to production. The product manager scoped out new analysis, so the redesign had to work with the data as it was already structured. Workflow and layout were open.
+                  The timeline was 3 sprints, design through to production. The product manager scoped out new analysis, aggregate tables or data insights. So the redesign had to work with the data as it was already structured. Workflow and layout were open.
                 </p>
               </Block>
             </section>
@@ -341,16 +330,19 @@ export default function Fidelity() {
                     stage="before"
                     hideStageLabel
                     diagramPadding="0"
+                    diagramBorderRadius="0"
                     tabs={[
                       {
                         id: 'manager-userflow',
-                        label: 'Manager userflow',
+                        label: 'Manager',
+                        diagramTitle: 'Manager Incident-review User Flow',
                         diagram: <img src="/fidelity/manager-userflow.png" alt="Manager userflow" style={{ display: 'block', width: '100%' }} />,
                         annotations: <Problem1Annotations />,
                       },
                       {
                         id: 'sp-userflow',
-                        label: 'Supervisory Principal userflow',
+                        label: 'Supervisory Principal',
+                        diagramTitle: 'Supervisory Principal Incident-review User Flow',
                         diagram: <img src="/fidelity/sp-userflow.png" alt="Supervisory Principal userflow" style={{ display: 'block', width: '100%' }} />,
                         annotations: <Problem1Annotations />,
                       },
@@ -441,7 +433,7 @@ export default function Fidelity() {
                             entries={[
                               {
                                 title: 'A supervision report has to document who was accountable for reviewing the associate',
-                                description: 'The managers — who owned the incident and who the associate reports to — are part of the report record. Removing them would violate the compliance requirement.',
+                                description: 'The managers, who owned the incident and who the associate reports to are part of the report record. Removing them would violate the compliance requirement.',
                                 pivot: 'Show associate records with reporting manager and owning manager',
                               },
                               {
@@ -452,7 +444,7 @@ export default function Fidelity() {
                               {
                                 title: 'Renaming a column from Associate to Manager meant updating the compliance documentation that references it',
                                 description: 'I proposed labelling "Associate" and "Managers" based on who the user is monitoring. This label appears throughout the supervisory procedures and training material, so the naming stayed as the vendor tool had it.',
-                                pivot: 'Changing the label meant changing all of it, which was not the priority for the project timeline',
+                                pivot: 'Not prioritized for this release',
                               },
                             ]}
                           />
@@ -476,17 +468,17 @@ export default function Fidelity() {
                           <p style={{ ...pStyle, margin: '0 auto var(--space-8)' }}>
                             Selecting an incident or an associate opens a dedicated page listing the associate incidents within that scope. Each row is one associate: the incident, its severity, the associate who performed it, the reporting manager that associate reports to, the manager accountable for the incident, and the incident count by month across the quarter.
                           </p>
+                          <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)', marginBottom: 'var(--space-8)' }}>
+                            <img src="/fidelity/after-screen.png" alt="Final userflow screen" style={{ display: 'block', width: '100%' }} />
+                          </div>
                           <video
-                            src="/fidelity/after-flow.mp4"
+                            src="/fidelity/solution-1.mp4"
                             autoPlay
                             loop
                             muted
                             playsInline
-                            style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)', marginBottom: 'var(--space-8)' }}
+                            style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }}
                           />
-                          <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)' }}>
-                            <img src="/fidelity/after-screen.png" alt="Final userflow screen" style={{ display: 'block', width: '100%' }} />
-                          </div>
                         </div>
                       </div>
                     ),
@@ -506,6 +498,7 @@ export default function Fidelity() {
                 counter="Problem 2"
                 stage="before"
                 hideStageLabel
+                diagramPadding="0"
                 title="Identical triggers resulted in different outcomes (modal, expansion, navigation), requiring reliance on recall"
                 description="Users learned the behavior of each table separately and relied on recall to know what a click would do."
                 tabs={[{
@@ -528,6 +521,7 @@ export default function Fidelity() {
                 stage="after"
                 hideStageLabel
                 solutionLabel="Solution 2"
+                diagramPadding="0"
                 title = "One overview-to-detail pattern across both the incident and associate views"
                 description="Both the incident overview and the associate overview follow the same structure: a summary table where selecting a row opens its detail."
                 tabs={[{
@@ -569,7 +563,7 @@ export default function Fidelity() {
                     key={i}
                     style={{
                       borderRadius: 'var(--radius-card)',
-                      background: 'var(--color-surface-sidebar)',
+                      background: 'var(--color-surface-card)',
                       backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='%23BEC1C3' stroke-width='0.6' stroke-dasharray='2%2c2'/%3e%3c/svg%3e")`,
                       padding: '20px 24px',
                       transition: 'var(--transition-theme)',
@@ -616,26 +610,16 @@ export default function Fidelity() {
                   <div
                     key={i}
                     style={{
+                      background: 'var(--color-surface-card)',
                       borderRadius: 'var(--radius-card)',
-                      background: 'var(--color-surface-sidebar)',
                       backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='%23BEC1C3' stroke-width='0.6' stroke-dasharray='2%2c2'/%3e%3c/svg%3e")`,
-                      padding: '20px 24px',
+                      padding: 'var(--space-5)',
                       transition: 'var(--transition-theme)',
                     }}
                   >
-                    <h4
-                      style={{
-                        margin: '0 0 10px',
-                        fontSize: 'var(--text-lg)',
-                        fontWeight: 600,
-                        lineHeight: 1.3,
-                        color: 'var(--color-text-title)',
-                        transition: 'var(--transition-theme)',
-                      }}
-                    >
-                      {learning.title}
-                    </h4>
-                    <p style={{ ...pStyle, margin: 0 }}>{learning.description}</p>
+                    <span style={findingCardEyebrow}>#{i + 1}</span>
+                    <p style={findingCardHeader}>{learning.title}</p>
+                    <div style={findingCardDesc}>{learning.description}</div>
                   </div>
                 ))}
               </div>

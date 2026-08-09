@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import LandingSidebar from '../components/layout/LandingSidebar'
 import { useTheme } from '../context/ThemeContext'
+import Card from '../components/ui/Card'
 
 const toolkit = [
   {
@@ -163,7 +163,7 @@ function HoloAvatar() {
           WebkitMaskImage: 'radial-gradient(ellipse 65% 65% at 50% 38%, black 40%, transparent 78%)',
         }}
       >
-        {[0.5, 0.5, 0.6, 0.7, 0.7].map((opacity, i) => (
+        {[0.8, 0.5, 0.6, 0.7, 0.7].map((opacity, i) => (
           <video
             key={i}
             ref={el => { videoRefs.current[i] = el }}
@@ -207,7 +207,7 @@ function HoloAvatar() {
       <div
         style={{
           position: 'absolute',
-          bottom: 0,
+          bottom: -32,
           left: '50%',
           transform: 'translateX(-50%)',
           width: `${EMIT_W}px`, height: `${EMIT_H}px`,
@@ -235,7 +235,7 @@ function SectionHeader({ label }: { label: string }) {
     >
       <span
         style={{
-          fontFamily: 'var(--font-mono)',
+          fontFamily: 'var(--font-sans)',
           fontSize: '12px',
           letterSpacing: '.16em',
           textTransform: 'uppercase',
@@ -268,12 +268,10 @@ function IconCard({
   iconSize?: number
 }) {
   return (
-    <div
+    <Card
       style={{
-        background: 'var(--color-surface-page)',
-        border: `1px solid ${hovered ? 'var(--color-surface-card)' : 'var(--color-border-hair)'}`,
-        borderRadius: 'var(--radius-card)',
-        padding: '26px',
+        border: `1px solid ${hovered ? 'var(--color-border-hair-hover)' : 'var(--color-border-hair)'}`,
+        padding: '20px',
         cursor: 'default',
         transition: `var(--transition-theme), border-color var(--duration-fast) var(--ease-standard)`,
       }}
@@ -322,7 +320,7 @@ function IconCard({
       >
         {desc}
       </div>
-    </div>
+    </Card>
   )
 }
 
@@ -340,12 +338,10 @@ function ValueCard({
   onLeave: () => void
 }) {
   return (
-    <div
+    <Card
       style={{
-        background: 'var(--color-surface-page)',
-        border: `1px solid ${hovered ? 'var(--color-surface-card)' : 'var(--color-border-hair)'}`,
-        borderRadius: 'var(--radius-card)',
-        padding: '26px',
+        border: `1px solid ${hovered ? 'var(--color-border-hair-hover)' : 'var(--color-border-hair)'}`,
+        padding: '20px',
         cursor: 'default',
         transition: `var(--transition-theme), border-color var(--duration-fast) var(--ease-standard)`,
       }}
@@ -374,12 +370,12 @@ function ValueCard({
       >
         {desc}
       </div>
-    </div>
+    </Card>
   )
 }
 
 const monoLabel: React.CSSProperties = {
-  fontFamily: 'var(--font-mono)',
+  fontFamily: 'var(--font-sans)',
   fontSize: '10px',
   letterSpacing: '.14em',
   textTransform: 'uppercase',
@@ -409,14 +405,60 @@ export default function About() {
         transition: 'var(--transition-theme)',
       }}
     >
-      <div className="layout-grid">
-        <LandingSidebar />
+      <div className="layout-content layout-content--centered" style={{ padding: '120px var(--space-12) 88px' }}>
 
-        <main style={{ background: 'var(--color-surface-main)', transition: 'var(--transition-theme)' }}>
-          <div className="layout-main-pad" style={{ padding: '88px var(--space-12) 88px' }}>
-          <div className="layout-content">
+            {/* ── Intro ── */}
+            <section style={{ maxWidth: '660px', marginBottom: '56px' }}>
+              <div style={{ marginBottom: '24px' }}>
+                <h1
+                  style={{
+                    fontSize: 'var(--text-lg)',
+                    lineHeight: 1.4,
+                    fontWeight: 600,
+                    letterSpacing: '-0.005em',
+                    margin: '0 0 8px',
+                    color: 'var(--color-text-title)',
+                    transition: 'var(--transition-theme)',
+                  }}
+                >
+                  Hi! I'm Sai
+                </h1>
+                <span
+                  style={{
+                    fontSize: '13px',
+                    color: 'var(--color-text-meta)',
+                    transition: 'var(--transition-theme)',
+                  }}
+                >
+                  (/sai/ &mdash; rhymes with &ldquo;hi&rdquo;)
+                </span>
+              </div>
 
-            {/* ── Hero identity card ── */}
+              <p style={{ ...bio, margin: 0 }}>
+                I design end-to-end digital product solutions to be intuitive. Along the way,
+                I like having a good time with the people I build them with.
+                I studied biotechnology &amp; bioinformatics. Before design, I was an analyst in
+                pharmaceutical R&amp;D, where I helped build{' '}
+                <span
+                  style={{
+                    background: 'var(--color-highlight-bg)',
+                    color: 'var(--color-highlight-text)',
+                    padding: '1px 5px',
+                    borderRadius: 'var(--radius-highlight)',
+                    transition: 'var(--transition-theme)',
+                  }}
+                >
+                  seewise
+                </span>{' '}
+                &mdash; a tool to manage and visualise clinical trial data. That was my window into
+                UX &amp; design.
+                Outside of work, I enjoy exploring new dishes, watching cooking videos, doodling
+                comics from my childhood, reading, and occasionally painting. I&rsquo;m learning to
+                grow into adulthood while keeping my inner child alive.
+              </p>
+            </section>
+
+            {/* ── Identity card ── */}
             <section
               style={{
                 display: 'grid',
@@ -434,7 +476,6 @@ export default function About() {
                   position: 'relative',
                   background: 'var(--color-surface-card)',
                   borderRight: '1px solid var(--color-border-hair)',
-                  minHeight: '360px',
                   overflow: 'hidden',
                   transition: 'var(--transition-theme)',
                 }}
@@ -445,9 +486,10 @@ export default function About() {
               {/* Right — name / role / previously / education */}
               <div
                 style={{
-                  padding: '40px 48px',
+                  padding: '20px',
                   display: 'flex',
                   flexDirection: 'column',
+                  justifyContent: 'flex-start',
                   gap: '28px',
                   background: 'var(--color-surface-card)',
                   transition: 'var(--transition-theme)',
@@ -458,7 +500,7 @@ export default function About() {
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '14px', flexWrap: 'wrap' }}>
                     <span
                       style={{
-                        fontFamily: 'var(--font-mono)',
+                        fontFamily: 'var(--font-sans)',
                         fontSize: '20px',
                         fontWeight: 600,
                         color: 'var(--color-text-title)',
@@ -470,7 +512,7 @@ export default function About() {
                     </span>
                     <span
                       style={{
-                        fontFamily: 'var(--font-mono)',
+                        fontFamily: 'var(--font-sans)',
                         fontSize: '14px',
                         color: 'var(--color-accent)',
                         transition: 'var(--transition-theme)',
@@ -481,25 +523,14 @@ export default function About() {
                   </div>
                   <div
                     style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '14px',
-                      color: 'var(--color-text-secondary)',
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '13px',
+                      color: 'var(--color-text-meta)',
                       marginTop: '6px',
                       transition: 'var(--transition-theme)',
                     }}
                   >
-                    Product &amp; systems designer
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '13px',
-                      color: 'var(--color-text-meta)',
-                      marginTop: '3px',
-                      transition: 'var(--transition-theme)',
-                    }}
-                  >
-                    Designing for 5+ years
+                    Designing for 4+ years
                   </div>
                 </div>
 
@@ -508,7 +539,7 @@ export default function About() {
                   <div style={monoLabel}>Previously at</div>
                   <div
                     style={{
-                      fontFamily: 'var(--font-mono)',
+                      fontFamily: 'var(--font-sans)',
                       fontSize: '15px',
                       color: 'var(--color-text-title)',
                       transition: 'var(--transition-theme)',
@@ -523,49 +554,19 @@ export default function About() {
                   <div style={monoLabel}>Education</div>
                   <div
                     style={{
-                      fontFamily: 'var(--font-mono)',
+                      fontFamily: 'var(--font-sans)',
                       fontSize: '14px',
                       color: 'var(--color-text-body)',
                       lineHeight: 1.6,
                       transition: 'var(--transition-theme)',
                     }}
                   >
-                    MS, Product &amp; Service Innovation — Carnegie Mellon
+                    MS, Product &amp; Service Innovation — Carnegie Mellon University
                     <br />
                     M.Des, Human-Centered Design — SMI, India
                   </div>
                 </div>
               </div>
-            </section>
-
-            {/* ── Bio ── */}
-            <section style={{ maxWidth: '660px', marginBottom: '64px' }}>
-              <p style={bio}>
-                I design end-to-end product solutions to be intuitive and delightful. Along the way,
-                I like having a good time with the people I build them with.
-              </p>
-              <p style={bio}>
-                I studied biotechnology &amp; bioinformatics. Before UX design, I was an analyst in
-                pharmaceutical R&amp;D, where I helped build{' '}
-                <span
-                  style={{
-                    background: 'var(--color-highlight-bg)',
-                    color: 'var(--color-highlight-text)',
-                    padding: '1px 5px',
-                    borderRadius: 'var(--radius-highlight)',
-                    transition: 'var(--transition-theme)',
-                  }}
-                >
-                  seewise
-                </span>{' '}
-                &mdash; a tool to manage and visualise clinical trial data. That was my window into
-                UX &amp; design.
-              </p>
-              <p style={{ ...bio, margin: 0 }}>
-                Outside of work, I enjoy exploring new dishes, watching cooking videos, doodling
-                comics from my childhood, reading, and occasionally painting. I&rsquo;m learning to
-                grow into adulthood while keeping my inner child alive.
-              </p>
             </section>
 
             {/* ── Toolkit ── */}
@@ -642,9 +643,6 @@ export default function About() {
               </div>
             </section>
 
-          </div>
-          </div>
-        </main>
       </div>
     </div>
   )

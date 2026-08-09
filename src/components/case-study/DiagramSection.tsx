@@ -31,6 +31,8 @@ export interface DiagramSectionProps {
   annotationsMinHeight?: number
   /** Padding around the diagram content. Defaults to 'var(--space-5) var(--space-10) var(--space-10)'. */
   diagramPadding?: string
+  /** Border radius on the inner diagram wrapper. Defaults to 'var(--radius-card)'. Pass '0' to remove. */
+  diagramBorderRadius?: string
   /** Hide the "Before"/"After" stage eyebrow. */
   hideStageLabel?: boolean
   /** Whether the diagram card breaks out wider than the text column. Defaults to true — set false for diagrams that should stay at the ambient text width. */
@@ -65,6 +67,7 @@ export function DiagramSection({
   defaultTabId,
   annotationsMinHeight = 200,
   diagramPadding = 'var(--space-5) var(--space-10) var(--space-10)',
+  diagramBorderRadius = 'var(--radius-card)',
   hideStageLabel = false,
   wide = true,
   card = true,
@@ -89,7 +92,17 @@ export function DiagramSection({
       )}
       {/* Tab bar — only when multiple tabs */}
       {multiTab && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--space-5)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-5)' }}>
+          <span
+            style={{
+              fontSize: 'var(--text-sm)',
+              color: 'var(--color-text-body)',
+              fontFamily: 'var(--font-sans)',
+              transition: 'var(--transition-theme)',
+            }}
+          >
+            {tabs.find(t => t.id === activeId)?.diagramTitle ?? ''}
+          </span>
           <nav
             role="tablist"
             style={{
@@ -112,10 +125,10 @@ export function DiagramSection({
                 style={{
                   position: 'relative',
                   overflow: 'hidden',
-                  height: '28px',
+                  height: '20px',
                   padding: '0 12px',
                   fontFamily: 'var(--font-sans)',
-                  fontSize: 'var(--text-sm)',
+                  fontSize: 'var(--text-xs)',
                   fontWeight: activeId === tab.id ? 500 : 400,
                   color: activeId === tab.id ? 'var(--color-text-title)' : 'var(--color-text-secondary)',
                   background: 'transparent',
@@ -135,7 +148,7 @@ export function DiagramSection({
       {/* Diagram card */}
       <div
         style={{
-          borderRadius: 'var(--radius-card)',
+          borderRadius: diagramBorderRadius,
           overflowX: 'auto',
           WebkitOverflowScrolling: 'touch',
           transition: 'var(--transition-theme)',
@@ -146,8 +159,9 @@ export function DiagramSection({
           headers differ in height between tabs.
         */}
 
-        {/* Zone 1 — Header stack: tallest header sets this zone's height */}
-        {tabs.some(t => t.diagramTitle || (t.diagramBadges && t.diagramBadges.length > 0)) && (
+        {/* Zone 1 — Header stack: tallest header sets this zone's height.
+            Skipped in multi-tab mode because diagramTitle is shown in the tab bar row instead. */}
+        {!multiTab && tabs.some(t => t.diagramTitle || (t.diagramBadges && t.diagramBadges.length > 0)) && (
           <div style={{ position: 'relative', padding: 'var(--space-10) var(--space-10) 0' }}>
             {tabs.map((tab, i) => (
               <div

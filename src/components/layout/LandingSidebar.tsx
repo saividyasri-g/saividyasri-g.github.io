@@ -75,7 +75,7 @@ export default function LandingSidebar() {
             transition: 'var(--transition-theme)',
           }}
         >
-          I'm a Product Designer based in SF.<br />
+          I'm a Product Designer based in San Francisco.<br />
           I help make complex, data-heavy tools to be intuitive and effortless to work with.
         </p>
       </div>

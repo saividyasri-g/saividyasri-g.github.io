@@ -52,6 +52,10 @@ html, body {
   text-rendering: optimizelegibility;
 }
 
+html.has-scrollbar {
+  scrollbar-gutter: stable both-edges;
+}
+
 body {
   font-family: var(--font-sans);
   font-size: var(--text-base);
@@ -157,6 +161,21 @@ a { text-decoration: none; }
 .fill-btn--card:hover,
 .fill-btn--card:focus-visible {
   border-color: var(--color-border-hair-hover) !important;
+}
+
+/* Card fill: cover full height (cards are taller than wide, so the default
+   padding-bottom:100% square undershoots). Override to use actual height. */
+.fill-btn--card::before {
+  z-index: 1;
+  top: 0;
+  height: 100%;
+  padding-bottom: 0;
+  transform: rotate(5deg) scaleX(0.25);
+}
+
+.fill-btn--card:hover::before,
+.fill-btn--card:focus-visible::before {
+  transform: rotate(0deg) scaleX(1);
 }
 
 /* Thumbnail zoom on card hover */

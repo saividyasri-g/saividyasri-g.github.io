@@ -419,7 +419,9 @@ export default function HeroMotoCorp() {
       {/* ── Hero / Title ── */}
       <section style={{ paddingTop: 'var(--space-10)' }}>
         <div className="layout-header-pad" style={{ padding: '0 var(--space-12)' }}>
-        <img src="/hmc/casestudy_thumbnail.png" alt="Hero image — service dashboard on tablet + mobile" style={{ width: '100%', display: 'block', borderRadius: 'var(--radius-card)' }} />
+        <div style={{ borderRadius: 'var(--radius-card)', overflow: 'hidden', height: '480px' }}>
+          <img src="/hmc/casestudy_thumbnail.png" alt="Hero image — service dashboard on tablet + mobile" style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: '50% 50%' }} />
+        </div>
         <div className="layout-content layout-content--centered layout-content--prose" style={{ marginTop: '32px' }}>
           <div
             style={{
