@@ -39,6 +39,8 @@ export interface DiagramSectionProps {
   wide?: boolean
   /** Whether the outer diagram area gets the tinted card background/padding. Defaults to true — set false to let the content sit directly on the page. */
   card?: boolean
+  /** Border radius on the outer tinted card (only applies when `card` is true). Defaults to 'var(--radius-card)'. Pass '0' to remove. */
+  cardBorderRadius?: string
 }
 
 const stageColors = {
@@ -71,6 +73,7 @@ export function DiagramSection({
   hideStageLabel = false,
   wide = true,
   card = true,
+  cardBorderRadius = 'var(--radius-card)',
 }: DiagramSectionProps) {
   const [activeId, setActiveId] = useState(defaultTabId ?? tabs[0]?.id)
   const multiTab = tabs.length > 1
@@ -80,7 +83,7 @@ export function DiagramSection({
     <div
       style={{
         background: card ? 'var(--color-surface-sidebar)' : undefined,
-        borderRadius: card ? 'var(--radius-card)' : undefined,
+        borderRadius: card ? cardBorderRadius : undefined,
         padding: card ? 'var(--space-6)' : undefined,
         transition: 'var(--transition-theme)',
       }}

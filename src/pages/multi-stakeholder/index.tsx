@@ -1,19 +1,19 @@
 import type { ReactNode } from 'react'
 import {
-  Overview,
   Outline,
   Learning,
   DiagramSection,
   sectionStyle,
   h2Style,
   pStyle,
+  eyebrowStyle,
   Block,
   ScenarioGroup,
   SectionDivider,
 } from '../../components/case-study'
-import Card from '../../components/ui/Card'
 
 const outlineItems = [
+  { id: 'overview',        num: '', label: 'Overview' },
   { id: 'context',         num: '', label: 'Context' },
   { id: 'why-it-mattered', num: '', label: 'Why it mattered' },
   { id: 'scenario-01',     num: '', label: 'Problem · Solution 1' },
@@ -22,13 +22,6 @@ const outlineItems = [
   { id: 'impact',          num: '', label: 'Impact' },
   { id: 'learnings',       num: '', label: 'Learnings' },
   { id: 'differently',     num: '', label: 'Do Differently' },
-]
-
-const overviewItems = [
-  { label: 'Role',                       value: 'UX Designer' },
-  { label: 'Team',                       value: '2 UX Designers, 1 Product Manager' },
-  { label: 'Timeline',                   value: '12 weeks' },
-  { label: 'Design & Management Skills', value: 'Cross-role workflow design, multi-stakeholder research' },
 ]
 
 /* ── Inline helpers ───────────────────────────────────── */
@@ -138,135 +131,10 @@ export default function MultiStakeholder() {
       }}
     >
 
-      {/* ── Hero / Title ── */}
+      {/* ── Hero thumbnail ── */}
       <section style={{ paddingTop: 'var(--space-10)' }}>
         <div className="layout-header-pad" style={{ padding: '0 var(--space-12)' }}>
           <ImgStage label="Case study thumbnail — multi-stakeholder workflow" aspectRatio="21 / 9" />
-          <div className="layout-content layout-content--centered layout-content--prose" style={{ marginTop: '32px' }}>
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--text-sm)',
-                fontWeight: 500,
-                letterSpacing: '.09em',
-                textTransform: 'uppercase' as const,
-                color: 'var(--color-text-secondary)',
-                marginBottom: '22px',
-                transition: 'var(--transition-theme)',
-              }}
-            >
-              Hero MotoCorp · 2023
-            </div>
-            <h1
-              style={{
-                fontSize: 'var(--text-xl)',
-                lineHeight: 1.1,
-                fontWeight: 600,
-                letterSpacing: '-0.025em',
-                color: 'var(--color-text-title)',
-                margin: '0 0 32px',
-                transition: 'var(--transition-theme)',
-              }}
-            >
-              Integrating Complex Multi-Stakeholder Workflows Across a Two-Wheeler Service Centre.
-            </h1>
-            <Overview items={overviewItems} />
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: 'var(--space-10)',
-                marginTop: 'var(--space-8)',
-              }}
-            >
-              <Card>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '.12em',
-                    color: 'var(--color-text-meta)',
-                    display: 'block',
-                    marginBottom: '14px',
-                    transition: 'var(--transition-theme)',
-                  }}
-                >
-                  Problem Overview
-                </span>
-                <p
-                  style={{
-                    fontSize: 'var(--text-base)',
-                    lineHeight: 1.65,
-                    color: 'var(--color-text-secondary)',
-                    margin: 0,
-                    transition: 'var(--transition-theme)',
-                  }}
-                >
-                  A two-wheeler service centre runs on four distinct roles — Security Guard, Service Manager, Technician, and Checkout — each working in a separate zone with no shared digital layer. Information moved between them verbally and on paper, creating avoidable idle times, delayed handoffs, and service bottlenecks.
-                </p>
-              </Card>
-
-              <Card>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      textTransform: 'uppercase' as const,
-                      letterSpacing: '.12em',
-                      color: 'var(--color-text-meta)',
-                      transition: 'var(--transition-theme)',
-                    }}
-                  >
-                    Solution &amp; Impact
-                  </span>
-                  <a
-                    href="#scenario-01"
-                    className="fill-btn fill-btn--subtle fill-btn--left"
-                    onClick={e => {
-                      e.preventDefault()
-                      document.getElementById('scenario-01')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                    }}
-                    style={{
-                      position: 'relative',
-                      overflow: 'hidden',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      height: '32px',
-                      padding: '0 14px',
-                      fontFamily: 'var(--font-sans)',
-                      fontSize: 'var(--text-base)',
-                      fontWeight: 400,
-                      background: 'transparent',
-                      borderRadius: 'var(--radius-btn)',
-                      color: 'var(--color-text-secondary)',
-                      textDecoration: 'none',
-                      cursor: 'pointer',
-                      transition: `border-color 0.4s var(--ease-standard), var(--transition-theme)`,
-                    }}
-                  >
-                    view solution
-                  </a>
-                </div>
-                <p
-                  style={{
-                    fontSize: 'var(--text-base)',
-                    lineHeight: 1.65,
-                    color: 'var(--color-text-secondary)',
-                    margin: 0,
-                    transition: 'var(--transition-theme)',
-                  }}
-                >
-                  I designed cross-role digital workflows connecting Security Guard check-in, technician status reporting, and checkout confirmation into a single shared system — removing the verbal handoffs and idle wait times that accumulated across every vehicle's journey.
-                </p>
-              </Card>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -277,6 +145,51 @@ export default function MultiStakeholder() {
         <main style={{ background: 'var(--color-surface-main)', minWidth: 0, transition: 'var(--transition-theme)' }}>
           <div className="layout-main-pad" style={{ padding: 'var(--space-10) var(--space-12) 60px' }}>
             <div className="layout-content layout-content--centered layout-content--prose">
+
+            {/* ════════════════════════════════════════ */}
+            {/* OVERVIEW                                */}
+            {/* ════════════════════════════════════════ */}
+            <section id="overview">
+              <h1
+                style={{
+                  fontSize: 'var(--text-xl)',
+                  lineHeight: 1.1,
+                  fontWeight: 600,
+                  letterSpacing: '-0.025em',
+                  color: 'var(--color-text-title)',
+                  margin: '0 0 32px',
+                  transition: 'var(--transition-theme)',
+                }}
+              >
+                Integrating Complex Multi-Stakeholder Workflows Across a Two-Wheeler Service Centre.
+              </h1>
+              <div style={{ marginBottom: 'var(--space-8)' }}>
+                <span style={eyebrowStyle}>Overview</span>
+                <p style={{ ...pStyle, margin: 0 }}>
+                  A two-wheeler service centre runs on four distinct roles — Security Guard, Service Manager, Technician, and Checkout — each working in a separate zone with no shared digital layer. Information moved between them verbally and on paper, creating avoidable idle times, delayed handoffs, and service bottlenecks.
+                </p>
+              </div>
+              <div style={{ marginBottom: 'var(--space-8)' }}>
+                <span style={eyebrowStyle}>Impact</span>
+                <p style={{ ...pStyle, margin: 0 }}>
+                  I designed cross-role digital workflows connecting Security Guard check-in, technician status reporting, and checkout confirmation into a single shared system — removing the verbal handoffs and idle wait times that accumulated across every vehicle's journey.
+                </p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-10)', marginBottom: 'var(--space-8)' }}>
+                <div>
+                  <span style={eyebrowStyle}>Duration</span>
+                  <p style={{ ...pStyle, margin: 0 }}>12 weeks (2023)</p>
+                </div>
+                <div>
+                  <span style={eyebrowStyle}>My Role</span>
+                  <p style={{ ...pStyle, margin: 0 }}>UX Designer</p>
+                </div>
+                <div>
+                  <span style={eyebrowStyle}>Team</span>
+                  <p style={{ ...pStyle, margin: 0 }}>2 UX Designers, 1 Product Manager</p>
+                </div>
+              </div>
+            </section>
 
             {/* ════════════════════════════════════════ */}
             {/* 01 CONTEXT                              */}

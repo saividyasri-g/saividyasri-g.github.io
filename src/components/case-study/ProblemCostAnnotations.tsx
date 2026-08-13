@@ -80,7 +80,8 @@ export function ProblemCostAnnotations({
             >
               Business Cost
             </span>
-            <span style={{ fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--color-text-body)', transition: 'var(--transition-theme)' }}>
+            {/* Fixed dark text — this panel's fill (costFill) stays light in both themes, so text must not follow the theme-swapping body-text token. */}
+            <span style={{ fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--primitive-light-title)' }}>
               {col.cost}
             </span>
           </div>

@@ -3,6 +3,7 @@ import { HashRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import FloatingNav from './components/layout/FloatingNav'
 import Home from './pages/Home'
+import Lab from './pages/Lab'
 import HeroMotoCorp from './pages/hmc'
 import MultiStakeholder from './pages/multi-stakeholder'
 import Marketplace from './pages/marketplace'
@@ -28,6 +29,7 @@ export default function App() {
         <FloatingNav />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/lab" element={<Lab />} />
           <Route path="/hmc" element={<HeroMotoCorp />} />
           <Route path="/multi-stakeholder" element={<MultiStakeholder />} />
           <Route path="/marketplace" element={<Marketplace />} />

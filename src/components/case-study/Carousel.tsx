@@ -33,17 +33,17 @@ export default function Carousel({ slides, autoPlayMs = 3500, width }: CarouselP
 
   return (
     <div
-      style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: width ?? '100%', margin: width ? '0 auto' : undefined }}
+      style={{ width: width ?? '100%', margin: width ? '0 auto' : undefined, background: '#fff', borderRadius: 'var(--radius-card)', border: '1px solid var(--color-border-hair)', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}
       onMouseEnter={() => { pausedRef.current = true }}
       onMouseLeave={() => { pausedRef.current = false }}
     >
-      {/* Caption */}
+      {/* Caption — top-left */}
       {slides[current].caption && (
         <span style={captionStyle}>{slides[current].caption}</span>
       )}
 
       {/* Image frame */}
-      <div style={{ position: 'relative', borderRadius: 'var(--radius-card)', overflow: 'hidden', background: 'var(--color-surface-raised)', border: '1px solid var(--color-border-hair)' }}>
+      <div style={{ position: 'relative', borderRadius: 'var(--radius-sm)', overflow: 'hidden', background: '#f5f5f5' }}>
         {slides.map((slide, i) => (
           <img
             key={slide.src}
@@ -134,6 +134,6 @@ const captionStyle: React.CSSProperties = {
   fontWeight: 400,
   lineHeight: 1.5,
   color: 'var(--color-text-secondary)',
-  textAlign: 'center',
+  textAlign: 'left',
   transition: 'var(--transition-theme)',
 }

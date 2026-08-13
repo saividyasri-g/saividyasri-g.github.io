@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import {
-  Overview,
   Outline,
-  Learning,
   Carousel,
   DiagramSection,
   CaseBadge,
+  ProblemCostAnnotations,
+  ConstraintPivotGrid,
   sectionStyle,
   h2Style,
   pStyle,
@@ -14,25 +14,18 @@ import {
   ScenarioGroup,
   SectionDivider,
 } from '../../components/case-study'
-import Card from '../../components/ui/Card'
 
 const outlineItems = [
+  { id: 'overview',         num: '', label: 'Overview' },
   { id: 'context',          num: '', label: 'Context' },
   { id: 'why-it-mattered',  num: '', label: 'Why it mattered' },
+  { id: 'scope',            num: '', label: 'Scope' },
   { id: 'scenario-01',      num: '', label: 'Problem · Solution 1' },
   { id: 'scenario-02',      num: '', label: 'Problem · Solution 2' },
   { id: 'scenario-03',      num: '', label: 'Problem · Solution 3' },
   { id: 'scenario-04',      num: '', label: 'Problem · Solution 4' },
   { id: 'impact',           num: '', label: 'Impact' },
   { id: 'learnings',        num: '', label: 'Learnings' },
-  { id: 'differently',      num: '', label: 'Do Differently' },
-]
-
-const overviewItems = [
-  { label: 'Role',                       value: 'UX Designer & Team Lead' },
-  { label: 'Team',                       value: '2 UX Designers, 2 Visual Designers' },
-  { label: 'Timeline',                   value: '9 weeks' },
-  { label: 'Design & Management Skills', value: 'Stakeholder communication and delivery management' },
 ]
 
 const contextSlides = [
@@ -44,360 +37,190 @@ const contextSlides = [
 
 /* ── Inline helpers ───────────────────────────────────── */
 
-function ImgStage({ label, aspectRatio = '16 / 10' }: { label: string; aspectRatio?: string }) {
-  const stripes = 'repeating-linear-gradient(135deg, var(--color-stripe-a) 0px, var(--color-stripe-a) 8px, var(--color-stripe-b) 8px, var(--color-stripe-b) 16px)'
-  return (
-    <div
-      style={{
-        borderRadius: 'var(--radius-card)',
-        border: '1px dashed var(--color-border-hair-hover)',
-        background: stripes,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px',
-        textAlign: 'center',
-        aspectRatio,
-        margin: '18px 0',
-        transition: 'var(--transition-theme)',
-      }}
-      role="img"
-      aria-label={label}
-    >
-      <span
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: 'var(--text-xs)',
-          letterSpacing: '.12em',
-          textTransform: 'uppercase' as const,
-          color: 'var(--color-text-meta)',
-        }}
-      >
-        {label}
-      </span>
-    </div>
-  )
-}
-
 /*
- * TOKEN GAP — amber draft color.
- * `rgba(200,150,0,x)` is hardcoded here because no --color-draft or yellow
- * token exists in tokens.css. Add --color-draft-border / --color-draft-bg if
- * this treatment is reused elsewhere, or accept it as a one-off.
+ * Finding card styles — dashed-border card pattern used for numbered
+ * findings lists. Mirrors the page-local pattern in fidelity/index.tsx
+ * (Problem1Findings); kept page-local here too since it isn't logged as
+ * a shared component yet.
  */
-function TbdCallout({ children }: { children: ReactNode }) {
-  return (
-    <div
-      style={{
-        borderLeft: '3px solid rgba(200,150,0,.38)',
-        background: 'rgba(200,150,0,.05)',
-        borderRadius: '0 var(--radius-sm) var(--radius-sm) 0',
-        padding: '12px 16px',
-        margin: '16px 0',
-      }}
-    >
-      <span
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '9px',
-          letterSpacing: '.18em',
-          textTransform: 'uppercase' as const,
-          color: 'rgba(160,120,0,.7)',
-          display: 'block',
-          marginBottom: '5px',
-        }}
-      >
-        Draft
-      </span>
-      <p style={{ ...pStyle, margin: 0, maxWidth: 'none' }}>{children}</p>
-    </div>
-  )
+const findingCardEyebrow: React.CSSProperties = {
+  display: 'block',
+  marginBottom: 'var(--space-2)',
+  fontFamily: 'var(--font-eyebrow)',
+  fontSize: '11px',
+  fontWeight: 600,
+  letterSpacing: 'var(--tracking-badge-label)',
+  textTransform: 'uppercase',
+  color: 'var(--color-text-meta)',
+  transition: 'var(--transition-theme)',
 }
 
-function ImpactItem({ children }: { children: ReactNode }) {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '20px 1fr',
-        gap: '12px',
-        padding: '20px 0',
-        borderBottom: '1px solid var(--color-border-hair)',
-        transition: 'var(--transition-theme)',
-      }}
-    >
-      <span
-        style={{
-          fontFamily: 'var(--font-mono)',
-          color: 'var(--color-text-faint)',
-          lineHeight: 1.65,
-          userSelect: 'none' as const,
-        }}
-      >
-        —
-      </span>
-      <p style={{ ...pStyle, margin: 0, maxWidth: 'none' }}>{children}</p>
-    </div>
-  )
+const findingCardHeader: React.CSSProperties = {
+  margin: '0 0 8px',
+  fontSize: 'var(--text-base)',
+  fontWeight: 400,
+  lineHeight: 1.35,
+  color: 'var(--color-text-body)',
+  transition: 'var(--transition-theme)',
 }
 
-/* ── Annotation helpers ───────────────────────────────── */
-
-const dashedCard: React.CSSProperties = {
-  borderRadius: 'var(--radius-card)',
-  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='%23BEC1C3' stroke-width='0.6' stroke-dasharray='2%2c2'/%3e%3c/svg%3e")`,
-  padding: '14px 16px',
+const findingCardDesc: React.CSSProperties = {
+  fontSize: 'var(--text-sm)',
+  fontWeight: 300,
+  lineHeight: 1.55,
+  color: 'var(--color-text-secondary)',
+  margin: 0,
+  transition: 'var(--transition-theme)',
 }
 
-function BeforeAnnotations() {
-  const problemColor = '#BD0505'
-  const costColor = '#7F5C16'
-  const costFill = 'rgba(127,92,22,0.12)'
-  const cols = [
+/** Three same-height, horizontally aligned images with captions, in a grey card — used in Problem 4. */
+function ProblemFourTrio() {
+  const rowHeight = 420
+  const items = [
     {
-      problem: "Limited visibility into Technician's availability",
-      description: 'Managers planned the vehicle-service first and checked workshop availability afterward, resulting in queued vehicles without an assigned technicians.',
-      cost: 'Assignment overhead on every vehicle',
+      src: '/hmc/problem-4-customer.png',
+      alt: 'Manager documenting the service plan while the customer describes the issue',
+      caption: 'The manager documents the service plan while the customer describes the issue. This plan is what the customer and the centre agree on.',
+      imgHeight: 220,
     },
     {
-      problem: 'Reassignment relied on the manager remembering unassigned vehicles',
-      description: 'Unassigned vehicles created a mental load for the manager, who had to track availability and reassign each one as technicians freed up',
-      cost: 'Vehicles sat idle & turnaround time increased',
+      src: '/hmc/problem-4-ui.gif',
+      alt: 'Documentation flow in the existing tool',
+      caption: 'The documentation flow in the existing tool.',
+      imgHeight: rowHeight,
     },
     {
-      problem: 'Deliveries promised against inaccurate availabilities',
-      description: "Without visibility into the centre's real-time workload, delivery estimates were made on inaccurate assumptions.",
-      cost: 'Delays surfaced at pickup led to customer dissatisfaction',
+      src: '/hmc/problem-4-technician.png',
+      alt: 'Technician working from the documented service plan',
+      caption: 'The technician works from the same plan. Context that did not fit the documentation form was relayed on the workshop floor.',
+      imgHeight: 220,
     },
   ]
 
   return (
-    <div>
-      <div style={{ display: 'flex', gap: 'var(--space-4)', marginBottom: '16px' }}>
-        <CaseBadge icon="/hmc/icons/problem.svg" label="Problem" color="#BD0505" />
-        <CaseBadge icon="/hmc/icons/cost.svg" label="Business Cost" color="#7F5C16" />
-      </div>
-      <div className="annotation-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-5)', alignItems: 'stretch' }}>
-        {cols.map((col, i) => (
-          <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ ...dashedCard, flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '7px', marginBottom: '10px' }}>
-                <img src="/hmc/icons/problem.svg" alt="" aria-hidden style={{ width: 14, height: 14, flexShrink: 0, marginTop: '2px' }} />
-                <span style={{ fontSize: 'var(--text-base)', fontWeight: 500, lineHeight: 1.35, color: problemColor, transition: 'var(--transition-theme)' }}>
-                  {col.problem}
-                </span>
-              </div>
-              <p style={{ margin: 0, fontSize: 'var(--text-base)', lineHeight: 1.55, color: 'var(--color-text-secondary)', transition: 'var(--transition-theme)' }}>
-                {col.description}
-              </p>
+    <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+      <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'flex-start' }}>
+        {items.map((item, i) => (
+          <div key={i} style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+            {/* Fixed-height slot shared by all three columns, image bottom-anchored — keeps captions aligned regardless of each image's own height. */}
+            <div style={{ height: `${rowHeight}px`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end' }}>
+              <img src={item.src} alt={item.alt} style={{ display: 'block', maxWidth: '100%', height: `${item.imgHeight}px`, maxHeight: '100%', objectFit: 'contain', objectPosition: 'center bottom' }} />
             </div>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-1)', marginTop: 'var(--space-5)' }}>
-              <div style={{ width: 22, height: 22, borderRadius: 'var(--radius-full)', background: costFill, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: 3 }}>
-                <img src="/hmc/icons/cost.svg" alt="" aria-hidden style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain' }} />
-              </div>
-              <span style={{ background: costFill, borderRadius: 'var(--radius-full)', padding: '3px 8px', fontSize: '13px', fontWeight: 500, lineHeight: 1.35, color: costColor, transition: 'var(--transition-theme)' }}>
-                {col.cost}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function RampBeforeAnnotations() {
-  const problemColor = '#BD0505'
-  const costColor = '#7F5C16'
-  const costFill = 'rgba(127,92,22,0.12)'
-  const cols = [
-    {
-      problem: 'The ramp plan showed assignments, and not progress',
-      description: 'The view showed the planned assignments but service progress and delays were not captured, so the manager learned them by walking the floor.',
-      cost: 'late discoveries of delays',
-    },
-    {
-      problem: 'The ramp plan could not be changed from the tool',
-      description: 'When a service ran over or a ramp freed up, reassignment of vehicle-services happened verbally on the floor.',
-      cost: 'manual verbal hand off hours',
-    },
-  ]
-
-  return (
-    <div>
-      <div style={{ display: 'flex', gap: 'var(--space-4)', marginBottom: '16px' }}>
-        <CaseBadge icon="/hmc/icons/problem.svg" label="Problem" color="#BD0505" />
-        <CaseBadge icon="/hmc/icons/cost.svg" label="Business Cost" color="#7F5C16" />
-      </div>
-      <div className="annotation-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-5)', alignItems: 'stretch' }}>
-        {cols.map((col, i) => (
-          <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ ...dashedCard, flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '7px', marginBottom: '10px' }}>
-                <img src="/hmc/icons/problem.svg" alt="" aria-hidden style={{ width: 14, height: 14, flexShrink: 0, marginTop: '2px' }} />
-                <span style={{ fontSize: 'var(--text-base)', fontWeight: 500, lineHeight: 1.35, color: problemColor, transition: 'var(--transition-theme)' }}>
-                  {col.problem}
-                </span>
-              </div>
-              <p style={{ margin: 0, fontSize: 'var(--text-base)', lineHeight: 1.55, color: 'var(--color-text-secondary)', transition: 'var(--transition-theme)' }}>
-                {col.description}
-              </p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-1)', marginTop: 'var(--space-5)' }}>
-              <div style={{ width: 22, height: 22, borderRadius: 'var(--radius-full)', background: costFill, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: 3 }}>
-                <img src="/hmc/icons/cost.svg" alt="" aria-hidden style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain' }} />
-              </div>
-              <span style={{ background: costFill, borderRadius: 'var(--radius-full)', padding: '3px 8px', fontSize: '13px', fontWeight: 500, lineHeight: 1.35, color: costColor, transition: 'var(--transition-theme)' }}>
-                {col.cost}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function Problem3BeforeAnnotations() {
-  const problemColor = '#BD0505'
-  const costColor = '#7F5C16'
-  const costFill = 'rgba(127,92,22,0.12)'
-  const cols = [
-    {
-      problem: 'No data ranked the demands',
-      description: "Waiting durations, stalled services, and finished-vehicle counts weren't captured anywhere. The manager responded to demands that were visible while the critical demands waited behind.",
-      cost: 'turnaround time increased',
-    },
-    {
-      problem: 'Customer waiting time was unknown',
-      description: 'Tokens were issued on paper, without timestamps. Waiting time was unknowable from the moment a customer entered.',
-      cost: 'customer dissatisfaction',
-    },
-  ]
-
-  return (
-    <div>
-      <div style={{ display: 'flex', gap: 'var(--space-4)', marginBottom: '16px' }}>
-        <CaseBadge icon="/hmc/icons/problem.svg" label="Problem" color="#BD0505" />
-        <CaseBadge icon="/hmc/icons/cost.svg" label="Business Cost" color="#7F5C16" />
-      </div>
-      <div className="annotation-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-5)', alignItems: 'stretch' }}>
-        {cols.map((col, i) => (
-          <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ ...dashedCard, flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '7px', marginBottom: '10px' }}>
-                <img src="/hmc/icons/problem.svg" alt="" aria-hidden style={{ width: 14, height: 14, flexShrink: 0, marginTop: '2px' }} />
-                <span style={{ fontSize: 'var(--text-base)', fontWeight: 500, lineHeight: 1.35, color: problemColor, transition: 'var(--transition-theme)' }}>
-                  {col.problem}
-                </span>
-              </div>
-              <p style={{ margin: 0, fontSize: 'var(--text-base)', lineHeight: 1.55, color: 'var(--color-text-secondary)', transition: 'var(--transition-theme)' }}>
-                {col.description}
-              </p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-1)', marginTop: 'var(--space-5)' }}>
-              <div style={{ width: 22, height: 22, borderRadius: 'var(--radius-full)', background: costFill, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: 3 }}>
-                <img src="/hmc/icons/cost.svg" alt="" aria-hidden style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain' }} />
-              </div>
-              <span style={{ background: costFill, borderRadius: 'var(--radius-full)', padding: '3px 8px', fontSize: '13px', fontWeight: 500, lineHeight: 1.35, color: costColor, transition: 'var(--transition-theme)' }}>
-                {col.cost}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function ExploredAnnotations() {
-  const constraintColor = 'rgba(194,111,23,0.85)'
-  const pivotColor = 'rgba(107,114,128,0.9)'
-  const pivotFill = 'rgba(107,114,128,0.10)'
-  const cols = [
-    {
-      title: 'Next-day scheduling had no data to run on',
-      body: "Shift ≠ availability. Technician's availability was only known on the day",
-      resolution: 'Next-day scheduling dropped; pivoted to live tracking vehicle-service status',
-    },
-    {
-      title: 'Integration across diverse systems was expensive',
-      body: `Technician's "presence" data sat in systems (HR systems, DMS, biometric) varied by centre`,
-      resolution: "Technician presence data collection moved into the Technician's app",
-    },
-    {
-      title: 'Training and expertise was held out of scope',
-      body: 'The signal needed skill data from a proposed training module which was not approved for MVP.',
-      resolution: "Excluded from the decision-support signal, showcased poc's in Technician App",
-    },
-  ]
-
-  return (
-    <div>
-      <div style={{ display: 'flex', gap: 'var(--space-4)', marginBottom: '16px' }}>
-        <CaseBadge icon="/hmc/icons/constraints.svg" label="Constraint" color="#C26F17" />
-        <CaseBadge icon="/hmc/icons/pivots.svg" label="Pivot" color="#6B7280" />
-      </div>
-      <div className="annotation-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-5)', alignItems: 'stretch' }}>
-        {cols.map((col, i) => (
-          <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ ...dashedCard, flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '7px', marginBottom: '8px' }}>
-                <img src="/hmc/icons/constraints.svg" alt="" aria-hidden style={{ width: 12, height: 12, flexShrink: 0, marginTop: '3px' }} />
-                <span style={{ fontSize: 'var(--text-base)', fontWeight: 500, lineHeight: 1.35, color: constraintColor, transition: 'var(--transition-theme)' }}>
-                  {col.title}
-                </span>
-              </div>
-              <p style={{ margin: 0, fontSize: 'var(--text-base)', lineHeight: 1.55, color: 'var(--color-text-secondary)', transition: 'var(--transition-theme)' }}>
-                {col.body}
-              </p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-1)', marginTop: 'var(--space-5)' }}>
-              <div style={{ width: 20, height: 20, borderRadius: 'var(--radius-full)', background: pivotFill, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: 3 }}>
-                <img src="/hmc/icons/pivots.svg" alt="" aria-hidden style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain' }} />
-              </div>
-              <span style={{ background: pivotFill, borderRadius: 'var(--radius-full)', padding: '3px 14px', fontSize: '13px', fontWeight: 500, lineHeight: 1.35, color: pivotColor, transition: 'var(--transition-theme)' }}>
-                {col.resolution}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function FinalAnnotations() {
-  const intentColor = 'rgba(15,124,102,0.9)'
-  const cards = [
-    {
-      title: 'Login created the availability input at every centre',
-      body: 'Technicians set availability and ramp at daily login. This gave every centre the same input, independent of the systems.',
-    },
-    {
-      title: 'Service status provided a real-time visibility',
-      body: 'Tagging and tracking service statuses such as unassigned, not started, ongoing, delayed provided real-time vehicle status.',
-    },
-  ]
-
-  return (
-    <div>
-      <CaseBadge icon="/hmc/icons/intent.svg" label="Intent" color="#0F7C66" style={{ marginBottom: '16px' }} />
-      <div className="annotation-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-5)' }}>
-        {cards.map((card, i) => (
-          <div key={i} style={dashedCard}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '7px', marginBottom: '8px' }}>
-              <img src="/hmc/icons/intent.svg" alt="" aria-hidden style={{ width: 12, height: 12, flexShrink: 0, marginTop: '3px' }} />
-              <span style={{ fontSize: 'var(--text-base)', fontWeight: 500, lineHeight: 1.35, color: intentColor, transition: 'var(--transition-theme)' }}>
-                {card.title}
-              </span>
-            </div>
-            <p style={{ margin: 0, fontSize: 'var(--text-base)', lineHeight: 1.55, color: 'var(--color-text-secondary)', transition: 'var(--transition-theme)' }}>
-              {card.body}
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-sm)', fontWeight: 400, lineHeight: 1.5, color: 'var(--color-text-secondary)', margin: 0, transition: 'var(--transition-theme)' }}>
+              {item.caption}
             </p>
           </div>
         ))}
       </div>
+      <div style={{ marginTop: 'var(--space-6)' }}>
+        <ProblemCostAnnotations columns={[
+          {
+            problem: "The customer's narration did not match the order of the form",
+            description: 'Customers described issues as they came to mind. The collapse-and-expand sections meant the manager scrolled back to find each one.',
+            cost: 'Time spent documenting, and errors in what was documented',
+          },
+          {
+            problem: 'Context that did not fit any form field was verbally relayed.',
+            description: "Notes about the vehicle's history or past incidents could not be captured in the form. Typing them took longer than talking, so managers relayed them to the technician on the workshop floor instead. SMEs estimated this happened for about a third of vehicles.",
+            cost: 'Managers held the context, walked to workshop floors',
+          },
+        ]} />
+      </div>
+    </div>
+  )
+}
+
+/** Findings from testing the Solution 2A dashboard — used in scenario 03. */
+function Solution2AFindings() {
+  const findings: { label: string; header: string; description: ReactNode }[] = [
+    {
+      label: '#1',
+      header: 'What was critical shifted with the time of day',
+      description: 'I designed for one operational state. Testing showed customer intake dominated the morning, and inspections, billing, and deliveries dominated the evening.',
+    },
+    {
+      label: '#2',
+      header: 'What each widget held depended on the service',
+      description: 'I assumed incorrectly that inspection was a mandatory step in every vehicle-service. Inspection depth varies by service type, and a well-planned service rarely raises a mid-service approval.',
+    },
+    {
+      label: '#3',
+      header: 'The same dashboard had to hold across centre formats',
+      description: 'I knew centres ranged in size. I had not accounted for the services differing by format.',
+    },
+  ]
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
+      {findings.map((item, i) => (
+        <div
+          key={i}
+          style={{
+            background: 'var(--color-surface-card)',
+            borderRadius: 'var(--radius-card)',
+            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='%23BEC1C3' stroke-width='0.6' stroke-dasharray='2%2c2'/%3e%3c/svg%3e")`,
+            padding: 'var(--space-5)',
+            transition: 'var(--transition-theme)',
+          }}
+        >
+          <span style={findingCardEyebrow}>{item.label}</span>
+          <p style={findingCardHeader}>{item.header}</p>
+          <div style={findingCardDesc}>{item.description}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/** Metric cards for the Impact section — dashed-card pattern matching fidelity's impact/learnings cards. */
+function ImpactCards() {
+  const cards: { title: ReactNode; description: string }[] = [
+    {
+      title: '15 min → ~7 min',
+      description: 'Documentation time cut by roughly 50%.',
+    },
+    {
+      title: (
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden style={{ flexShrink: 0 }}>
+            <path d="M10 3v9m0 0-3.5-3.5M10 12l3.5-3.5" stroke="var(--color-text-title)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M4 14v1.5A1.5 1.5 0 0 0 5.5 17h9a1.5 1.5 0 0 0 1.5-1.5V14" stroke="var(--color-text-title)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          100K+ downloads
+        </span>
+      ),
+      description: "App shipped and live across Hero MotoCorp's authorised-dealer network.",
+    },
+  ]
+
+  return (
+    <div className="annotation-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-5)', marginTop: 'var(--space-8)' }}>
+      {cards.map((card, i) => (
+        <div
+          key={i}
+          style={{
+            borderRadius: 'var(--radius-card)',
+            background: 'var(--color-surface-card)',
+            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='%23BEC1C3' stroke-width='0.6' stroke-dasharray='2%2c2'/%3e%3c/svg%3e")`,
+            padding: '20px 24px',
+            transition: 'var(--transition-theme)',
+          }}
+        >
+          <h4
+            style={{
+              margin: '0 0 10px',
+              fontSize: 'var(--text-lg)',
+              fontWeight: 600,
+              lineHeight: 1.3,
+              color: 'var(--color-text-title)',
+              transition: 'var(--transition-theme)',
+            }}
+          >
+            {card.title}
+          </h4>
+          <p style={{ ...pStyle, margin: 0 }}>{card.description}</p>
+        </div>
+      ))}
     </div>
   )
 }
@@ -416,141 +239,12 @@ export default function HeroMotoCorp() {
       }}
     >
 
-      {/* ── Hero / Title ── */}
+      {/* ── Hero thumbnail ── */}
       <section style={{ paddingTop: 'var(--space-10)' }}>
         <div className="layout-header-pad" style={{ padding: '0 var(--space-12)' }}>
-        <div style={{ borderRadius: 'var(--radius-card)', overflow: 'hidden', height: '480px' }}>
-          <img src="/hmc/casestudy_thumbnail.png" alt="Hero image — service dashboard on tablet + mobile" style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: '50% 50%' }} />
-        </div>
-        <div className="layout-content layout-content--centered layout-content--prose" style={{ marginTop: '32px' }}>
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'var(--text-sm)',
-              fontWeight: 500,
-              letterSpacing: '.09em',
-              textTransform: 'uppercase' as const,
-              color: 'var(--color-text-secondary)',
-              marginBottom: '22px',
-              transition: 'var(--transition-theme)',
-            }}
-          >
-            Hero MotoCorp · 2023
+          <div style={{ borderRadius: 'var(--radius-card)', overflow: 'hidden', height: '480px' }}>
+            <img src="/hmc/casestudy_thumbnail.png" alt="Hero image — service dashboard on tablet + mobile" style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', objectPosition: '50% 50%' }} />
           </div>
-          <h1
-            style={{
-              fontSize: 'var(--text-xl)',
-              lineHeight: 1.1,
-              fontWeight: 600,
-              letterSpacing: '-0.025em',
-              color: 'var(--color-text-title)',
-              margin: '0 0 32px',
-              transition: 'var(--transition-theme)',
-            }}
-          >
-            Vehicle Service Management Tools for Service Managers running two-wheeler service centres.
-          </h1>
-          <Overview items={overviewItems} />
-
-          {/* ── Problem / Solution summary cards ── */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 'var(--space-10)',
-              marginTop: 'var(--space-8)',
-            }}
-          >
-            {/* Left: Problem Overview */}
-            <Card>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  textTransform: 'uppercase' as const,
-                  letterSpacing: '.12em',
-                  color: 'var(--color-text-meta)',
-                  display: 'block',
-                  marginBottom: '14px',
-                  transition: 'var(--transition-theme)',
-                }}
-              >
-                Problem Overview
-              </span>
-              <p
-                style={{
-                  fontSize: 'var(--text-base)',
-                  lineHeight: 1.65,
-                  color: 'var(--color-text-secondary)',
-                  margin: 0,
-                  transition: 'var(--transition-theme)',
-                }}
-              >
-                A two-wheeler service centre ran on multiple staff roles working in physically separate zones. One of these roles, the service manager, managed the entire centre's operations. They relied on manually gathering information from each zone, which caused increased waiting times, vehicle idle time, and delayed deliveries.
-              </p>
-            </Card>
-
-            {/* Right: Solution & Impact */}
-            <Card>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '.12em',
-                    color: 'var(--color-text-meta)',
-                    transition: 'var(--transition-theme)',
-                  }}
-                >
-                  Solution &amp; Impact
-                </span>
-                <a
-                  href="#scenario-01"
-                  className="fill-btn fill-btn--subtle fill-btn--left"
-                  onClick={e => {
-                    e.preventDefault()
-                    document.getElementById('scenario-01')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                  }}
-                  style={{
-                    position: 'relative',
-                    overflow: 'hidden',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '32px',
-                    padding: '0 14px',
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: 'var(--text-base)',
-                    fontWeight: 400,
-                    background: 'transparent',
-                    borderRadius: 'var(--radius-btn)',
-                    color: 'var(--color-text-secondary)',
-                    textDecoration: 'none',
-                    cursor: 'pointer',
-                    transition: `border-color 0.4s var(--ease-standard), var(--transition-theme)`,
-                  }}
-                >
-                  view solution
-                </a>
-              </div>
-              <p
-                style={{
-                  fontSize: 'var(--text-base)',
-                  lineHeight: 1.65,
-                  color: 'var(--color-text-secondary)',
-                  margin: 0,
-                  transition: 'var(--transition-theme)',
-                }}
-              >
-                I led the design of service manager workflows and tools such as dashboard and workshop floor visualisation. Testing revealed that redesign IA and workflow cut documentation completion time by ~54%.{' '}
-                The app is distributed across Hero MotoCorp's service dealership network, with 100K+ downloads on the Play Store (functionally gated to authorised dealers, so downloads track the intended workforce across 6,000+ centres).
-              </p>
-            </Card>
-          </div>
-        </div>
         </div>
       </section>
 
@@ -563,6 +257,59 @@ export default function HeroMotoCorp() {
         <main style={{ background: 'var(--color-surface-main)', minWidth: 0, transition: 'var(--transition-theme)' }}>
           <div className="layout-main-pad" style={{ padding: 'var(--space-10) var(--space-12) 60px' }}>
             <div className="layout-content layout-content--centered layout-content--prose">
+
+            {/* ════════════════════════════════════════ */}
+            {/* OVERVIEW                                */}
+            {/* ════════════════════════════════════════ */}
+            <section id="overview">
+              <h1
+                style={{
+                  fontSize: 'var(--text-xl)',
+                  lineHeight: 1.1,
+                  fontWeight: 600,
+                  letterSpacing: '-0.025em',
+                  color: 'var(--color-text-title)',
+                  margin: '0 0 32px',
+                  transition: 'var(--transition-theme)',
+                }}
+              >
+                Vehicle Service Management Tools for Service Managers running two-wheeler service centres.
+              </h1>
+              <div style={{ marginBottom: 'var(--space-8)' }}>
+                <span style={eyebrowStyle}>Overview</span>
+                <p style={{ ...pStyle, margin: 0 }}>
+                  A two-wheeler service centre ran on multiple staff roles working in physically separate zones. One of these roles, the service manager, managed the entire centre's operations. They relied on manually gathering information from each zone, which caused increased waiting times, vehicle idle time, and delayed deliveries.
+                </p>
+              </div>
+              <div style={{ marginBottom: 'var(--space-8)' }}>
+                <span style={eyebrowStyle}>Impact</span>
+                <p style={{ ...pStyle, margin: 0 }}>
+                  I led the design of service manager workflows and tools — dashboard, workshop floor visualisation, and documentation. Testing showed the redesigned IA cut documentation completion time by ~54%. The app shipped across Hero MotoCorp's authorised-dealer network, with{' '}
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.hero.serviceapp&hl=en_US"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'var(--color-text-title)', textDecoration: 'underline', textUnderlineOffset: '2px', transition: 'var(--transition-theme)' }}
+                  >
+                    100K+ Play Store downloads
+                  </a>.
+                </p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-10)', marginBottom: 'var(--space-8)' }}>
+                <div>
+                  <span style={eyebrowStyle}>Duration</span>
+                  <p style={{ ...pStyle, margin: 0 }}>9 weeks (2023)</p>
+                </div>
+                <div>
+                  <span style={eyebrowStyle}>My Role</span>
+                  <p style={{ ...pStyle, margin: 0 }}>UX Designer &amp; Team Lead</p>
+                </div>
+                <div>
+                  <span style={eyebrowStyle}>Team</span>
+                  <p style={{ ...pStyle, margin: 0 }}>2 UX Designers, 2 Visual Designers</p>
+                </div>
+              </div>
+            </section>
 
             {/* ════════════════════════════════════════ */}
             {/* 01 CONTEXT                              */}
@@ -582,7 +329,7 @@ export default function HeroMotoCorp() {
                 header="The Service Manager is accountable for the service centre's operations starting from vehicle entry to delivery."
               >
                 <p style={pStyle}>
-                  Their operations span customer engagement and alignment, vehicle-service documentation, estimating service duration, assigning vehicles to technicians' ramps, assessing service quality, and processing payment through to checkout.
+                  The Service Manager's operations span customer engagement, alignment, vehicle-service documentation, estimating service duration, assigning vehicles to technicians' ramps, assessing service quality, and processing payment through to checkout.
                 </p>
                 <p style={{ ...pStyle, margin: 0 }}>
                   Top three most important business goals were increasing the number of vehicles serviced, improving on-time vehicle-service delivery, and driving overall customer satisfaction.
@@ -616,57 +363,142 @@ export default function HeroMotoCorp() {
             </section>
 
             {/* ════════════════════════════════════════ */}
+            {/* SCOPE                                   */}
+            {/* ════════════════════════════════════════ */}
+            <section id="scope" style={sectionStyle}>
+              <Block
+                eyebrow="Scope"
+                header="An agency engagement with no direct research access"
+              >
+                <p style={{ ...pStyle, margin: 0 }}>
+                  This project with Hero MotoCorp (client) ran remotely through COVID. Primary research at the service centres was not in scope, so we worked from stakeholder interviews and concept testing with four service executives and a product manager who were the SMEs engaged throughout the project. They were the source for how centres actually ran, and concept testing was how I checked design decisions against that.
+                </p>
+              </Block>
+            </section>
+
+            {/* ════════════════════════════════════════ */}
             {/* 03 SCENARIO 01 — ASSIGNING VEHICLES     */}
             {/* ════════════════════════════════════════ */}
             <ScenarioGroup id="scenario-01">
 
               <DiagramSection
                 wide={false}
+                hideStageLabel
+                diagramPadding="0"
                 counter="Problem 1"
                 stage="before"
                 title="To assign a vehicle to a technician's ramp, the manager had to physically walk the workshop floor to find out who was free."
                 description="Once a vehicle's service plan was documented, the service manager had to assign it to a technician's ramp for servicing. But the manager had no data on technician availability or workshop status, so they physically moved to the workshop floor to gather this information manually."
                 tabs={[{
                   id: 'starting',
-                  diagramTitle: "Technician assignment ran on floor-walks and the manager's memory",
-                  diagramBadges: [{ icon: '/hmc/icons/friction.svg', label: 'Friction in workflow', color: '#BD0505' }],
-                  diagram: <img src="/hmc/workflow-before.svg" alt="Starting point: manual technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />,
-                  annotations: <BeforeAnnotations />,
+                  diagram: (
+                    <>
+                      <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-2)', transition: 'var(--transition-theme)' }}>
+                        <div style={{ position: 'relative' }}>
+                          <img src="/hmc/workflow-before.svg" alt="Starting point: manual technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />
+                          <CaseBadge icon="/hmc/icons/friction.svg" label="Friction in workflow" color="#BD0505" style={{ position: 'absolute', top: 'var(--space-3)', right: 'var(--space-3)' }} />
+                        </div>
+                      </div>
+                      <div style={{ marginTop: 'var(--space-6)' }}>
+                        <ProblemCostAnnotations columns={[
+                          {
+                            problem: "Limited visibility into Technician's availability",
+                            description: 'Managers planned the vehicle-service first and checked workshop availability afterward, resulting in queued vehicles without an assigned technician.',
+                            cost: 'Assignment overhead on every vehicle',
+                          },
+                          {
+                            problem: 'Reassignment relied on the manager remembering unassigned vehicles',
+                            description: 'Unassigned vehicles created a mental load for the manager, who had to track availability and reassign each one as technicians freed up.',
+                            cost: 'Vehicles sat idle & turnaround time increased',
+                          },
+                          {
+                            problem: 'Deliveries promised against inaccurate availabilities',
+                            description: "Without visibility into the centre's real-time workload, delivery estimates were made on inaccurate assumptions.",
+                            cost: 'Delays surfaced at pickup led to customer dissatisfaction',
+                          },
+                        ]} />
+                      </div>
+                    </>
+                  ),
                 }]}
               />
 
               <DiagramSection
                 wide={false}
+                hideStageLabel
+                card={false}
+                diagramPadding="0"
                 stage="after"
-                solutionLabel="Solution 1A"
-                title="A technician assignment workflow that pulled availability data into the manager's screen."
-                description="I designed a workflow that let the manager assign a documented vehicle to a specific technician's ramp without leaving the tool."
-                defaultTabId="final"
-                tabs={[
-                  {
-                    id: 'explored',
-                    label: 'Explored, not pursued',
-                    diagramTitle: 'Next-day scheduling needed availability data that no system held',
-                    diagramBadges: [
-                      { icon: '/hmc/icons/redesign.svg', label: 'Redesigned workflow', color: '#0F7C66' },
-                      { icon: '/hmc/icons/constraints.svg', label: 'Constraints', color: '#C26F17' },
-                    ],
-                    diagram: <img src="/hmc/explored.svg" alt="Explored workflow: next-day scheduling approach" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />,
-                    annotations: <ExploredAnnotations />,
-                  },
-                  {
-                    id: 'final',
-                    label: 'Final workflow',
-                    diagramTitle: 'Technician assignment ran on availability data the app collected',
-                    diagramBadges: [{ icon: '/hmc/icons/redesign.svg', label: 'Redesigned workflow', color: '#0F7C66' }],
-                    diagram: <img src="/hmc/workflow-after.svg" alt="Final redesigned technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />,
-                    annotations: <FinalAnnotations />,
-                  },
-                ]}
+                solutionLabel="Solution 1A · Exploration"
+                title="I explored a technician assignment workflow that pulled availability data from external HR and dealer management systems."
+                description={
+                  <>
+                    <p style={{ ...pStyle, margin: '0 0 var(--space-4)' }}>
+                      I explored existing systems that held workforce data, such as HR systems which held biometric attendance, and the dealer management systems that held rosters and shift information.
+                    </p>
+                    <p style={{ ...pStyle, margin: '0 0 var(--space-4)' }}>
+                      However, these systems lacked information on whether the technicians were present on the workshop or available to take a vehicle. This was known only on the day, and hence next-day scheduling had no reliable data.
+                    </p>
+                    <p style={{ ...pStyle, margin: 0 }}>
+                      The systems also differed by centre, and integrating each one was a separate build.
+                    </p>
+                  </>
+                }
+                tabs={[{
+                  id: 'explored',
+                  diagram: (
+                    <div>
+                      {/* Grey card: diagram title + image + constraints */}
+                      <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                        <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-2)', marginBottom: 'var(--space-8)', transition: 'var(--transition-theme)' }}>
+                          <img src="/hmc/explored-workflow.png" alt="Explored workflow: next-day scheduling approach" style={{ display: 'block', width: '100%' }} />
+                        </div>
+                        <p style={{ ...pStyle, margin: '0 0 var(--space-5)', maxWidth: 'none' }}>
+                          Two constraints came out of the feasibility discussion with the SMEs and service managers: external system reliability and integration cost.
+                        </p>
+                        <ConstraintPivotGrid entries={[
+                          {
+                            title: 'Next-day scheduling had no data to run on',
+                            description: "Shift ≠ availability. Technician's availability was only known on the day, so there was no source for forward scheduling.",
+                            pivot: 'Live tracking of Technician availability through vehicle-service status',
+                          },
+                          {
+                            title: 'Integration across diverse systems was expensive',
+                            description: "Technician presence data sat in systems (HR, DMS, biometric) that varied by centre. Integrating them was outside the scope and budget of the MVP.",
+                            pivot: "Technician presence data collected through App's daily login",
+                          },
+                          {
+                            title: 'Training and expertise data came from an external system',
+                            description: 'This decision-support signal needed skill data from a proposed training module integration that was not approved for MVP.',
+                            pivot: "Not prioritised for this release.",
+                          },
+                        ]} />
+                      </div>
+
+                      {/* Final section */}
+                      <div style={{ marginTop: 'var(--space-8)' }}>
+                        <span style={eyebrowStyle}>Solution 1A · Final</span>
+                        <h2 style={{ fontSize: 'var(--text-lg)', lineHeight: 1.22, fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--color-text-title)', margin: '0 0 14px', maxWidth: 'var(--content-width-prose)', transition: 'var(--transition-theme)' }}>
+                          A technician assignment workflow that pulled availability data from the technician's app into the manager's screen.
+                        </h2>
+                        <p style={{ ...pStyle, margin: '0 0 var(--space-6)' }}>
+                          I designed a workflow where the Technicians set availability and ramp at daily login on Technician's app. This login input provides every centre the same input, independent of the systems. Tagging and tracking service statuses such as unassigned, not started, ongoing, delayed provided real-time vehicle status.
+                        </p>
+                        <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                          <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-2)', transition: 'var(--transition-theme)' }}>
+                            <img src="/hmc/final-workflow.png" alt="Final redesigned technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ),
+                }]}
               />
 
               <DiagramSection
                 wide={false}
+                hideStageLabel
+                diagramPadding="0"
                 stage="after"
                 solutionLabel="Solution 1B · i"
                 title="When a technician was available"
@@ -679,6 +511,8 @@ export default function HeroMotoCorp() {
 
               <DiagramSection
                 wide={false}
+                hideStageLabel
+                diagramPadding="0"
                 stage="after"
                 solutionLabel="Solution 1B · ii"
                 title="When no technician was available"
@@ -691,6 +525,8 @@ export default function HeroMotoCorp() {
 
               <DiagramSection
                 wide={false}
+                hideStageLabel
+                diagramPadding="0"
                 stage="after"
                 solutionLabel="Solution 1B · iii"
                 title="When a technician freed up"
@@ -705,7 +541,7 @@ export default function HeroMotoCorp() {
                       muted
                       playsInline
                       onLoadedMetadata={e => { (e.target as HTMLVideoElement).playbackRate = 1 }}
-                      style={{ display: 'block', width: '60%', margin: '0 auto', borderRadius: 'var(--radius-sm)' }}
+                      style={{ display: 'block', width: '85%', margin: '0 auto', borderRadius: 'var(--radius-sm)' }}
                     />
                   ),
                 }]}
@@ -720,19 +556,40 @@ export default function HeroMotoCorp() {
 
               <DiagramSection
                 wide={false}
+                hideStageLabel
+                diagramPadding="0"
                 counter="Problem 2"
                 stage="before"
                 title="The tool showed the day's plan, and the manager still walked the floor to learn its progress"
-                description="The ramp plan showed which vehicles were assigned to which ramps, but not whether a service was progressing, delayed, or done — so managers walked the workshop floor to find out. Each walk answered the floor's state for that moment, and the state changed through the day."
+                description="The ramp plan showed which vehicles were assigned to which ramps, but not whether a service was progressing, delayed, or done. So managers walked the workshop floor to find out the floor's state for that moment, and the state changed through the day."
                 tabs={[{
                   id: 'ramp-before',
-                  diagram: <img src="/hmc/problem-2.png" alt="Ramp plan before — assignments only, no progress visibility" style={{ display: 'block', width: '70%', margin: '0 auto' }} />,
-                  annotations: <RampBeforeAnnotations />,
+                  diagram: (
+                    <>
+                      <img src="/hmc/problem-2.png" alt="Ramp plan before — assignments only, no progress visibility" style={{ display: 'block', width: '70%', margin: '0 auto' }} />
+                      <div style={{ marginTop: 'var(--space-6)' }}>
+                        <ProblemCostAnnotations columns={[
+                          {
+                            problem: 'The ramp plan showed assignments, and not progress',
+                            description: 'The view showed the planned assignments but service progress and delays were not captured, so the manager learned them by walking the floor.',
+                            cost: 'Late discoveries of delays',
+                          },
+                          {
+                            problem: 'The ramp plan could not be changed from the tool',
+                            description: 'When a service ran over or a ramp freed up, reassignment of vehicle-services happened verbally on the floor.',
+                            cost: 'Manual verbal hand-off hours',
+                          },
+                        ]} />
+                      </div>
+                    </>
+                  ),
                 }]}
               />
 
               <DiagramSection
                 wide={false}
+                hideStageLabel
+                diagramPadding="0"
                 stage="after"
                 solutionLabel="Solution 2"
                 title="A ramp and workshop view for mid-service tracking and reassignment."
@@ -761,58 +618,73 @@ export default function HeroMotoCorp() {
                   <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-10)', transition: 'var(--transition-theme)' }}>
                     <img src="/hmc/problem-3.png" alt="Problem 3 — real-time operations awareness" style={{ display: 'block', width: '100%' }} />
                   </div>
-                </div>
-                <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)', marginTop: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
-                  <Problem3BeforeAnnotations />
+                  <div style={{ marginTop: 'var(--space-6)' }}>
+                    <ProblemCostAnnotations columns={[
+                      {
+                        problem: 'No data ranked the demands',
+                        description: "Waiting durations, stalled services, and finished-vehicle counts weren't captured anywhere. The manager responded to demands that were visible while the critical demands waited behind.",
+                        cost: 'Turnaround time increased',
+                      },
+                      {
+                        problem: 'Customer waiting time was unknown',
+                        description: 'Tokens were issued on paper, without timestamps. Waiting time was unknowable from the moment a customer entered.',
+                        cost: 'Customer dissatisfaction',
+                      },
+                    ]} />
+                  </div>
                 </div>
               </Block>
 
               <DiagramSection
                 wide={false}
+                hideStageLabel
                 stage="after"
-                solutionLabel="Solution · 2a"
-                title="The first version ranked delays by criticality — until testing showed criticality shifts by time of day."
-                description="Working with SMEs, I mapped the delay points across the service journey and set out to surface them on a dashboard."
-                defaultTabId="starting"
+                solutionLabel="Solution · 3a · Exploration"
+                title="I explored a dashboard surfacing touchpoints where any delay costs the business."
+                description="Working with SMEs, I mapped the delay points across the service journey and set out to surface them on a dashboard. Each widget is a point where a delay has a cost such as customer satisfaction at intake, idle technicians at approvals, held ramps at inspection, and promised deliveries in the parking bay."
+                diagramPadding="0"
                 tabs={[
                   {
                     id: 'starting',
-                    label: 'Starting concept',
-                    diagramTitle: 'A dashboard of fixed widgets, one per touchpoint where waiting costs the business',
-                    diagram: <img src="/hmc/solution3-iteration.png" alt="Starting concept wireframe — fixed widget dashboard" style={{ display: 'block', width: '100%' }} />,
-                    annotations: (
-                      <p style={{ ...pStyle, margin: 0 }}>
-                        Each widget is a point where a delay has a cost such as customer satisfaction at intake, idle technicians at approvals, held ramps at inspection, and promised deliveries in the parking bay.
-                      </p>
-                    ),
-                  },
-                  {
-                    id: 'pivot',
-                    label: 'Pivotal iteration',
-                    diagramTitle: 'Testing showed criticality shifts by time of day — a fixed layout couldn\'t flex',
-                    diagram: <ImgStage label="Dashboard with equal-weighted tabs, annotated" />,
-                    annotations: (
-                      <div>
-                        <p style={{ ...pStyle, margin: '0 0 16px' }}>
-                          Testing with service executives and SMEs surfaced the flaw: what counts as critical shifts by time of day. Customer wait dominates the morning rush. Workshop floor and billing dominate the evening crunch. A fixed "top 5" would always be showing the wrong moment's priority.
+                    diagram: (
+                      <>
+                        <img src="/hmc/solution3-iteration.png" alt="Starting concept wireframe — fixed widget dashboard" style={{ display: 'block', width: '100%' }} />
+                        <p style={{ ...pStyle, margin: 'var(--space-6) 0 var(--space-5)' }}>
+                          Testing revealed three sources of variance the layout could not hold: time of day, service type, and service centre format.
                         </p>
-                        <p style={{ ...pStyle, margin: 0 }}>
-                          Instead of ranking, I gave each delay point its own equally-weighted tab — so the manager could navigate to whichever mattered at that moment.
-                        </p>
-                      </div>
+                        <Solution2AFindings />
+                      </>
                     ),
                   },
                 ]}
               />
 
+              <DiagramSection
+                wide={false}
+                hideStageLabel
+                stage="after"
+                solutionLabel="Solution · 3a · Final"
+                title="The final iteration made each category a tab with its own count."
+                description="Each category — tokens, ongoing jobs, billing, ramp plan, parking bay — became a tab carrying its own count. The tabs held the same order and position through the day, so the manager read where the load was from the numbers and moved to it. This system solved for the operational and service centre variance."
+                diagramPadding="0"
+                tabs={[
+                  {
+                    id: 'final',
+                    diagram: <img src="/hmc/solution-3-final.png" alt="Final dashboard — tabs per category with counts" style={{ display: 'block', width: '100%' }} />,
+                  },
+                ]}
+              />
+
               <Block
-                eyebrow="Solution · 2b"
+                eyebrow="Solution · 3b"
                 header="A persistent alert layer for anything that needed a prompt decision, regardless of which tab was open."
               >
                 <p style={pStyle}>
-                  Above the tabs, an alert layer stayed visible regardless of which tab the manager had open. Anything that required a prompt decision — a stalled approval, a customer waiting past a threshold, a vehicle idling too long — surfaced here so the manager didn't have to be looking at the right tab to see it.
+                  Above the tabs, an alert layer stayed visible regardless of which tab the manager had open. Anything that required a prompt decision a waiting inspection, a customer waiting past a threshold were surfaced as alerts so the manager didn't have to be looking at the right tab to see it.
                 </p>
-                <ImgStage label="Notifications / persistent alert layer, annotated" />
+                <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                  <img src="/hmc/solution-2b.png" alt="Persistent alert layer, annotated" style={{ display: 'block', width: '70%', margin: '0 auto' }} />
+                </div>
               </Block>
 
             </ScenarioGroup>
@@ -824,55 +696,76 @@ export default function HeroMotoCorp() {
 
               <Block
                 eyebrow="Problem 4"
-                header="The documentation tool served two audiences — customer and technician — and it was failing both."
+                header="The vehicle-service plan documentation flow forced the manager to scroll back and forth while the customer talked, and some context did not fit the form at all."
               >
                 <p style={pStyle}>
-                  The documentation tool had two jobs. First, it aligned the customer and the centre on what was being serviced and how long it would take. Second, the technician used it to understand what needed to be done on the vehicle. Both were failing.
+                  The documentation served two audiences. It aligned the customer and the centre on what was being serviced and how long it would take, and it told the technician what needed to be done on the vehicle.
                 </p>
-                <p style={pStyle}>
-                  <strong style={{ color: 'var(--color-text-title)', fontWeight: 600 }}>Customer alignment.</strong>{' '}
-                  Through a UX audit, I found that the current documentation flow's IA — with its collapse and expand interactions — forced the manager to scroll back and forth constantly. Customers don't narrate complaints in the order the form expects. As a customer described an issue, a part replacement got added; a complaint changed; the criticality shifted — all before the customer finished talking. The long-list format made managers waste time scrolling to find and jump into sections.
-                </p>
-                <p style={{ ...pStyle, margin: 0 }}>
-                  <strong style={{ color: 'var(--color-text-title)', fontWeight: 600 }}>Technician handoff.</strong>{' '}
-                  Some context that technicians needed to service the vehicle didn't fit into any tagged field. Typing it into the notes section on a tablet was too slow — so managers physically walked to the workshop and relayed it to the technician verbally. This was the same manual information gathering the rest of this project was designed to eliminate, surfacing again inside documentation. SMEs described this as roughly a third of job cards — an estimate, not a measured figure.
-                </p>
+                <ProblemFourTrio />
               </Block>
 
               <Block
-                eyebrow="Solution · 3a"
-                header="A redesigned IA with a sidebar to jump between sections, a preview of what was filled, and sticky quick-access fields."
+                eyebrow="Solution · 4a"
+                header="I redesigned the documentation IA with a sidebar to jump between sections, a preview of what was filled, and sticky quick-access fields."
               >
                 <p style={pStyle}>
-                  I restructured the form into a sidebar of sections the manager could jump between quickly. A preview of what was filled in each section gave the manager awareness of what was documented and what was missing, and gave the customer awareness of what was being captured. Frequently-edited fields — supervisor and criticality — were pulled out as sticky, quick-access items so the manager could change them from any section without navigating away.
+                  I restructured the form into a sidebar of sections the manager could jump between quickly. A preview of what was filled in each section gave the manager awareness of what was documented and what was missing, and gave the customer awareness of what was being captured. Frequently-edited fields like supervisor and service criticality were pulled out as sticky, quick-access items so the manager could change them from any section without navigating away.
                 </p>
-                <ImgStage label="Redesigned documentation IA — sidebar, preview, sticky fields, annotated" />
+                <video
+                  src="/hmc/solution-4.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  onLoadedMetadata={e => { (e.target as HTMLVideoElement).playbackRate = 1 }}
+                  style={{ display: 'block', width: '68%', margin: '18px auto', borderRadius: 'var(--radius-sm)' }}
+                />
               </Block>
 
               <Block
-                eyebrow="Solution · 3b"
-                header="Voice recording against complaints and overall notes — capturing the context that couldn't be typed, without another walk to the workshop."
+                eyebrow="Solution · 4b"
+                header="I introduced voice recording against complaints to capture the context that couldn't be typed, without having to walk to the workshop."
               >
                 <p style={pStyle}>
                   To avoid the physical trip and the manual handoff, I proposed a voice-recording option against individual complaints and the overall notes section. Instead of walking to the technician to relay context verbally, the manager could record it once and the technician could listen to it on the workshop floor.
                 </p>
-                <p style={pStyle}>
-                  Two considerations shaped the specification. The recording needed to cut through ambient workshop noise so the manager could speak at normal volume. And the technician needed to hear the recorded note clearly on a noisy workshop floor — so I proposed pairing the feature with earphones on the tablets.
-                </p>
-                <ImgStage label="Voice recording feature — noise handling, playback for technician" />
-                <TbdCallout>Iteration or decision-making story — how did I land on voice specifically vs. other options?</TbdCallout>
+                <div
+                  style={{
+                    borderLeft: '3px solid var(--color-border-hair-hover)',
+                    borderRadius: '0 var(--radius-sm) var(--radius-sm) 0',
+                    padding: '8px 16px',
+                    margin: 'var(--space-5) 0',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-eyebrow)',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      letterSpacing: 'var(--tracking-badge-label)',
+                      textTransform: 'uppercase',
+                      color: 'var(--color-text-meta)',
+                      display: 'block',
+                      marginBottom: '4px',
+                      transition: 'var(--transition-theme)',
+                    }}
+                  >
+                    Specification Note
+                  </span>
+                  <p style={{ ...pStyle, margin: 0, maxWidth: 'none' }}>
+                    The recording needed to cut through ambient workshop noise so the manager could speak at normal volume. And the technician needed to hear the recorded note clearly on a noisy workshop floor, so I proposed pairing the feature with earphones on the tablets.
+                  </p>
+                </div>
+                <video
+                  src="/hmc/voice-recording.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  onLoadedMetadata={e => { (e.target as HTMLVideoElement).playbackRate = 1 }}
+                  style={{ display: 'block', width: '68%', margin: '18px auto', borderRadius: 'var(--radius-sm)' }}
+                />
               </Block>
-
-              {/* Result — uses Learning component for the highlighted callout */}
-              <div style={{ marginBottom: '48px' }}>
-                <span style={eyebrowStyle}>Result</span>
-                <Learning>
-                  The redesigned IA cut documentation time roughly in half; voice recording was projected to remove verbal handoffs for a third of job cards.
-                </Learning>
-                <p style={{ ...pStyle, marginTop: '16px', margin: '16px 0 0' }}>
-                  Tested with service managers and executives, completing documentation for an average set of complaints took 7 minutes less using the redesigned IA than the original form — roughly a 50% reduction against a 13–15 minute baseline. The voice feature was projected to cut verbal handoffs for roughly a third of job cards, based on SME estimate — not measured post-launch.
-                </p>
-              </div>
 
             </ScenarioGroup>
 
@@ -881,21 +774,14 @@ export default function HeroMotoCorp() {
             {/* ════════════════════════════════════════ */}
             <section id="impact" style={sectionStyle}>
               <SectionDivider label="Impact" />
-              <h2 style={h2Style}>One tested outcome, one shipped-and-live signal, one labeled projection.</h2>
-              <div style={{ borderTop: '1px solid var(--color-border-hair)', marginTop: '8px', transition: 'var(--transition-theme)' }}>
-                <ImpactItem>
-                  <strong style={{ color: 'var(--color-text-title)', fontWeight: 600 }}>Documentation time cut by roughly 50%</strong>{' '}
-                  — 7 minutes off a 13–15 minute baseline in testing, with service managers and executives.
-                </ImpactItem>
-                <ImpactItem>
-                  <strong style={{ color: 'var(--color-text-title)', fontWeight: 600 }}>App shipped and live</strong>{' '}
-                  across Hero MotoCorp's authorised-dealer network, with 100K+ Play Store downloads (functionally gated to authorised dealers, so downloads track the intended workforce across 6,000+ centres).
-                </ImpactItem>
-                <ImpactItem>
-                  <strong style={{ color: 'var(--color-text-title)', fontWeight: 600 }}>Voice recording</strong>{' '}
-                  projected to cut verbal handoffs for roughly a third of job cards (SME estimate; not measured).
-                </ImpactItem>
-              </div>
+              <h2 style={h2Style}>I tested the documentation redesign, the one flow I could test before handing off to development.</h2>
+              <p style={pStyle}>
+                This was an agency engagement, so testing happened before the specification was handed off to the client's development team, and there was no research resource for post-launch measurement. Documentation was the one flow I could test in a session: it's a bounded task, repeated for every vehicle, with a clear before and after.
+              </p>
+              <p style={{ ...pStyle, margin: 0 }}>
+                I ran task-based testing with 3 service managers, comparing the original form against the redesigned IA on the same set of complaints.
+              </p>
+              <ImpactCards />
             </section>
 
             {/* ════════════════════════════════════════ */}
@@ -903,25 +789,38 @@ export default function HeroMotoCorp() {
             {/* ════════════════════════════════════════ */}
             <section id="learnings" style={sectionStyle}>
               <SectionDivider label="Learnings" />
-              <TbdCallout>
-                Your learnings — what to take from this project. Placeholder for the structural-consistency / adoption-as-design-problem synthesis if you want it, or something else.
-              </TbdCallout>
+              <div className="annotation-grid" style={{ gridTemplateColumns: '1fr', gap: 'var(--space-5)' }}>
+                {[
+                  {
+                    title: 'Concept testing surfaced more than stakeholder interviews did',
+                    description: 'Research resource was limited, so I had to choose where to spend it. While stakeholder interviews led to generic answers, putting a concept in front of them produced specific insights like how a day in service centre actually ran, which was pivotal to the dashboard concept.',
+                  },
+                  {
+                    title: 'Designing across 6,000 centres meant finding what stayed constant',
+                    description: "My instinct on the dashboard was to surface the top five things needing the manager's attention. Priority changed by hour, by service mix, and by centre, so any ranking the system produced would be wrong somewhere. I shifted to using the dashboard to communicate the state of the centre and alerts to communicate criticality, leaving the decision of what to act on with the manager.",
+                  },
+                  {
+                    title: 'A proposed feature carries a cost, and the case has to include when it does not apply',
+                    description: 'Voice recording needed audio infrastructure and development time. Proposing it meant stating what it was worth, what broke without it, and where it would not help. After the specification handed off, I had no way to protect the decision.',
+                  },
+                ].map((learning, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      background: 'var(--color-surface-card)',
+                      borderRadius: 'var(--radius-card)',
+                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='%23BEC1C3' stroke-width='0.6' stroke-dasharray='2%2c2'/%3e%3c/svg%3e")`,
+                      padding: 'var(--space-5)',
+                      transition: 'var(--transition-theme)',
+                    }}
+                  >
+                    <span style={findingCardEyebrow}>#{i + 1}</span>
+                    <p style={findingCardHeader}>{learning.title}</p>
+                    <div style={findingCardDesc}>{learning.description}</div>
+                  </div>
+                ))}
+              </div>
             </section>
-
-            {/* ════════════════════════════════════════ */}
-            {/* 07 WHAT I'D DO DIFFERENTLY              */}
-            {/* ════════════════════════════════════════ */}
-            <section id="differently" style={sectionStyle}>
-              <SectionDivider label="What I'd do differently" />
-              <h2 style={h2Style}>
-                Treat this as a service design project from the start — and design the workflows before the tools.
-              </h2>
-              <TbdCallout>
-                Expand in your own words. Your note says "Service Design Project — so design the workflows." If you want the measurement-handoff reflection folded in here too, or replacing this, say so.
-              </TbdCallout>
-            </section>
-
-
 
             </div>
           </div>

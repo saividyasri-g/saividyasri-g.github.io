@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 
 export const navItems = [
   { label: 'Work', to: '/', noActive: false },
-  { label: 'Experiments', to: '/#experiments', noActive: true },
+  { label: 'Lab', to: '/lab', noActive: false },
   { label: 'About', to: '/about', noActive: false },
 ]
 

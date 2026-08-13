@@ -68,7 +68,8 @@ export function ConstraintPivotGrid({ entries }: ConstraintPivotGridProps) {
           </div>
           <div style={{ width: pivotCardWidth, flexShrink: 0, background: pivotFill, borderRadius: 'var(--radius-card)', padding: 'var(--space-4) var(--space-5)', transition: 'var(--transition-theme)' }}>
             <span style={{ ...cardEyebrow, marginBottom: 'var(--space-2)', color: pivotLabelColor }}>Pivot</span>
-            <span style={{ fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--color-text-body)', transition: 'var(--transition-theme)' }}>
+            {/* Fixed dark text — this panel's fill (pivotFill) stays light in both themes, so text must not follow the theme-swapping body-text token. */}
+            <span style={{ fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--primitive-light-title)' }}>
               {entry.pivot}
             </span>
           </div>

@@ -11,6 +11,8 @@ interface Project {
   href: string
   comingSoon?: boolean
   imgContained?: boolean
+  /** Default scale for the thumbnail (e.g. 0.7 = shown 30% smaller); zooms to full size on hover. Omit for the standard fill treatment. */
+  imgScale?: number
 }
 
 const projects: Project[] = [
@@ -18,33 +20,49 @@ const projects: Project[] = [
     tags: ['Enterprise', 'B2B', '100K+ Downloads'],
     title: 'Vehicle Service Management Tools',
     desc: 'Dashboard and workshop floor visualisation tool for Service Managers to manage vehicle service operations efficiently.',
-    img: '/hmc/casestudy_thumbnail.png',
+    img: '/hmc-thumbnail.png',
     imgAlt: 'Service manager dashboard on tablet and mobile',
     href: '#/hmc',
+  },
+  {
+    tags: ['Enterprise', 'Compliance', 'Fidelity'],
+    title: 'Redesign of a Compliance Enterprise System',
+    desc: 'Restructuring a legacy compliance supervision tool that cut supervision review times by up to 71%',
+    img: '/fidelity/thumbnail.png',
+    imgAlt: 'Fidelity compliance system redesign — dashboard overview',
+    href: '#/fidelity',
+    imgContained: true,
   },
   {
     tags: ['Enterprise', 'B2B', 'Multi-Role'],
     title: 'Integrating Complex Multi-Stakeholder Workflows',
     desc: 'Removing avoidable vehicle idle times, technician waiting time and manual dependencies at vehicle service centres.',
-    img: null,
+    img: '/workflow-thumbnail.png',
     imgAlt: 'Multi-stakeholder service workflow across mobile screens',
     href: '#/multi-stakeholder',
+    imgScale: 0.7,
   },
   {
     tags: ['Marketplace', 'Growth Design'],
     title: 'Solving the Activation Problem in a Marketplace Platform',
     desc: 'Redesigning the supplier activation path — from a drop-off-heavy onboarding form to a guided, progressive flow that surfaced social proof at the moments of highest uncertainty.',
-    img: null,
+    img: '/tbm.png',
     imgAlt: 'Marketplace supplier activation flow',
     href: '#/marketplace',
+    imgScale: 0.7,
   },
+]
+
+/** School projects and self-directed concepts — shown in their own section below Work, using the same ProjectCard as the main grid. */
+const conceptProjects: Project[] = [
   {
-    tags: ['Enterprise', 'Compliance', 'Fidelity'],
-    title: 'Redesign of a Compliance Enterprise System',
-    desc: 'Restructuring a legacy compliance supervision tool that reduced the completion time of supervision review tasks by 30%.',
-    img: '/fidelity/thumbnail.png',
-    imgAlt: 'Fidelity compliance system redesign — dashboard overview',
-    href: '#/fidelity',
+    tags: ['Gen AI', 'Higher Ed', 'Concept'],
+    title: 'Course Compass',
+    desc: 'An AI-assisted course discovery concept that helps students identify relevant paths based on goals, constraints, and prior knowledge.',
+    img: '/course-compass-thumbnail.png',
+    imgAlt: 'Course Compass — AI course discovery concept',
+    href: '#',
+    comingSoon: true,
     imgContained: true,
   },
 ]
@@ -58,6 +76,7 @@ interface CardProps {
 
 function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps) {
   const [imgLoaded, setImgLoaded] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
 
   const stripesBg =
     'repeating-linear-gradient(135deg, var(--color-stripe-a) 0px, var(--color-stripe-a) 8px, var(--color-stripe-b) 8px, var(--color-stripe-b) 16px)'
@@ -82,8 +101,8 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps)
       tabIndex={project.comingSoon ? undefined : 0}
       onKeyDown={e => { if (!project.comingSoon && (e.key === 'Enter' || e.key === ' ')) window.location.hash = project.href.replace('#', '') }}
       aria-label={project.comingSoon ? undefined : `View case study: ${project.title}`}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onMouseEnter={() => { setIsHovered(true); onMouseEnter() }}
+      onMouseLeave={() => { setIsHovered(false); onMouseLeave() }}
     >
       {/* Thumbnail */}
       <div
@@ -140,6 +159,7 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps)
               height: project.imgContained ? 'calc(100% - 2 * var(--space-5))' : '100%',
               objectFit: project.imgContained ? 'contain' : 'cover',
               opacity: imgLoaded ? 1 : 0,
+              transform: project.imgScale ? `scale(${isHovered ? 0.8 : project.imgScale})` : undefined,
               transition: 'opacity 0.5s ease-out, transform 0.55s var(--ease-standard)',
             }}
           />
@@ -200,6 +220,7 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps)
 
 export default function Home() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [conceptHoveredIndex, setConceptHoveredIndex] = useState<number | null>(null)
 
   return (
     <div
@@ -258,6 +279,35 @@ export default function Home() {
             />
           ))}
         </div>
+
+        <section style={{ marginTop: 'var(--space-16)' }}>
+          <span
+            style={{
+              display: 'block',
+              marginBottom: 'var(--space-6)',
+              fontFamily: 'var(--font-eyebrow)',
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '.12em',
+              textTransform: 'uppercase' as const,
+              color: 'var(--color-text-meta)',
+              transition: 'var(--transition-theme)',
+            }}
+          >
+            Other Projects & Concepts
+          </span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: '1fr', gap: 'var(--space-6)' }}>
+            {conceptProjects.map((project, i) => (
+              <ProjectCard
+                key={project.title}
+                project={project}
+                dimmed={conceptHoveredIndex !== null && conceptHoveredIndex !== i}
+                onMouseEnter={() => setConceptHoveredIndex(i)}
+                onMouseLeave={() => setConceptHoveredIndex(null)}
+              />
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   )

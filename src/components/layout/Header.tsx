@@ -15,7 +15,7 @@ interface HeaderProps {
 
 const defaultItems: NavItem[] = [
   { label: 'Work', to: '/' },
-  { label: 'Experiments', to: '/#experiments', noActive: true },
+  { label: 'Lab', to: '/#lab', noActive: true },
   { label: 'About', to: '/#about', noActive: true },
 ]
 
