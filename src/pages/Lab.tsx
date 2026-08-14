@@ -277,7 +277,9 @@ export default function Lab() {
     thumbNode: (
       <FannedPhotos images={['/painting/IMG_7703.jpeg', '/painting/IMG_7704.jpeg', '/painting/IMG_7705.jpeg']} />
     ),
-    thumbAspect: '4 / 3',
+    // Taller than 4/3 — bottoms this card out flush with the Illustration
+    // card beside it in the bottom row.
+    thumbAspect: '6 / 5',
   }
 
   return (

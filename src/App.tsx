@@ -21,11 +21,22 @@ function ScrollbarGutter() {
   return null
 }
 
+/** Each route starts at the top of its own page — scroll position from the
+    previous page shouldn't carry over on navigation. */
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
 export default function App() {
   return (
     <ThemeProvider>
       <HashRouter>
         <ScrollbarGutter />
+        <ScrollToTop />
         <FloatingNav />
         <Routes>
           <Route path="/" element={<Home />} />

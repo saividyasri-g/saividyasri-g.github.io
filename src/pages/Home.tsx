@@ -28,7 +28,7 @@ const projects: Project[] = [
   {
     tags: ['Enterprise', 'Compliance', 'Fidelity'],
     title: 'Supervisory Workstation - Compliance Tool',
-    desc: 'Redesigning how managers at Fidelity Investments find the associate responsible for a compliance incident and file a supervision report.',
+    desc: 'Redesigned how managers at Fidelity Investments find the associate responsible for a compliance incident and file a supervision report.',
     img: '/fidelity/thumbnail.png',
     imgAlt: 'Fidelity compliance system redesign — dashboard overview',
     href: '#/fidelity',
