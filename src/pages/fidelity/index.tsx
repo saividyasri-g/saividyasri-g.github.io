@@ -181,7 +181,7 @@ export default function Fidelity() {
                 transition: 'var(--transition-theme)',
               }}
             >
-              Redesign of a Enterprise Tool for Compliance Supervision System
+              Supervisory Workstation - for Managers and Supervisory Principals reviewing compliance incidents
             </h1>
             <div style={{ marginBottom: 'var(--space-8)' }}>
               <span style={eyebrowStyle}>Overview</span>
@@ -592,7 +592,7 @@ export default function Fidelity() {
             {/* ════════════════════════════════════════ */}
             <section id="learnings" style={sectionStyle}>
               <SectionDivider label="Learnings" />
-              <div className="annotation-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-5)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
                 {[
                   {
                     title: 'Questioning the unquestioned revealed more insights',

@@ -191,6 +191,35 @@ a { text-decoration: none; }
   }
 }
 
+/* Lab painting stack — hovered photo lifts off the pile, carries to the front slot while
+   zoomed, then settles back to rest, all as one continuous timeline (not stitched
+   transitions) so the motion stays fluid instead of stepping between phases.
+   --from-x/--from-rot/--to-x/--to-rot are set inline per card by FannedPhotos. */
+@keyframes painting-card-to-front {
+  0% {
+    transform: translate(-50%, -50%) translateX(var(--from-x)) rotate(var(--from-rot)) scale(1);
+  }
+
+  38% {
+    transform: translate(-50%, -50%) translateX(var(--from-x)) rotate(var(--from-rot)) scale(var(--lift-scale));
+  }
+
+  72% {
+    transform: translate(-50%, -50%) translateX(var(--to-x)) rotate(var(--to-rot)) scale(var(--lift-scale));
+  }
+
+  100% {
+    transform: translate(-50%, -50%) translateX(var(--to-x)) rotate(var(--to-rot)) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .painting-card {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* ─── Responsive layout ──────────────────────────────────── */
 
 /* Inner content constraint — caps readable width on large screens.

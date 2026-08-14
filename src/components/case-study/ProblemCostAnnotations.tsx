@@ -1,7 +1,11 @@
+import type { ReactNode } from 'react'
+
 export interface AnnotationColumn {
   problem: string
   description: string
   cost: string
+  /** Optional media (image/video) rendered above this finding's card. */
+  media?: ReactNode
 }
 
 export interface ProblemCostAnnotationsProps {
@@ -53,40 +57,63 @@ export function ProblemCostAnnotations({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
-      {columns.map((col, i) => (
-        <div key={i} style={dashedCard}>
-          <div style={{ flex: 1 }}>
-            <span style={findingLabelStyle}>Finding #{i + 1}</span>
-            <p style={{ margin: '0 0 8px', fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--color-text-body)', transition: 'var(--transition-theme)' }}>
-              {col.problem}
-            </p>
-            <p style={descStyle}>
-              {col.description}
-            </p>
+      {columns.map((col, i) => {
+        const findingCard = (
+          <div style={dashedCard}>
+            <div style={{ flex: 1 }}>
+              <span style={findingLabelStyle}>Finding #{i + 1}</span>
+              <p style={{ margin: '0 0 8px', fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--color-text-body)', transition: 'var(--transition-theme)' }}>
+                {col.problem}
+              </p>
+              <p style={descStyle}>
+                {col.description}
+              </p>
+            </div>
+            <div style={{ width: costCardWidth, flexShrink: 0, background: costFill, borderRadius: 'var(--radius-card)', padding: 'var(--space-4) var(--space-5)', transition: 'var(--transition-theme)' }}>
+              <span
+                style={{
+                  display: 'block',
+                  marginBottom: 'var(--space-2)',
+                  fontFamily: 'var(--font-eyebrow)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: 'var(--tracking-badge-label)',
+                  textTransform: 'uppercase',
+                  color: costLabelColor,
+                  transition: 'var(--transition-theme)',
+                }}
+              >
+                Business Cost
+              </span>
+              {/* Fixed dark text — this panel's fill (costFill) stays light in both themes, so text must not follow the theme-swapping body-text token. */}
+              <span style={{ fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--primitive-light-title)' }}>
+                {col.cost}
+              </span>
+            </div>
           </div>
-          <div style={{ width: costCardWidth, flexShrink: 0, background: costFill, borderRadius: 'var(--radius-card)', padding: 'var(--space-4) var(--space-5)', transition: 'var(--transition-theme)' }}>
-            <span
-              style={{
-                display: 'block',
-                marginBottom: 'var(--space-2)',
-                fontFamily: 'var(--font-eyebrow)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: 'var(--tracking-badge-label)',
-                textTransform: 'uppercase',
-                color: costLabelColor,
-                transition: 'var(--transition-theme)',
-              }}
-            >
-              Business Cost
-            </span>
-            {/* Fixed dark text — this panel's fill (costFill) stays light in both themes, so text must not follow the theme-swapping body-text token. */}
-            <span style={{ fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--primitive-light-title)' }}>
-              {col.cost}
-            </span>
+        )
+
+        if (!col.media) return <div key={i}>{findingCard}</div>
+
+        {/* Finding card and its media share one grey container, mirroring the fidelity case study's video + findings grouping. */}
+        return (
+          <div
+            key={i}
+            style={{
+              background: 'var(--color-surface-sidebar)',
+              borderRadius: 'var(--radius-card)',
+              padding: 'var(--space-6)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--space-5)',
+              transition: 'var(--transition-theme)',
+            }}
+          >
+            {col.media}
+            {findingCard}
           </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }

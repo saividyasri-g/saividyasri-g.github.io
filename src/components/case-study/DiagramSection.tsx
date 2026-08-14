@@ -136,7 +136,7 @@ export function DiagramSection({
                   color: activeId === tab.id ? 'var(--color-text-title)' : 'var(--color-text-secondary)',
                   background: 'transparent',
                   border: 'none',
-                  borderRadius: 'var(--radius-sm)',
+                  borderRadius: 'var(--radius-lg)',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
                   transition: 'var(--transition-theme)',

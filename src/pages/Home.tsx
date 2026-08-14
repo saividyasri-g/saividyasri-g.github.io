@@ -23,29 +23,31 @@ const projects: Project[] = [
     img: '/hmc-thumbnail.png',
     imgAlt: 'Service manager dashboard on tablet and mobile',
     href: '#/hmc',
+    imgContained: true,
   },
   {
     tags: ['Enterprise', 'Compliance', 'Fidelity'],
-    title: 'Redesign of a Compliance Enterprise System',
-    desc: 'Restructuring a legacy compliance supervision tool that cut supervision review times by up to 71%',
+    title: 'Supervisory Workstation - Compliance Tool',
+    desc: 'Redesigning how managers at Fidelity Investments find the associate responsible for a compliance incident and file a supervision report.',
     img: '/fidelity/thumbnail.png',
     imgAlt: 'Fidelity compliance system redesign — dashboard overview',
     href: '#/fidelity',
     imgContained: true,
   },
   {
-    tags: ['Enterprise', 'B2B', 'Multi-Role'],
-    title: 'Integrating Complex Multi-Stakeholder Workflows',
-    desc: 'Removing avoidable vehicle idle times, technician waiting time and manual dependencies at vehicle service centres.',
+    tags: ['Enterprise', 'B2B', '100K+ Downloads'],
+    title: 'Multi-Stakeholder Workflows Integration',
+    desc: 'Removed manual dependencies between Service Manager, Technician and Security Guard at vehicle service centres.',
     img: '/workflow-thumbnail.png',
     imgAlt: 'Multi-stakeholder service workflow across mobile screens',
     href: '#/multi-stakeholder',
     imgScale: 0.7,
+    comingSoon: true,
   },
   {
-    tags: ['Marketplace', 'Growth Design'],
-    title: 'Solving the Activation Problem in a Marketplace Platform',
-    desc: 'Redesigning the supplier activation path — from a drop-off-heavy onboarding form to a guided, progressive flow that surfaced social proof at the moments of highest uncertainty.',
+    tags: ['Product Strategy', 'Growth Design'],
+    title: 'Marketplace Onboarding & Activation',
+    desc: 'Redesigned onboarding around early value delivery, reducing signup drop-off from 71.6% to 34%',
     img: '/tbm.png',
     imgAlt: 'Marketplace supplier activation flow',
     href: '#/marketplace',
@@ -56,14 +58,13 @@ const projects: Project[] = [
 /** School projects and self-directed concepts — shown in their own section below Work, using the same ProjectCard as the main grid. */
 const conceptProjects: Project[] = [
   {
-    tags: ['Gen AI', 'Higher Ed', 'Concept'],
+    tags: ['Recommendation System', 'Concept'],
     title: 'Course Compass',
-    desc: 'An AI-assisted course discovery concept that helps students identify relevant paths based on goals, constraints, and prior knowledge.',
+    desc: 'An AI-assisted course discovery concept that helps students identify curriculum paths based on goals, constraints, and prior knowledge.',
     img: '/course-compass-thumbnail.png',
     imgAlt: 'Course Compass — AI course discovery concept',
     href: '#',
     comingSoon: true,
-    imgContained: true,
   },
 ]
 
@@ -77,9 +78,7 @@ interface CardProps {
 function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps) {
   const [imgLoaded, setImgLoaded] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
-
-  const stripesBg =
-    'repeating-linear-gradient(135deg, var(--color-stripe-a) 0px, var(--color-stripe-a) 8px, var(--color-stripe-b) 8px, var(--color-stripe-b) 16px)'
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0, fromRight: false, fromBottom: false })
 
   return (
     <div
@@ -100,10 +99,42 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps)
       role={project.comingSoon ? undefined : 'link'}
       tabIndex={project.comingSoon ? undefined : 0}
       onKeyDown={e => { if (!project.comingSoon && (e.key === 'Enter' || e.key === ' ')) window.location.hash = project.href.replace('#', '') }}
-      aria-label={project.comingSoon ? undefined : `View case study: ${project.title}`}
+      aria-label={project.comingSoon ? `${project.title} — coming soon` : `View case study: ${project.title}`}
       onMouseEnter={() => { setIsHovered(true); onMouseEnter() }}
       onMouseLeave={() => { setIsHovered(false); onMouseLeave() }}
+      onMouseMove={e => {
+        if (!project.comingSoon) return
+        const rect = e.currentTarget.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+        setCursorPos({ x, y, fromRight: x > rect.width / 2, fromBottom: y > rect.height / 2 })
+      }}
     >
+      {project.comingSoon && isHovered && (
+        <span
+          aria-hidden
+          style={{
+            position: 'absolute',
+            left: cursorPos.x,
+            top: cursorPos.y,
+            transform: `translate(${cursorPos.fromRight ? 'calc(-100% - 14px)' : '14px'}, ${cursorPos.fromBottom ? 'calc(-100% - 14px)' : '14px'})`,
+            zIndex: 2,
+            pointerEvents: 'none',
+            background: 'var(--color-text-title)',
+            color: 'var(--color-surface-page)',
+            fontFamily: 'var(--font-sans)',
+            fontWeight: 500,
+            fontSize: 'var(--text-xs)',
+            letterSpacing: '.06em',
+            textTransform: 'uppercase' as const,
+            padding: '6px 10px',
+            borderRadius: 'var(--radius-lg)',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Coming soon
+        </span>
+      )}
       {/* Thumbnail */}
       <div
         style={{
@@ -122,8 +153,9 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps)
           style={{
             position: 'absolute',
             inset: 0,
-            background: project.imgContained ? 'var(--color-surface-card)' : project.img ? stripesBg : 'var(--color-surface-card)',
-            opacity: project.img && imgLoaded && !project.imgContained ? 0 : 1,
+            /* Same themed background on every card's thumbnail — including full-bleed covers whose image is scaled down (imgScale), which otherwise leaves the card's own background showing through the gap around the shrunk image instead of this one. */
+            background: 'var(--color-surface-card)',
+            opacity: project.img && imgLoaded && !project.imgContained && !project.imgScale ? 0 : 1,
             transition: 'opacity 0.4s ease-out, background var(--transition-theme)',
             display: 'flex',
             alignItems: 'center',
@@ -230,7 +262,7 @@ export default function Home() {
         transition: 'var(--transition-theme)',
       }}
     >
-      <div className="layout-content layout-content--centered" style={{ padding: '88px var(--space-12) 88px' }}>
+      <div className="layout-content layout-content--centered" style={{ padding: '120px var(--space-12) 88px' }}>
         <header style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-6)' }}>
           <h1
             style={{

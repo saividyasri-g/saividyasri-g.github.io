@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import {
   Outline,
+  ProblemCostAnnotations,
   sectionStyle,
-  h2Style,
   pStyle,
   eyebrowStyle,
   Block,
@@ -15,12 +15,10 @@ const outlineItems = [
   { id: 'context',           num: '', label: 'Context' },
   { id: 'problem-discovery', num: '', label: 'Problem Discovery' },
   { id: 'reframe',           num: '', label: 'Reframe' },
-  { id: 'scenario-01',       num: '', label: 'Problem · Solution 1' },
-  { id: 'scenario-02',       num: '', label: 'Problem · Solution 2' },
-  { id: 'scenario-03',       num: '', label: 'Problem · Solution 3' },
+  { id: 'solution',          num: '', label: 'Solution' },
   { id: 'impact',            num: '', label: 'Impact' },
+  { id: 'post-launch-review', num: '', label: 'Post-launch Review' },
   { id: 'learnings',         num: '', label: 'Learnings' },
-  { id: 'differently',       num: '', label: 'Do Differently' },
 ]
 
 /* ── Inline helpers ───────────────────────────────────── */
@@ -60,38 +58,9 @@ function ImgStage({ label, aspectRatio = '16 / 10' }: { label: string; aspectRat
   )
 }
 
-function TbdCallout({ children }: { children: ReactNode }) {
-  return (
-    <div
-      style={{
-        borderLeft: '3px solid rgba(200,150,0,.38)',
-        background: 'rgba(200,150,0,.05)',
-        borderRadius: '0 var(--radius-sm) var(--radius-sm) 0',
-        padding: '12px 16px',
-        margin: '16px 0',
-      }}
-    >
-      <span
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '9px',
-          letterSpacing: '.18em',
-          textTransform: 'uppercase' as const,
-          color: 'rgba(160,120,0,.7)',
-          display: 'block',
-          marginBottom: '5px',
-        }}
-      >
-        Draft
-      </span>
-      <p style={{ ...pStyle, margin: 0, maxWidth: 'none' }}>{children}</p>
-    </div>
-  )
-}
-
 /*
- * Finding card styles — dashed-border card pattern used for numbered
- * findings lists. Mirrors the page-local pattern in hmc/index.tsx
+ * Plain finding card styles — dashed-border card, header + description only
+ * (no cost box). Mirrors the page-local pattern in hmc/index.tsx
  * (Solution2AFindings); kept page-local here too since it isn't logged as
  * a shared component yet.
  */
@@ -125,7 +94,7 @@ const findingCardDesc: React.CSSProperties = {
   transition: 'var(--transition-theme)',
 }
 
-/** Numbered finding cards — used in Problem Discovery to lay out the four proxy-method findings. */
+/** Numbered finding cards with no cost box — used in Post-launch Review to lay out the three production-recording findings. */
 function FindingCards({ findings }: { findings: { header: string; description: string }[] }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)', margin: '20px 0' }}>
@@ -140,47 +109,9 @@ function FindingCards({ findings }: { findings: { header: string; description: s
             transition: 'var(--transition-theme)',
           }}
         >
-          <span style={findingCardEyebrow}>Finding #{i + 1}</span>
+          <span style={findingCardEyebrow}>#{i + 1}</span>
           <p style={findingCardHeader}>{item.header}</p>
           <p style={findingCardDesc}>{item.description}</p>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-/** Metric + baseline cards — dashed-card pattern with a side box, mirrors ProblemCostAnnotations/ConstraintPivotGrid. Used in Reframe to lay out the two success metrics. */
-function MetricCards({ metrics }: { metrics: { label: string; baseline: string }[] }) {
-  const baselineColor = '#6B7280'
-  const baselineFill = '#F1F2F4'
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)', margin: '20px 0' }}>
-      {metrics.map((m, i) => (
-        <div
-          key={i}
-          style={{
-            background: 'var(--color-surface-card)',
-            borderRadius: 'var(--radius-card)',
-            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='%23BEC1C3' stroke-width='0.6' stroke-dasharray='2%2c2'/%3e%3c/svg%3e")`,
-            padding: 'var(--space-5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 'var(--space-6)',
-            transition: 'var(--transition-theme)',
-          }}
-        >
-          <div style={{ flex: 1 }}>
-            <span style={findingCardEyebrow}>Metric #{i + 1}</span>
-            <p style={{ ...findingCardHeader, margin: 0 }}>{m.label}</p>
-          </div>
-          <div style={{ width: '280px', flexShrink: 0, background: baselineFill, borderRadius: 'var(--radius-card)', padding: 'var(--space-4) var(--space-5)', transition: 'var(--transition-theme)' }}>
-            <span style={{ ...findingCardEyebrow, marginBottom: 'var(--space-2)', color: `${baselineColor}e6` }}>Baseline</span>
-            {/* Fixed dark text — this panel's fill stays light in both themes, so text must not follow the theme-swapping body-text token. */}
-            <span style={{ fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--primitive-light-title)' }}>
-              {m.baseline}
-            </span>
-          </div>
         </div>
       ))}
     </div>
@@ -218,81 +149,34 @@ function Note({ label = 'Note', children }: { label?: string; children: ReactNod
   )
 }
 
-function ImpactItem({ children }: { children: ReactNode }) {
+/** Metric cards for the Impact section — dashed-card pattern matching hmc/fidelity's impact cards. */
+function ImpactCards({ cards }: { cards: { title: string; description: string }[] }) {
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '20px 1fr',
-        gap: '12px',
-        padding: '20px 0',
-        borderBottom: '1px solid var(--color-border-hair)',
-        transition: 'var(--transition-theme)',
-      }}
-    >
-      <span
-        style={{
-          fontFamily: 'var(--font-mono)',
-          color: 'var(--color-text-faint)',
-          lineHeight: 1.65,
-          userSelect: 'none' as const,
-        }}
-      >
-        —
-      </span>
-      {/* div, not p — children here is a TbdCallout, which renders its own block-level markup that isn't valid inside a <p>. */}
-      <div style={{ ...pStyle, margin: 0, maxWidth: 'none' }}>{children}</div>
-    </div>
-  )
-}
-
-/* ── Stat tile ────────────────────────────────────────── */
-
-function StatRow({ stats }: { stats: { value: string; label: string }[] }) {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(${stats.length}, 1fr)`,
-        gap: 'var(--space-5)',
-        margin: '24px 0',
-      }}
-    >
-      {stats.map((s, i) => (
+    <div className="annotation-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-5)', marginTop: 'var(--space-8)' }}>
+      {cards.map((card, i) => (
         <div
           key={i}
           style={{
             borderRadius: 'var(--radius-card)',
-            border: '1px solid var(--color-border-hair)',
+            background: 'var(--color-surface-card)',
+            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3e%3crect width='100%25' height='100%25' fill='none' rx='10' ry='10' stroke='%23BEC1C3' stroke-width='0.6' stroke-dasharray='2%2c2'/%3e%3c/svg%3e")`,
             padding: '20px 24px',
             transition: 'var(--transition-theme)',
           }}
         >
-          <div
+          <h4
             style={{
-              fontSize: '28px',
+              margin: '0 0 10px',
+              fontSize: 'var(--text-lg)',
               fontWeight: 600,
-              letterSpacing: '-0.02em',
+              lineHeight: 1.3,
               color: 'var(--color-text-title)',
-              lineHeight: 1.1,
-              marginBottom: '6px',
               transition: 'var(--transition-theme)',
             }}
           >
-            {s.value}
-          </div>
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '11px',
-              letterSpacing: '.1em',
-              textTransform: 'uppercase' as const,
-              color: 'var(--color-text-meta)',
-              transition: 'var(--transition-theme)',
-            }}
-          >
-            {s.label}
-          </div>
+            {card.title}
+          </h4>
+          <p style={{ ...pStyle, margin: 0 }}>{card.description}</p>
         </div>
       ))}
     </div>
@@ -343,18 +227,18 @@ export default function Marketplace() {
                   transition: 'var(--transition-theme)',
                 }}
               >
-                Cutting Professional Signup Bounce From 71.6% to 34% in a Two-Sided Marketplace.
+                Home Service Marketplace Onboarding & Activation
               </h1>
               <div style={{ marginBottom: 'var(--space-8)' }}>
                 <span style={eyebrowStyle}>Overview</span>
                 <p style={{ ...pStyle, margin: 0 }}>
-                  Builder Market is a two-sided home services marketplace. When I joined as a product design intern, 71.6% of professionals were dropping off during signup. The product roadmap was investing in retention features designed for professionals who were already active on the platform, while most professionals were never becoming active for those features to matter.
+                  Builder Market is an early-stage two-sided marketplace connecting homeowners with home service professionals. The business had asked me to redesign the professional onboarding flow because 71.6% of professionals were dropping off. On investigation, the deeper problem was that the flow required professionals to invest 7–8 minutes completing a full business listing before the platform delivered any value.
                 </p>
               </div>
               <div style={{ marginBottom: 'var(--space-8)' }}>
                 <span style={eyebrowStyle}>Impact</span>
                 <p style={{ ...pStyle, margin: 0 }}>
-                  I owned the onboarding redesign. The redesign removed nine marketing modals from the signup flow, shortened the form to the fields the platform needed to run lead-matching, and routed post-signup to a dashboard where real matched leads were visible. Bounce during signup dropped from 71.6% to 34% in the two weeks after launch, measured as a pre/post comparison against the equivalent prior window.
+                  I proposed and aligned the team on a reframe: surface value first, then ask for commitment. I designed the abbreviated signup flow, the routing to a dashboard, and the flow professionals used to claim their first free suggested leads. Signup bounce dropped from 71.6% to 34% in the two weeks after launch.
                 </p>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-10)', marginBottom: 'var(--space-8)' }}>
@@ -399,10 +283,10 @@ export default function Marketplace() {
               </Block>
 
               <Block
-                header="The startup sourced leads externally and matched them to pros based on the business listing"
+                header="Business listing creation was the activation moment, and pros weren't getting there"
               >
                 <p style={{ ...pStyle, margin: 0 }}>
-                  Professionals could claim the first few matched leads free before paying for any. This was the startup's advantage in the competitive market landscape.
+                  Despite monthly visitors, few pros created a business listing. Pros created listings within the platform's onboarding flow.
                 </p>
               </Block>
             </section>
@@ -413,23 +297,28 @@ export default function Marketplace() {
             <section id="problem-discovery" style={sectionStyle}>
               <Block
                 eyebrow="Problem Discovery"
-                header="Web analytics showed a 71.6% drop-off in the onboarding flow."
+                header="Web analytics showed a 71.6% drop-off in the onboarding flow"
               >
                 <p style={{ ...pStyle, margin: 0 }}>
                   When I joined as an intern, I was tasked with redesigning the onboarding flow because of this drop-off rate. I investigated by analyzing Hotjar analytics, reviewing session recordings, and benchmarking against competing marketplaces.
                 </p>
-                <FindingCards findings={[
+                <ProblemCostAnnotations columns={[
                   {
-                    header: 'The signup flow used nine marketing modals to describe future value with a generic example.',
-                    description: "Each modal described what the platform could do for the professional's business in the future, using aspirational language and a single generic example. Session recordings showed professionals rage-clicking Back and Continue trying to move past the modals to reach the actual product.",
+                    problem: 'Business listing creation triggered the drop-off in the onboarding flow',
+                    description: 'Web analytics showed the drop-off concentrated in business listing creation. Completing a listing took 8 minutes (timed the flow in UX audit).',
+                    cost: 'Longest path to value · High drop-off before payoff',
+                    media: <video src="/marketplace/modals.mp4" autoPlay loop muted playsInline style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />,
                   },
                   {
-                    header: 'Signup routed professionals back to the marketing homepage instead of the leads dashboard.',
-                    description: 'Professionals who completed signup landed on the homepage, where nothing showed them a matched lead or gave them a reason to return.',
+                    problem: "Onboarding described the platform's value instead of letting pros experience it",
+                    description: 'Session recordings showed rage clicks on the marketing modals. Pros trying to move past the pitch to reach the value.',
+                    cost: 'No first-hand value · Friction before payoff',
+                    media: <video src="/marketplace/modals.mp4" autoPlay loop muted playsInline style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />,
                   },
                   {
-                    header: "Builder Market's onboarding flow was a market outlier.",
-                    description: "Angi, Jobber, and Houzz Pro introduced professionals to dashboards and management tools early in onboarding, letting them experience the platform's value before committing to detailed configuration. Builder Market's flow did the opposite.",
+                    problem: "Even after completing a business listing, pros didn't reach the value",
+                    description: 'Pros who finished listing creation landed on the marketing homepage, not on any product surface. Competitors landed pros on a dashboard, letting them experience the platform.',
+                    cost: 'No reason to return · Acquisition spend wasted',
                   },
                 ]} />
               </Block>
@@ -441,49 +330,32 @@ export default function Marketplace() {
             <section id="reframe" style={sectionStyle}>
               <Block
                 eyebrow="Reframe"
-                header={`I reframed the problem from "onboarding redesign" to "onboarding is gating pros from the platform's value" and defined two success metrics with baselines`}
+                header={`I reframed the problem from "reduce onboarding drop-off" to "get pros to value early" and redefined success as the value became clearer`}
               >
                 <p style={pStyle}>
-                  Findings pointed at a deeper problem than the ask: the flow wasn't just tedious to complete, it was gating pros from the matched leads that were the platform's advantage. Fixing the flow's usability would have produced a smoother version of the same problem.
+                  The findings pointed that pros were asked to commit before the platform showed them anything. I redefined success from listing completion to time to reach value on a dashboard.
                 </p>
-                <p style={{ ...pStyle, margin: 0 }}>
-                  I proposed two metrics to measure the redesign's impact, and established baselines for both.
+                <p style={{ ...pStyle, margin: '20px 0 0' }}>
+                  Part-way through, the business surfaced that they were sourcing leads externally and the first few would be free — a concrete value pros could reach. I redefined success again around claiming that free lead. This moved listing creation to after the pro sees value, betting that a pro who has seen a real lead completes the listing more readily than one asked upfront.
                 </p>
-                <MetricCards metrics={[
-                  {
-                    label: 'Onboarding drop-off rate',
-                    baseline: '71.6% (web analytics, 2 weeks at the start of the internship)',
-                  },
-                  {
-                    label: 'Time to first value',
-                    baseline: '7–8 minutes to reach the end of onboarding',
-                  },
-                ]} />
-                <Note>
-                  Time to first value baseline was established through a UX audit where other interns and I ran timed task-completions of the existing flow using fake data. The end of onboarding was the marketing homepage, not a matched lead, so none of the 7–8 minutes delivered value.
-                </Note>
+                <div style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-border-hair)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', margin: '18px 0 0', transition: 'var(--transition-theme)' }}>
+                  <img src="/marketplace/reframe.png" alt="Reframed success metric — listing creation moved after first free lead" style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />
+                </div>
               </Block>
             </section>
 
             {/* ════════════════════════════════════════ */}
-            {/* SCENARIO 01 — ONBOARDING FORM           */}
+            {/* SOLUTION                                 */}
             {/* ════════════════════════════════════════ */}
-            <ScenarioGroup id="scenario-01" label="Problem · Solution 1">
-              <TbdCallout>Add Problem 1 / Solution 1 — likely maps to removing the nine marketing modals from the signup flow (referenced in the Overview Impact summary). Fill in with the before/after detail, screens, and reasoning.</TbdCallout>
-            </ScenarioGroup>
-
-            {/* ════════════════════════════════════════ */}
-            {/* SCENARIO 02                              */}
-            {/* ════════════════════════════════════════ */}
-            <ScenarioGroup id="scenario-02" label="Problem · Solution 2">
-              <TbdCallout>Add Problem 2 / Solution 2 — likely maps to shortening the signup form to only the fields needed for lead-matching. Fill in with the before/after detail, screens, and reasoning.</TbdCallout>
-            </ScenarioGroup>
-
-            {/* ════════════════════════════════════════ */}
-            {/* SCENARIO 03                              */}
-            {/* ════════════════════════════════════════ */}
-            <ScenarioGroup id="scenario-03" label="Problem · Solution 3">
-              <TbdCallout>Add Problem 3 / Solution 3 — likely maps to routing post-signup to a dashboard showing real matched leads instead of the marketing homepage. Fill in with the before/after detail, screens, and reasoning.</TbdCallout>
+            <ScenarioGroup id="solution" label="Solution">
+              <Block header="I redesigned onboarding to collect only what lead-matching needs: business name, service type, service area">
+                <p style={pStyle}>
+                  Pros now pick one service through search instead of scrolling categories; additional services are optional. The business name field matches against the existing directory as they type, so they can claim an existing listing instead of creating a duplicate.
+                </p>
+                <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                  <video src="/marketplace/solution.mp4" autoPlay loop muted playsInline style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />
+                </div>
+              </Block>
             </ScenarioGroup>
 
             {/* ════════════════════════════════════════ */}
@@ -491,19 +363,50 @@ export default function Marketplace() {
             {/* ════════════════════════════════════════ */}
             <section id="impact" style={sectionStyle}>
               <SectionDivider label="Impact" />
-              <h2 style={h2Style}>Signup bounce dropped from 71.6% to 34% in the two weeks after launch.</h2>
-              <StatRow stats={[
-                { value: '71.6%', label: 'Signup bounce — before' },
-                { value: '34%', label: 'Signup bounce — after' },
+              <ImpactCards cards={[
+                {
+                  title: 'Bounce: 71.6% → 34%',
+                  description: 'Web analytics, two weeks post-launch against the baseline month before I started. Before/after comparison, not an A/B test.',
+                },
+                {
+                  title: 'Time to reach a lead: 8 min → under 2',
+                  description: 'Timed the redesigned flow the same way (UX audit). Run on the prototype, so it excludes production latency and edge cases.',
+                },
               ]} />
-              <div style={{ borderTop: '1px solid var(--color-border-hair)', marginTop: '8px', transition: 'var(--transition-theme)' }}>
-                <ImpactItem>
-                  <TbdCallout>Add any dashboard/business-listing-side impact metrics from the two designers who owned those components, if relevant to attribute alongside the onboarding number.</TbdCallout>
-                </ImpactItem>
-                <ImpactItem>
-                  <TbdCallout>Add downstream impact if measured — e.g. change in professionals reaching a completed business listing, or claiming their first lead, after the onboarding redesign.</TbdCallout>
-                </ImpactItem>
-              </div>
+              <Note>
+                Both these metrics measure the flow I owned: how fast pros reached value. Whether more pros went on to complete a full business listing depended on the listing form and dashboard, owned by the other designers.
+              </Note>
+            </section>
+
+            {/* ════════════════════════════════════════ */}
+            {/* POST-LAUNCH REVIEW                       */}
+            {/* ════════════════════════════════════════ */}
+            <section id="post-launch-review" style={sectionStyle}>
+              <Block
+                eyebrow="Post-launch Review"
+                header="I reviewed production session recordings and found three interaction problems in the redesign"
+              >
+                <p style={{ ...pStyle, margin: 0 }}>
+                  The structural changes reduced the major friction, but watching the production build surfaced three problems.
+                </p>
+                <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', margin: '20px 0 0', transition: 'var(--transition-theme)' }}>
+                  <video src="/marketplace/review.mp4" autoPlay loop muted playsInline style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />
+                  <FindingCards findings={[
+                    {
+                      header: 'The service dropdown closed after every selection.',
+                      description: 'Pros adding more than one service had to reopen it each time. Recordings showed hesitation and rapid re-clicks.',
+                    },
+                    {
+                      header: "Search wasn't discoverable.",
+                      description: 'Some pros defaulted to scrolling instead of typing, the behavior the redesign was meant to replace.',
+                    },
+                    {
+                      header: 'The clear icon sat next to the dropdown toggle.',
+                      description: 'The two were easy to confuse, and recordings showed mis-clicks between them.',
+                    },
+                  ]} />
+                </div>
+              </Block>
             </section>
 
             {/* ════════════════════════════════════════ */}
@@ -511,17 +414,21 @@ export default function Marketplace() {
             {/* ════════════════════════════════════════ */}
             <section id="learnings" style={sectionStyle}>
               <SectionDivider label="Learnings" />
-              <TbdCallout>Add your synthesis from this project — what changed about how you think about onboarding, activation, or scoping a redesign around what the platform actually needed (lead-matching fields) versus what the roadmap assumed mattered (retention features).</TbdCallout>
+              <FindingCards findings={[
+                {
+                  header: "I kept asking what pros get out of the platform, and why they'd come back",
+                  description: 'The ask was listing completion. I kept putting the value question back to the team. Each answer moved what success meant, from completing a listing, to reaching the dashboard, to claiming a free lead.',
+                },
+                {
+                  header: 'I proposed a structure before the internship started',
+                  description: "I came in with a proposal doc setting out what I wanted to own and what I needed from the team. That's what carved out the four weeks I spent on onboarding, activation, and the lead-claim flow.",
+                },
+              ]} />
             </section>
 
             {/* ════════════════════════════════════════ */}
             {/* WHAT I'D DO DIFFERENTLY                 */}
             {/* ════════════════════════════════════════ */}
-            <section id="differently" style={sectionStyle}>
-              <SectionDivider label="What I'd do differently" />
-              <TbdCallout>Add reflections — on scope, on what you'd push for given the missing step-level instrumentation on listing creation/activation, or on anything else surprising about this project.</TbdCallout>
-            </section>
-
             </div>
           </div>
         </main>

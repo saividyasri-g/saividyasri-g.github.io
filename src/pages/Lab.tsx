@@ -142,9 +142,86 @@ function LabCard({ tile }: { tile: LabTile }) {
   }
 
   return (
-    <a href={tile.href} target="_blank" rel="noopener noreferrer" className="fill-btn fill-btn--subtle" style={cardStyle}>
+    <a href={tile.href} target="_blank" rel="noopener noreferrer" className="fill-btn fill-btn--subtle fill-btn--card" style={cardStyle}>
       {content}
     </a>
+  )
+}
+
+const SHUFFLE_S = 1.2
+const LIFT_SCALE = 1.18
+
+/** Painting photos laid out like a fanned-out stack of cards — centered, rotated outward from the middle image, middle image on top. Hovering a card that's peeking out from behind shuffles it to front: it lifts, carries over to the front slot, and settles back down — all one continuous `@keyframes` timeline (`painting-card-to-front` in index.css) rather than several transitions stitched together in JS, so the motion doesn't step between phases. The other cards in the stack ease over to their new offsets on a plain `transition` at the same time. */
+function FannedPhotos({ images }: { images: string[] }) {
+  const [order, setOrder] = useState(images)
+  const [lift, setLift] = useState<{ src: string; fromX: number; fromRot: number } | null>(null)
+
+  const bringToFront = (src: string) => {
+    if (lift) return
+    const mid = (order.length - 1) / 2
+    const fromIndex = order.indexOf(src)
+    if (fromIndex === mid) return
+    const fromOffset = fromIndex - mid
+    setLift({ src, fromX: fromOffset * 56, fromRot: fromOffset * 9 })
+    setOrder(prev => {
+      const rest = prev.filter(s => s !== src)
+      const insertAt = Math.floor(rest.length / 2)
+      return [...rest.slice(0, insertAt), src, ...rest.slice(insertAt)]
+    })
+  }
+
+  const mid = (order.length - 1) / 2
+
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      {order.map((src, i) => {
+        const offset = i - mid
+        const isLifting = lift?.src === src
+
+        const style: React.CSSProperties = {
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          width: '52%',
+          aspectRatio: '4 / 5',
+          zIndex: isLifting ? order.length + 1 : order.length - Math.abs(offset),
+          borderRadius: 'var(--radius-sm)',
+          overflow: 'hidden',
+          border: '4px solid #fff',
+          boxShadow: isLifting ? '0 20px 40px rgba(0,0,0,0.3)' : '0 10px 24px rgba(0,0,0,0.2)',
+        }
+
+        if (isLifting && lift) {
+          Object.assign(style, {
+            '--from-x': `${lift.fromX}px`,
+            '--from-rot': `${lift.fromRot}deg`,
+            '--to-x': `${offset * 56}px`,
+            '--to-rot': `${offset * 9}deg`,
+            '--lift-scale': LIFT_SCALE,
+            animation: `painting-card-to-front ${SHUFFLE_S}s var(--ease-standard) forwards`,
+          })
+        } else {
+          style.transform = `translate(-50%, -50%) translateX(${offset * 56}px) rotate(${offset * 9}deg) scale(1)`
+          style.transition = `transform ${SHUFFLE_S}s var(--ease-standard), box-shadow ${SHUFFLE_S}s var(--ease-standard)`
+        }
+
+        return (
+          <div
+            key={src}
+            className="painting-card"
+            onMouseEnter={() => bringToFront(src)}
+            onAnimationEnd={() => setLift(cur => (cur?.src === src ? null : cur))}
+            style={style}
+          >
+            <img
+              src={src}
+              alt=""
+              style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+        )
+      })}
+    </div>
   )
 }
 
@@ -160,6 +237,10 @@ export default function Lab() {
         <HoloAvatar />
       </div>
     ),
+    // Shorter than the default 1/1 square — trims the column so this card's stack
+    // bottoms out flush with the Visual Effect card at the bottom of column 2.
+    thumbAspect: '15 / 14',
+    href: '/experiments/hologram/index.html',
   }
   const researchAgentTile: LabTile = {
     tags: ['Claude Code'],
@@ -179,19 +260,23 @@ export default function Lab() {
     tags: ['Visual Effect'],
     desc: 'I explored screen print effect on images. Combining this with hologram trick led to some good outputs.',
     thumb: '/experiments/screenprint-thumb.png',
+    href: '/experiments/screenprint/index.html',
   }
 
   // Bottom row
   const comicsTile: LabTile = {
     tags: ['Illustration'],
-    desc: 'I create comic illustrations in a weirdly ugly-cute aesthetic. An ongoing side thing',
-    thumb: '/lab/comics.png',
+    desc: 'I create comic illustrations in a weirdly ugly-cute aesthetic. An ongoing side thing.',
+    thumb: '/comic.jpeg',
     thumbAspect: '2 / 3',
+    href: 'https://www.instagram.com/imafartisttoo/',
   }
   const paintingTile: LabTile = {
     tags: ['Painting'],
     desc: 'Painting was one of the many classes my mom signed me up for as a kid, and one of the few that stuck. Lately, trying to pick it back up.',
-    thumb: '/lab/painting.png',
+    thumbNode: (
+      <FannedPhotos images={['/painting/IMG_7703.jpeg', '/painting/IMG_7704.jpeg', '/painting/IMG_7705.jpeg']} />
+    ),
     thumbAspect: '4 / 3',
   }
 
@@ -206,11 +291,11 @@ export default function Lab() {
       <div className="layout-content layout-content--centered" style={{ padding: '120px var(--space-12) 88px' }}>
         <h1
           style={{
-            fontSize: 'var(--text-lg)',
+            fontSize: 'var(--text-base)',
             lineHeight: 1.4,
             fontWeight: 600,
             letterSpacing: '-0.005em',
-            margin: '0 0 8px',
+            margin: '0 0 var(--space-3)',
             color: 'var(--color-text-title)',
             transition: 'var(--transition-theme)',
           }}
