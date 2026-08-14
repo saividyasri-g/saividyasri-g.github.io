@@ -21,42 +21,6 @@ const outlineItems = [
   { id: 'learnings',         num: '', label: 'Learnings' },
 ]
 
-/* ── Inline helpers ───────────────────────────────────── */
-
-function ImgStage({ label, aspectRatio = '16 / 10' }: { label: string; aspectRatio?: string }) {
-  const stripes = 'repeating-linear-gradient(135deg, var(--color-stripe-a) 0px, var(--color-stripe-a) 8px, var(--color-stripe-b) 8px, var(--color-stripe-b) 16px)'
-  return (
-    <div
-      style={{
-        borderRadius: 'var(--radius-card)',
-        border: '1px dashed var(--color-border-hair-hover)',
-        background: stripes,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px',
-        textAlign: 'center',
-        aspectRatio,
-        margin: '18px 0',
-        transition: 'var(--transition-theme)',
-      }}
-      role="img"
-      aria-label={label}
-    >
-      <span
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: 'var(--text-xs)',
-          letterSpacing: '.12em',
-          textTransform: 'uppercase' as const,
-          color: 'var(--color-text-meta)',
-        }}
-      >
-        {label}
-      </span>
-    </div>
-  )
-}
 
 /*
  * Plain finding card styles — dashed-border card, header + description only
@@ -200,7 +164,9 @@ export default function Marketplace() {
       {/* ── Hero thumbnail ── */}
       <section style={{ paddingTop: 'var(--space-10)' }}>
         <div className="layout-header-pad" style={{ padding: '0 var(--space-12)' }}>
-          <ImgStage label="Case study thumbnail — Builder Market onboarding" aspectRatio="21 / 9" />
+          <div style={{ borderRadius: 'var(--radius-card)', overflow: 'hidden' }}>
+            <img src="/tbm.png" alt="Case study thumbnail — Builder Market onboarding" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          </div>
         </div>
       </section>
 
