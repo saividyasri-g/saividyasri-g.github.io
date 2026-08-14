@@ -164,8 +164,19 @@ export default function Marketplace() {
       {/* ── Hero thumbnail ── */}
       <section style={{ paddingTop: 'var(--space-10)' }}>
         <div className="layout-header-pad" style={{ padding: '0 var(--space-12)' }}>
-          <div style={{ borderRadius: 'var(--radius-card)', overflow: 'hidden' }}>
-            <img src="/tbm.png" alt="Case study thumbnail — Builder Market onboarding" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          <div
+            style={{
+              background: 'var(--color-surface-card)',
+              borderRadius: 'var(--radius-card)',
+              padding: 'var(--space-8)',
+              transition: 'var(--transition-theme)',
+            }}
+          >
+            <img
+              src="/tbm.png"
+              alt="Case study thumbnail — Builder Market onboarding"
+              style={{ width: '50%', display: 'block', borderRadius: 'var(--radius-sm)', margin: '0 auto' }}
+            />
           </div>
         </div>
       </section>
