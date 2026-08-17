@@ -231,7 +231,7 @@ export default function Lab() {
   // Column 1 (top block)
   const holoTile: LabTile = {
     tags: ['CSS', 'Vibe-code'],
-    desc: 'I made a css-layered hologram inspired from Kyle Turman’s website. It’s pretty cool css trick.',
+    desc: 'I made a css-layered hologram inspired from Kyle Turman’s website. It’s a pretty cool css trick.',
     thumbNode: (
       <div style={{ position: 'relative', width: '100%', height: '100%' }}>
         <HoloAvatar />
@@ -246,7 +246,7 @@ export default function Lab() {
     tags: ['Claude Code'],
     desc: 'A second agent for deeper company or domain research based on my rules and hands me a good material before conversations.',
     href: 'https://github.com/saividyasri-g/company-intel',
-    icon: '/agent.svg',
+    icon: '/icons/agent.svg',
   }
 
   // Column 2 (top block)
@@ -254,7 +254,7 @@ export default function Lab() {
     tags: ['Claude Code'],
     desc: 'A job-scraper agent I built for myself - pulls listings, adds company intel, tracks applications. Seems like a necessity in 2026.',
     href: 'https://github.com/saividyasri-g/job-scraper',
-    icon: '/agent.svg',
+    icon: '/icons/agent.svg',
   }
   const screenprintTile: LabTile = {
     tags: ['Visual Effect'],

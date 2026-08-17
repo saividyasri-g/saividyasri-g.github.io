@@ -1,6 +1,13 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import ThemeToggle from '../components/ui/ThemeToggle'
 import NavLinks from '../components/layout/NavLinks'
+import Modal from '../components/ui/Modal'
+import { eyebrowStyle, pStyle, h2Style, Carousel } from '../components/case-study'
+
+const hydroportSlides = Array.from({ length: 8 }, (_, i) => ({
+  src: `/Hydroport/h-${i + 1}.png`,
+  alt: `HydroPort concept visual ${i + 1}`,
+}))
 
 interface Project {
   tags: string[]
@@ -13,6 +20,8 @@ interface Project {
   imgContained?: boolean
   /** Default scale for the thumbnail (e.g. 0.7 = shown 30% smaller); zooms to full size on hover. Omit for the standard fill treatment. */
   imgScale?: number
+  /** When present, clicking the card opens a modal with this content instead of navigating — for projects with no dedicated case-study page yet. */
+  modalContent?: ReactNode
 }
 
 const projects: Project[] = [
@@ -20,7 +29,7 @@ const projects: Project[] = [
     tags: ['Enterprise', 'B2B', '100K+ Downloads'],
     title: 'Vehicle Service Management Tools',
     desc: 'Dashboard and workshop floor visualisation tool for Service Managers to manage vehicle service operations efficiently.',
-    img: '/hmc-thumbnail.png',
+    img: '/hmc/hmc-thumbnail.png',
     imgAlt: 'Service manager dashboard on tablet and mobile',
     href: '#/hmc',
     imgContained: true,
@@ -48,7 +57,7 @@ const projects: Project[] = [
     tags: ['Product Strategy', '0 -> 1', 'B2B2C'],
     title: 'Marketplace Onboarding & Activation',
     desc: 'Redesigned onboarding around early value delivery, reducing signup drop-off from 71.6% to 34%',
-    img: '/tbm.png',
+    img: '/marketplace/tbm.png',
     imgAlt: 'Marketplace supplier activation flow',
     href: '#/marketplace',
     imgScale: 0.7,
@@ -66,6 +75,78 @@ const conceptProjects: Project[] = [
     href: '#',
     comingSoon: true,
   },
+  {
+    tags: ['Service Design', 'Innovation Strategy'],
+    title: 'HydroPort - Electrolyser Rental Service Model',
+    desc: 'Moving a new alloy to market by innovating how green hydrogen plants get built and paid for.',
+    img: '/Hydroport/Electrolyser-thumbnail.jpg',
+    imgAlt: 'HydroPort — modular electrolyser rental model concept',
+    href: '#',
+    modalContent: (
+      <>
+        <h1
+          style={{
+            fontSize: 'var(--text-xl)',
+            lineHeight: 1.1,
+            fontWeight: 600,
+            letterSpacing: '-0.025em',
+            color: 'var(--color-text-title)',
+            margin: '0 0 32px',
+            transition: 'var(--transition-theme)',
+          }}
+        >
+          HydroPort — Electrolyser Rental Service Model
+        </h1>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-10)', marginBottom: 'var(--space-8)' }}>
+          <div>
+            <span style={eyebrowStyle}>Status</span>
+            <p style={{ ...pStyle, margin: 0 }}>Proposal • Capstone with ATI • 2025</p>
+          </div>
+          <div>
+            <span style={eyebrowStyle}>Team</span>
+            <p style={{ ...pStyle, margin: 0 }}>Irene, Roy, Manasi, Jenny, Linda and Me</p>
+          </div>
+          <div>
+            <span style={eyebrowStyle}>Skills</span>
+            <p style={{ ...pStyle, margin: 0 }}>User Research, PESTLE Analysis, Value Opportunity Analysis, Competitor Research</p>
+          </div>
+        </div>
+        <div style={{ margin: '24px 0' }}>
+          <Carousel slides={hydroportSlides} autoPlayMs={4000} />
+        </div>
+        <div style={{ marginBottom: 'var(--space-8)' }}>
+          <span style={eyebrowStyle}>Problem overview</span>
+          <h3 style={{ ...h2Style, fontSize: 'var(--text-base)', margin: '0 0 8px' }}>
+            ATI developed a novel nickel alloy and needed a route to market
+          </h3>
+          <p style={{ ...pStyle, margin: '0 0 20px' }}>
+            ATI is a materials science company selling specialty alloys into aerospace, defense, energy, and medical markets. They developed a nickel alloy that replaces Ni-201 in green hydrogen electrolysis at 20% lower cost and half the lead time. The brief was to commercialise it.
+          </p>
+          <h3 style={{ ...h2Style, fontSize: 'var(--text-base)', margin: '0 0 8px' }}>
+            Plant economics hold back green hydrogen production
+          </h3>
+          <p style={{ ...pStyle, margin: 0 }}>
+            The alloy sells in volume only if green hydrogen production grows. We interviewed the U.S. Department of Energy to find out what constrains that growth. A green hydrogen plant costs millions to build, takes years to construct, and runs at fixed capacity once it exists, so a buyer who wants to try green hydrogen has to commit capital to a permanent plant before producing anything.
+          </p>
+        </div>
+        <div>
+          <span style={eyebrowStyle}>Solution</span>
+          <h3 style={{ ...h2Style, fontSize: 'var(--text-base)', margin: '0 0 8px' }}>
+            HydroPort rents a trailer-mounted electrolyser by the month
+          </h3>
+          <p style={{ ...pStyle, margin: '0 0 20px' }}>
+            We worked with ATI as a team of designers and engineers to change what a buyer commits to. HydroPort puts a 1 MW electrolyser on a trailer, delivers it to the buyer's site, and rents it at $8,600 per month. Buyers add capacity by renting more units and stop without stranding capital. ATI does not build electrolysers, so the model runs through a venture with electrolyser manufacturers: ATI supplies the alloy, manufacturers build the units, and the venture rents them.
+          </p>
+          <h3 style={{ ...h2Style, fontSize: 'var(--text-base)', margin: '0 0 8px' }}>
+            Replacing the plates every three years turns a one-time alloy sale into recurring demand
+          </h3>
+          <p style={{ ...pStyle, margin: 0 }}>
+            We modeled the unit economics to check the model held. The rental price clears a 25% margin over operating cost, and the largest cost line is plate replacement, which is where ATI's alloy goes. That cycle is the reason the model works for ATI specifically.
+          </p>
+        </div>
+      </>
+    ),
+  },
 ]
 
 interface CardProps {
@@ -73,12 +154,20 @@ interface CardProps {
   dimmed: boolean
   onMouseEnter: () => void
   onMouseLeave: () => void
+  onOpenModal: (project: Project) => void
 }
 
-function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps) {
+function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal }: CardProps) {
   const [imgLoaded, setImgLoaded] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0, fromRight: false, fromBottom: false })
+
+  const hasModal = !!project.modalContent
+  const isClickable = hasModal || (!project.comingSoon && project.href !== '#')
+  const activate = () => {
+    if (hasModal) onOpenModal(project)
+    else if (isClickable) window.location.hash = project.href.replace('#', '')
+  }
 
   return (
     <div
@@ -91,15 +180,15 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps)
         background: 'var(--color-surface-main)',
         border: '1px solid var(--color-border-hair)',
         borderRadius: 'var(--radius-project-card)',
-        cursor: project.comingSoon ? 'default' : 'pointer',
+        cursor: isClickable ? 'pointer' : 'default',
         opacity: dimmed ? 0.45 : 1,
         transition: `border-color var(--duration-hover) var(--ease-standard), opacity 0.3s ease-out`,
       }}
-      onClick={() => { if (!project.comingSoon && project.href !== '#') window.location.hash = project.href.replace('#', '') }}
-      role={project.comingSoon ? undefined : 'link'}
-      tabIndex={project.comingSoon ? undefined : 0}
-      onKeyDown={e => { if (!project.comingSoon && (e.key === 'Enter' || e.key === ' ')) window.location.hash = project.href.replace('#', '') }}
-      aria-label={project.comingSoon ? `${project.title} — coming soon` : `View case study: ${project.title}`}
+      onClick={activate}
+      role={isClickable ? (hasModal ? 'button' : 'link') : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      onKeyDown={e => { if (isClickable && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); activate() } }}
+      aria-label={hasModal ? `View project: ${project.title}` : project.comingSoon ? `${project.title} — coming soon` : `View case study: ${project.title}`}
       onMouseEnter={() => { setIsHovered(true); onMouseEnter() }}
       onMouseLeave={() => { setIsHovered(false); onMouseLeave() }}
       onMouseMove={e => {
@@ -253,6 +342,7 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave }: CardProps)
 export default function Home() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [conceptHoveredIndex, setConceptHoveredIndex] = useState<number | null>(null)
+  const [modalProject, setModalProject] = useState<Project | null>(null)
 
   return (
     <div
@@ -308,6 +398,7 @@ export default function Home() {
               dimmed={hoveredIndex !== null && hoveredIndex !== i}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
+              onOpenModal={setModalProject}
             />
           ))}
         </div>
@@ -336,11 +427,16 @@ export default function Home() {
                 dimmed={conceptHoveredIndex !== null && conceptHoveredIndex !== i}
                 onMouseEnter={() => setConceptHoveredIndex(i)}
                 onMouseLeave={() => setConceptHoveredIndex(null)}
+                onOpenModal={setModalProject}
               />
             ))}
           </div>
         </section>
       </div>
+
+      <Modal open={!!modalProject} onClose={() => setModalProject(null)}>
+        {modalProject?.modalContent}
+      </Modal>
     </div>
   )
 }
