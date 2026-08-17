@@ -112,7 +112,7 @@ function ImpactItem({ children }: { children: ReactNode }) {
       >
         —
       </span>
-      <p style={{ ...pStyle, margin: 0, maxWidth: 'none' }}>{children}</p>
+      <div style={{ ...pStyle, margin: 0, maxWidth: 'none' }}>{children}</div>
     </div>
   )
 }

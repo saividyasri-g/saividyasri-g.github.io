@@ -45,7 +45,7 @@ const projects: Project[] = [
     comingSoon: true,
   },
   {
-    tags: ['Product Strategy', 'Growth Design'],
+    tags: ['Product Strategy', '0 -> 1', 'B2B2C'],
     title: 'Marketplace Onboarding & Activation',
     desc: 'Redesigned onboarding around early value delivery, reducing signup drop-off from 71.6% to 34%',
     img: '/tbm.png',
