@@ -454,10 +454,12 @@ export default function About() {
                           />
                           {contact.label}
                         </a>
-                        {contact.icon === '/icons/mail.svg' && emailHovered && (
+                        {contact.icon === '/icons/mail.svg' && (
+                          /* Always mounted (space reserved even when hidden) so its appearance on hover never changes this row's wrap/height. */
                           <button
                             type="button"
                             aria-label={emailCopied ? 'Email address copied' : 'Copy email address'}
+                            tabIndex={emailHovered ? 0 : -1}
                             onClick={() => {
                               navigator.clipboard.writeText('vidya1997@gmail.com')
                               setEmailCopied(true)
@@ -474,7 +476,9 @@ export default function About() {
                               background: 'none',
                               color: emailCopied ? 'var(--color-accent)' : 'var(--color-text-meta)',
                               cursor: 'pointer',
-                              transition: 'color var(--duration-hover) var(--ease-standard)',
+                              opacity: emailHovered ? 1 : 0,
+                              pointerEvents: emailHovered ? 'auto' : 'none',
+                              transition: 'color var(--duration-hover) var(--ease-standard), opacity var(--duration-hover) var(--ease-standard)',
                             }}
                             onMouseEnter={e => { if (!emailCopied) e.currentTarget.style.color = 'var(--color-accent)' }}
                             onMouseLeave={e => { if (!emailCopied) e.currentTarget.style.color = 'var(--color-text-meta)' }}
