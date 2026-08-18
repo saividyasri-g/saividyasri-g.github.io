@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import ThemeToggle from '../ui/ThemeToggle'
 import NavLinks from './NavLinks'
 
-const CASE_STUDY_PATHS = ['/hmc', '/fidelity', '/marketplace', '/multi-stakeholder']
+const CASE_STUDY_PATHS = ['/hmc', '/fidelity', '/marketplace', '/multi-stakeholder', '/ai-inference-tools']
 const SENTINEL_PATHS = ['/']
 
 export default function FloatingNav() {

@@ -8,9 +8,10 @@ import HeroMotoCorp from './pages/hmc'
 import MultiStakeholder from './pages/multi-stakeholder'
 import Marketplace from './pages/marketplace'
 import Fidelity from './pages/fidelity'
+import AiInferenceTools from './pages/ai-inference-tools'
 import About from './pages/About'
 
-const SCROLLBAR_ROUTES = ['/hmc', '/multi-stakeholder', '/marketplace', '/fidelity']
+const SCROLLBAR_ROUTES = ['/hmc', '/multi-stakeholder', '/marketplace', '/fidelity', '/ai-inference-tools']
 
 function ScrollbarGutter() {
   const { pathname } = useLocation()
@@ -45,6 +46,7 @@ export default function App() {
           <Route path="/multi-stakeholder" element={<MultiStakeholder />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/fidelity" element={<Fidelity />} />
+          <Route path="/ai-inference-tools" element={<AiInferenceTools />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </HashRouter>

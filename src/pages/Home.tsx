@@ -35,7 +35,7 @@ const projects: Project[] = [
     imgContained: true,
   },
   {
-    tags: ['Enterprise', 'Compliance', 'Fidelity'],
+    tags: ['Enterprise', 'Compliance Dashboard'],
     title: 'Supervisory Workstation - Compliance Tool',
     desc: 'Redesigned how managers at Fidelity Investments find the associate responsible for a compliance incident and file a supervision report.',
     img: '/fidelity/thumbnail.png',
@@ -67,13 +67,13 @@ const projects: Project[] = [
 /** School projects and self-directed concepts — shown in their own section below Work, using the same ProjectCard as the main grid. */
 const conceptProjects: Project[] = [
   {
-    tags: ['Recommendation System', 'Concept'],
-    title: 'Course Compass',
-    desc: 'An AI-assisted course discovery concept that helps students identify curriculum paths based on goals, constraints, and prior knowledge.',
-    img: '/course-compass-thumbnail.png',
-    imgAlt: 'Course Compass — AI course discovery concept',
-    href: '#',
-    comingSoon: true,
+    tags: ['Self-Directed Exploration', 'B2B'],
+    title: 'AI Inference Tools: Intake and Purchase Decision',
+    desc: 'I investigated how mid-size companies buy AI inference tools, what triggers ML engineers to look for one, and how that buying chain should shape the first interaction.',
+    img: '/ai_inference/header.png',
+    imgAlt: 'Competitive positioning quadrant — configuration burden vs. cost predictability across Groq, Together.ai, and Fireworks AI',
+    href: '#/ai-inference-tools',
+    imgContained: true,
   },
   {
     tags: ['Service Design', 'Innovation Strategy'],
@@ -146,6 +146,15 @@ const conceptProjects: Project[] = [
         </div>
       </>
     ),
+  },
+  {
+    tags: ['Recommendation System', 'Concept'],
+    title: 'Course Compass',
+    desc: 'An AI-assisted course discovery concept that helps students identify curriculum paths based on goals, constraints, and prior knowledge.',
+    img: '/course-compass-thumbnail.png',
+    imgAlt: 'Course Compass — AI course discovery concept',
+    href: '#',
+    comingSoon: true,
   },
 ]
 
