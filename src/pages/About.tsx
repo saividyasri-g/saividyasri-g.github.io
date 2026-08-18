@@ -232,7 +232,7 @@ export default function About() {
         transition: 'var(--transition-theme)',
       }}
     >
-      <div className="layout-content layout-content--centered" style={{ padding: '120px var(--space-12) 88px' }}>
+      <div className="layout-content layout-content--centered page-outer-pad" style={{ padding: '120px var(--space-12) 88px' }}>
 
             {/* ── Intro ── */}
             <section style={{ maxWidth: '660px', marginBottom: '56px' }}>
@@ -289,6 +289,7 @@ export default function About() {
 
             {/* ── Identity card ── */}
             <section
+              className="about-identity-card"
               style={{
                 display: 'grid',
                 gridTemplateColumns: '260px 1fr',
@@ -301,6 +302,7 @@ export default function About() {
             >
               {/* Left — hologram avatar */}
               <div
+                className="about-identity-avatar"
                 style={{
                   position: 'relative',
                   background: 'var(--color-surface-card)',
@@ -506,6 +508,7 @@ export default function About() {
             <section style={{ marginBottom: '60px' }}>
               <SectionHeader label="My Toolkit" />
               <div
+                className="about-card-grid-2"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
@@ -531,6 +534,7 @@ export default function About() {
             <section style={{ marginBottom: '60px' }}>
               <SectionHeader label="Ethics & Principles" />
               <div
+                className="about-card-grid-3"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(3, 1fr)',
@@ -556,6 +560,7 @@ export default function About() {
             <section style={{ marginBottom: '24px' }}>
               <SectionHeader label="Current Values" />
               <div
+                className="about-card-grid-3"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(3, 1fr)',

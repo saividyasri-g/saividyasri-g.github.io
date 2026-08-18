@@ -290,7 +290,7 @@ export default function Lab() {
         transition: 'var(--transition-theme)',
       }}
     >
-      <div className="layout-content layout-content--centered" style={{ padding: '120px var(--space-12) 88px' }}>
+      <div className="layout-content layout-content--centered page-outer-pad" style={{ padding: '120px var(--space-12) 88px' }}>
         <h1
           style={{
             fontSize: 'var(--text-base)',

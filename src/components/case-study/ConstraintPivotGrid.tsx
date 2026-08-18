@@ -60,13 +60,13 @@ export function ConstraintPivotGrid({ entries }: ConstraintPivotGridProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
       {entries.map((entry, i) => (
-        <div key={i} style={dashedCard}>
+        <div key={i} className="finding-card" style={dashedCard}>
           <div style={{ flex: 1 }}>
             <span style={cardEyebrow}>Constraint #{i + 1}</span>
             <p style={cardHeader}>{entry.title}</p>
             <p style={cardDesc}>{entry.description}</p>
           </div>
-          <div style={{ width: pivotCardWidth, flexShrink: 0, background: pivotFill, borderRadius: 'var(--radius-card)', padding: 'var(--space-4) var(--space-5)', transition: 'var(--transition-theme)' }}>
+          <div className="finding-cost-panel" style={{ width: pivotCardWidth, flexShrink: 0, background: pivotFill, borderRadius: 'var(--radius-card)', padding: 'var(--space-4) var(--space-5)', transition: 'var(--transition-theme)' }}>
             <span style={{ ...cardEyebrow, marginBottom: 'var(--space-2)', color: pivotLabelColor }}>Pivot</span>
             {/* Fixed dark text — this panel's fill (pivotFill) stays light in both themes, so text must not follow the theme-swapping body-text token. */}
             <span style={{ fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--primitive-light-title)' }}>

@@ -316,6 +316,7 @@ a { text-decoration: none; }
 
   .layout-grid-body {
     flex-direction: column;
+    align-items: stretch;
   }
 
   /* Project card: image above text on mobile */
@@ -323,6 +324,15 @@ a { text-decoration: none; }
     grid-template-columns: 1fr !important;
     gap: 20px !important;
   }
+
+  /* About: principles and values drop from 3 to 2 columns at tablet */
+  .about-card-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Home: swap Multi-Stakeholder (3rd) below Marketplace (4th) in single-column view */
+  .project-card-grid--work > :nth-child(3) { order: 4; }
+  .project-card-grid--work > :nth-child(4) { order: 3; }
 
   /* Sidebar becomes a normal block (not sticky/full-height) on small screens */
   .layout-sidebar {
@@ -380,5 +390,41 @@ a { text-decoration: none; }
   .diagram-header {
     flex-direction: column !important;
     align-items: flex-start !important;
+  }
+
+  /* ProblemCostAnnotations: stack cost panel below finding text on phones */
+  .finding-card {
+    flex-direction: column !important;
+  }
+
+  .finding-cost-panel {
+    width: 100% !important;
+  }
+
+  /* Home / About: reduce top padding and horizontal gutter on phones */
+  .page-outer-pad {
+    padding: 72px var(--space-4) 60px var(--space-4) !important;
+  }
+
+  /* Home: project card title scales down on narrow screens */
+  .project-card-title {
+    font-size: 17px !important;
+  }
+
+  /* About: identity card stacks avatar on top, info below */
+  .about-identity-card {
+    grid-template-columns: 1fr !important;
+  }
+
+  .about-identity-avatar {
+    border-right: none !important;
+    border-bottom: 1px solid var(--color-border-hair);
+    min-height: 220px;
+  }
+
+  /* About: toolkit 2-col and principles/values 3-col all collapse to 1 */
+  .about-card-grid-2,
+  .about-card-grid-3 {
+    grid-template-columns: 1fr !important;
   }
 }

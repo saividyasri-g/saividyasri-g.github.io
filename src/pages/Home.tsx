@@ -317,6 +317,7 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal 
           ))}
         </div>
         <h3
+          className="project-card-title"
           style={{
             fontSize: '22px',
             lineHeight: 1.2,
@@ -361,7 +362,7 @@ export default function Home() {
         transition: 'var(--transition-theme)',
       }}
     >
-      <div className="layout-content layout-content--centered" style={{ padding: '120px var(--space-12) 88px' }}>
+      <div className="layout-content layout-content--centered page-outer-pad" style={{ padding: '120px var(--space-12) 88px' }}>
         <header style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-6)' }}>
           <h1
             style={{
@@ -399,7 +400,7 @@ export default function Home() {
 
         <div id="home-inline-nav-sentinel" aria-hidden style={{ height: 1 }} />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: '1fr', gap: 'var(--space-6)', marginTop: 'var(--space-10)' }}>
+        <div className="project-card-grid project-card-grid--work" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: '1fr', gap: 'var(--space-6)', marginTop: 'var(--space-10)' }}>
           {projects.map((project, i) => (
             <ProjectCard
               key={project.title}
@@ -428,7 +429,7 @@ export default function Home() {
           >
             Other Projects & Concepts
           </span>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: '1fr', gap: 'var(--space-6)' }}>
+          <div className="project-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridAutoRows: '1fr', gap: 'var(--space-6)' }}>
             {conceptProjects.map((project, i) => (
               <ProjectCard
                 key={project.title}

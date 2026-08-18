@@ -59,7 +59,7 @@ export function ProblemCostAnnotations({
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
       {columns.map((col, i) => {
         const findingCard = (
-          <div style={dashedCard}>
+          <div className="finding-card" style={dashedCard}>
             <div style={{ flex: 1 }}>
               <span style={findingLabelStyle}>Finding #{i + 1}</span>
               <p style={{ margin: '0 0 8px', fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--color-text-body)', transition: 'var(--transition-theme)' }}>
@@ -69,7 +69,7 @@ export function ProblemCostAnnotations({
                 {col.description}
               </p>
             </div>
-            <div style={{ width: costCardWidth, flexShrink: 0, background: costFill, borderRadius: 'var(--radius-card)', padding: 'var(--space-4) var(--space-5)', transition: 'var(--transition-theme)' }}>
+            <div className="finding-cost-panel" style={{ width: costCardWidth, flexShrink: 0, background: costFill, borderRadius: 'var(--radius-card)', padding: 'var(--space-4) var(--space-5)', transition: 'var(--transition-theme)' }}>
               <span
                 style={{
                   display: 'block',

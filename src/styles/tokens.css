@@ -240,10 +240,9 @@
   --transition-theme: background var(--duration-theme), color var(--duration-theme), border-color var(--duration-theme);
 }
 
-/* Below this width, revert the smallest type steps to their original compact sizes */
 @media (width <= 768px) {
   :root {
-    --text-xs: var(--primitive-size-8);
+    --text-xs: var(--primitive-size-12);
     --text-sm: var(--primitive-size-12);
   }
 }
