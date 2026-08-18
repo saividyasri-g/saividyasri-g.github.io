@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import {
   Outline,
+  CaseStudyNav,
   sectionStyle,
   pStyle,
   eyebrowStyle,
@@ -464,6 +465,8 @@ export default function AiInferenceTools() {
                   />
                 </Block>
               </section>
+
+              <CaseStudyNav next={{ title: 'Vehicle Service Management Tools', href: '#/hmc' }} />
 
             </div>
           </div>

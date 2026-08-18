@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import {
   Outline,
   ProblemCostAnnotations,
+  CaseStudyNav,
   sectionStyle,
   pStyle,
   eyebrowStyle,
@@ -229,7 +230,7 @@ export default function Marketplace() {
                 </div>
                 <div>
                   <span style={eyebrowStyle}>Team</span>
-                  <p style={{ ...pStyle, margin: 0 }}>3 designers — I owned onboarding; two designers owned dashboard and business listing form components</p>
+                  <p style={{ ...pStyle, margin: 0 }}>3 UX designers, 2 Visual Designers, CTO, CEO </p>
                 </div>
                 <div>
                   <span style={eyebrowStyle}>Tools</span>
@@ -276,7 +277,7 @@ export default function Marketplace() {
                 eyebrow="Problem Discovery"
                 header="Web analytics showed a 71.6% drop-off in the onboarding flow"
               >
-                <p style={{ ...pStyle, margin: 0 }}>
+                <p style={{ ...pStyle, margin: '0 0 var(--space-5)' }}>
                   When I joined as an intern, I was tasked with redesigning the onboarding flow because of this drop-off rate. I investigated by analyzing Hotjar analytics, reviewing session recordings, and benchmarking against competing marketplaces.
                 </p>
                 <ProblemCostAnnotations columns={[
@@ -284,7 +285,6 @@ export default function Marketplace() {
                     problem: 'Business listing creation triggered the drop-off in the onboarding flow',
                     description: 'Web analytics showed the drop-off concentrated in business listing creation. Completing a listing took 8 minutes (timed the flow in UX audit).',
                     cost: 'Longest path to value · High drop-off before payoff',
-                    media: <video src="/marketplace/modals.mp4" autoPlay loop muted playsInline style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />,
                   },
                   {
                     problem: "Onboarding described the platform's value instead of letting pros experience it",
@@ -313,7 +313,7 @@ export default function Marketplace() {
                   The findings pointed that pros were asked to commit before the platform showed them anything. I redefined success from listing completion to time to reach value on a dashboard.
                 </p>
                 <p style={{ ...pStyle, margin: '20px 0 0' }}>
-                  Part-way through, the business surfaced that they were sourcing leads externally and the first few would be free — a concrete value pros could reach. I redefined success again around claiming that free lead. This moved listing creation to after the pro sees value, betting that a pro who has seen a real lead completes the listing more readily than one asked upfront.
+                  Part-way through, the business surfaced that they were sourcing leads externally and the first few would be free (new value unlocked!). I redefined success again around claiming that free lead. This moved listing creation, betting that a pro who has seen a real lead completes the listing more readily than one asked upfront.
                 </p>
                 <div style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-border-hair)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', margin: '18px 0 0', transition: 'var(--transition-theme)' }}>
                   <img src="/marketplace/reframe.png" alt="Reframed success metric — listing creation moved after first free lead" style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />
@@ -342,12 +342,12 @@ export default function Marketplace() {
               <SectionDivider label="Impact" />
               <ImpactCards cards={[
                 {
-                  title: 'Bounce: 71.6% → 34%',
-                  description: 'Web analytics, two weeks post-launch against the baseline month before I started. Before/after comparison, not an A/B test.',
+                  title: '71.6% → 34%',
+                  description: 'Bounce rate measured two weeks post-launch against the baseline month before I started. ',
                 },
                 {
-                  title: 'Time to reach a lead: 8 min → under 2',
-                  description: 'Timed the redesigned flow the same way (UX audit). Run on the prototype, so it excludes production latency and edge cases.',
+                  title: '8 min → under 2 min',
+                  description: 'Timed the prototype of redesigned flow. Excludes production latency.',
                 },
               ]} />
               <Note>
@@ -403,9 +403,8 @@ export default function Marketplace() {
               ]} />
             </section>
 
-            {/* ════════════════════════════════════════ */}
-            {/* WHAT I'D DO DIFFERENTLY                 */}
-            {/* ════════════════════════════════════════ */}
+              <CaseStudyNav next={{ title: 'AI Inference Tools: Intake and Purchase Decision', href: '#/ai-inference-tools' }} />
+
             </div>
           </div>
         </main>

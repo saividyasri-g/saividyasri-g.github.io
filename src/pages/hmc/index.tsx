@@ -6,6 +6,7 @@ import {
   CaseBadge,
   ProblemCostAnnotations,
   ConstraintPivotGrid,
+  CaseStudyNav,
   sectionStyle,
   h2Style,
   pStyle,
@@ -322,7 +323,7 @@ export default function HeroMotoCorp() {
                 <p style={pStyle}>
                   A two-wheeler service centre is where customers bring their motorbikes and scooters for routine service and repairs. A typical centre runs on multiple staff roles working across physically separate zones:
                 </p>
-                <Carousel slides={contextSlides} autoPlayMs={3500} width="50%" />
+                <Carousel slides={contextSlides} autoPlayMs={3500} imgWidth="55%" />
               </Block>
 
               <Block
@@ -821,6 +822,8 @@ export default function HeroMotoCorp() {
                 ))}
               </div>
             </section>
+
+              <CaseStudyNav next={{ title: 'Supervisory Workstation — Compliance Tool', href: '#/fidelity' }} />
 
             </div>
           </div>

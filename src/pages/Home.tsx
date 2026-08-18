@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react'
 import ThemeToggle from '../components/ui/ThemeToggle'
 import NavLinks from '../components/layout/NavLinks'
 import Modal from '../components/ui/Modal'
+import Footer from '../components/ui/Footer'
 import { eyebrowStyle, pStyle, h2Style, Carousel } from '../components/case-study'
 
 const hydroportSlides = Array.from({ length: 8 }, (_, i) => ({
@@ -26,7 +27,7 @@ interface Project {
 
 const projects: Project[] = [
   {
-    tags: ['Enterprise', 'B2B', '100K+ Downloads'],
+    tags: ['Enterprise - SaaS', '100K+ Downloads'],
     title: 'Vehicle Service Management Tools',
     desc: 'Dashboard and workshop floor visualisation tool for Service Managers to manage vehicle service operations efficiently.',
     img: '/hmc/hmc-thumbnail.png',
@@ -35,7 +36,7 @@ const projects: Project[] = [
     imgContained: true,
   },
   {
-    tags: ['Enterprise', 'Compliance Dashboard'],
+    tags: ['Enterprise', 'Internal Compliance Tool'],
     title: 'Supervisory Workstation - Compliance Tool',
     desc: 'Redesigned how managers at Fidelity Investments find the associate responsible for a compliance incident and file a supervision report.',
     img: '/fidelity/thumbnail.png',
@@ -44,7 +45,7 @@ const projects: Project[] = [
     imgContained: true,
   },
   {
-    tags: ['Enterprise', 'B2B', '100K+ Downloads'],
+    tags: ['Enterprise - SaaS', '100K+ Downloads'],
     title: 'Multi-Stakeholder Workflows Integration',
     desc: 'Removed manual dependencies between Service Manager, Technician and Security Guard at vehicle service centres.',
     img: '/workflow-thumbnail.png',
@@ -69,14 +70,14 @@ const conceptProjects: Project[] = [
   {
     tags: ['Self-Directed Exploration', 'B2B'],
     title: 'AI Inference Tools: Intake and Purchase Decision',
-    desc: 'Investigated buying journey of AI inference tools in mid-size companies, and how that should shape the first intake interaction.',
+    desc: 'Investigated buying journey of AI inference tools in mid-size companies, and how that should shape the intake interaction.',
     img: '/ai_inference/header.png',
     imgAlt: 'Competitive positioning quadrant — configuration burden vs. cost predictability across Groq, Together.ai, and Fireworks AI',
     href: '#/ai-inference-tools',
     imgContained: true,
   },
   {
-    tags: ['Service Design', 'Innovation Strategy'],
+    tags: ['Service Design', ' B2B Innovation Strategy'],
     title: 'HydroPort - Electrolyser Rental Service Model',
     desc: 'Moving a new alloy to market by innovating how green hydrogen plants get built and paid for.',
     img: '/Hydroport/Electrolyser-thumbnail.jpg',
@@ -208,7 +209,7 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal 
         setCursorPos({ x, y, fromRight: x > rect.width / 2, fromBottom: y > rect.height / 2 })
       }}
     >
-      {project.comingSoon && isHovered && (
+      {isHovered && project.comingSoon && (
         <span
           aria-hidden
           style={{
@@ -223,8 +224,7 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal 
             fontFamily: 'var(--font-sans)',
             fontWeight: 500,
             fontSize: 'var(--text-xs)',
-            letterSpacing: '.06em',
-            textTransform: 'uppercase' as const,
+            letterSpacing: '0.01em',
             padding: '6px 10px',
             borderRadius: 'var(--radius-lg)',
             whiteSpace: 'nowrap',
@@ -442,6 +442,7 @@ export default function Home() {
             ))}
           </div>
         </section>
+        <Footer />
       </div>
 
       <Modal open={!!modalProject} onClose={() => setModalProject(null)}>

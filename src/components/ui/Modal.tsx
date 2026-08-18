@@ -66,6 +66,7 @@ export default function Modal({ open, onClose, children }: ModalProps) {
           type="button"
           onClick={onClose}
           aria-label="Close"
+          className="fill-btn fill-btn--subtle"
           style={{
             position: 'absolute',
             top: 'var(--space-5)',
@@ -75,6 +76,7 @@ export default function Modal({ open, onClose, children }: ModalProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            overflow: 'hidden',
             border: '1px solid var(--color-border-hair)',
             borderRadius: 'var(--radius-sm)',
             background: 'var(--color-surface-card)',

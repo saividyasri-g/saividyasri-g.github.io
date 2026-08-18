@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Card from '../components/ui/Card'
 import HoloAvatar from '../components/HoloAvatar'
+import Footer from '../components/ui/Footer'
 
 const toolkit = [
   {
@@ -581,6 +582,7 @@ export default function About() {
               </div>
             </section>
 
+            <Footer />
       </div>
     </div>
   )

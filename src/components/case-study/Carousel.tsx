@@ -10,9 +10,11 @@ interface CarouselProps {
   slides: Slide[]
   autoPlayMs?: number
   width?: string
+  /** Max-width of the image frame inside the card (e.g. '60%'). Card always fills its container. */
+  imgWidth?: string
 }
 
-export default function Carousel({ slides, autoPlayMs = 3500, width }: CarouselProps) {
+export default function Carousel({ slides, autoPlayMs = 3500, width, imgWidth }: CarouselProps) {
   const [current, setCurrent] = useState(0)
   const pausedRef = useRef(false)
 
@@ -43,7 +45,7 @@ export default function Carousel({ slides, autoPlayMs = 3500, width }: CarouselP
       )}
 
       {/* Image frame */}
-      <div style={{ position: 'relative', borderRadius: 'var(--radius-sm)', overflow: 'hidden', background: '#f5f5f5' }}>
+      <div style={{ position: 'relative', borderRadius: 'var(--radius-sm)', overflow: 'hidden', background: '#f5f5f5', maxWidth: imgWidth, margin: imgWidth ? '0 auto' : undefined }}>
         {slides.map((slide, i) => (
           <img
             key={slide.src}
@@ -131,7 +133,7 @@ function arrowStyle(side: 'left' | 'right'): React.CSSProperties {
 const captionStyle: React.CSSProperties = {
   fontFamily: 'var(--font-sans)',
   fontSize: 'var(--text-sm)',
-  fontWeight: 400,
+  fontWeight: 500,
   lineHeight: 1.5,
   color: 'var(--color-text-secondary)',
   textAlign: 'left',

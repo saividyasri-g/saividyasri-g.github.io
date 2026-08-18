@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import HoloAvatar from '../components/HoloAvatar'
+import Footer from '../components/ui/Footer'
 
 interface LabTile {
   tags: string[]
@@ -338,6 +339,7 @@ export default function Lab() {
             <LabCard tile={paintingTile} />
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   )

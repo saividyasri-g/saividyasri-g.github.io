@@ -5,6 +5,7 @@ export default function ThemeToggle() {
   const dark = theme === 'dark'
 
   return (
+    <div style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
     <button
       onClick={toggle}
       aria-label="Toggle theme"
@@ -69,5 +70,6 @@ export default function ThemeToggle() {
         ☾
       </span>
     </button>
+    </div>
   )
 }

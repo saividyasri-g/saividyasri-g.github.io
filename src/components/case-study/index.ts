@@ -1,4 +1,5 @@
 export { CaseBadge } from './CaseBadge'
+export { CaseStudyNav } from './CaseStudyNav'
 export { default as Overview } from './Overview'
 export { default as Metric } from './Metric'
 export { default as BeforeAfter } from './BeforeAfter'

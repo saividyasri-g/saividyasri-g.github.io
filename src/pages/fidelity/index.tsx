@@ -3,6 +3,7 @@ import {
   DiagramSection,
   ProblemCostAnnotations,
   ConstraintPivotGrid,
+  CaseStudyNav,
   sectionStyle,
   h2Style,
   pStyle,
@@ -624,6 +625,8 @@ export default function Fidelity() {
                 ))}
               </div>
             </section>
+
+              <CaseStudyNav next={{ title: 'Marketplace Onboarding & Activation', href: '#/marketplace' }} />
 
             </div>
           </div>
