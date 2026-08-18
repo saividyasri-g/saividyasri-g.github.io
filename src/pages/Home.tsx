@@ -69,7 +69,7 @@ const conceptProjects: Project[] = [
   {
     tags: ['Self-Directed Exploration', 'B2B'],
     title: 'AI Inference Tools: Intake and Purchase Decision',
-    desc: 'I investigated how mid-size companies buy AI inference tools, what triggers ML engineers to look for one, and how that buying chain should shape the first interaction.',
+    desc: 'Investigated buying journey of AI inference tools in mid-size companies, and how that should shape the first intake interaction.',
     img: '/ai_inference/header.png',
     imgAlt: 'Competitive positioning quadrant — configuration burden vs. cost predictability across Groq, Together.ai, and Fireworks AI',
     href: '#/ai-inference-tools',

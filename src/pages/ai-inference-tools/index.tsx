@@ -205,6 +205,24 @@ export default function AiInferenceTools() {
                     Research log
                   </a>
                 </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-10)', marginBottom: 'var(--space-8)' }}>
+                  <div>
+                    <span style={eyebrowStyle}>Status</span>
+                    <p style={{ ...pStyle, margin: 0 }}>Concept Exploration • 2026</p>
+                  </div>
+                  <div>
+                    <span style={eyebrowStyle}>Duration</span>
+                    <p style={{ ...pStyle, margin: 0 }}>3 nights</p>
+                  </div>
+                  <div>
+                    <span style={eyebrowStyle}>Skills</span>
+                    <p style={{ ...pStyle, margin: 0 }}>Market Research, Competitor Research, Journey Mapping</p>
+                  </div>
+                  <div>
+                    <span style={eyebrowStyle}>Tools</span>
+                    <p style={{ ...pStyle, margin: 0 }}>Claude - Projects, Paper</p>
+                  </div>
+                </div>
                 <div style={{ marginBottom: 'var(--space-8)' }}>
                   <span style={eyebrowStyle}>Overview</span>
                   <p style={{ ...pStyle, margin: '8px 0 16px' }}>
@@ -216,7 +234,7 @@ export default function AiInferenceTools() {
                   <p style={{ ...pStyle, margin: '0 0 16px' }}>
                     From this I formed a hypothesis: ML engineers configuring an inference tool think in terms of what they are running (model, workload type, request volume, latency tolerance) not in terms of hardware. I designed an intake flow on that hypothesis, structured so the engineer reaches a result and a defensible cost estimate in the same session.
                   </p>
-                  <Note label="Tools">
+                  <Note label="How I worked">
                     I used Claude for the secondary research like finding sources, summarising community forums discussion, and building the buyer journey and positioning maps. I audited Groq, Fireworks AI, and Together.ai myself. I specified the intake flow and generated the wireframes by prompting in Paper.
                   </Note>
                 </div>
@@ -395,7 +413,7 @@ export default function AiInferenceTools() {
                   </p>
                 </Block>
 
-                <Block header="Phase 1: I would run 3/5 qualitative research interviews to validate the hypothesis">
+                <Block header="Phase 1: I would run 3 qualitative research interviews to validate the hypothesis">
                   <p style={{ ...pStyle, margin: 0 }}>
                     <strong style={{ color: 'var(--color-text-title)', fontWeight: 600 }}>Hypothesis: </strong>
                     ML engineers configuring an inference tool think in terms of what they are running (model, workload type, request volume, latency tolerance) rather than hardware requirements.
@@ -406,15 +424,15 @@ export default function AiInferenceTools() {
                     showLabels={false}
                     findings={[
                       {
-                        header: 'If all three describe the workload first.',
+                        header: '3/3 participants validate workload-first mental model.',
                         description: 'The assumption holds. I learn what else they consider beyond model, latency, and volume, and why. Anything that changes the design goes into the wireframes before the next phase.',
                       },
                       {
-                        header: 'If one or more describe hardware first.',
+                        header: 'At least 1/3 participant validate hardware-first mental model.',
                         description: 'The design does not serve them, and I need to know why GPU configuration feels right. I map what those engineers have in common and survey a wider group to segment by preference.',
                       },
                       {
-                        header: 'If they describe something else entirely.',
+                        header: 'At least 1/3 participant describe a different approach.',
                         description: 'The most useful outcome and the one I have least prepared for. I learn what they are actually thinking about, then segment the same way.',
                       },
                     ]}
@@ -435,11 +453,11 @@ export default function AiInferenceTools() {
                     showLabels={false}
                     findings={[
                       {
-                        header: 'If under the target benchmark.',
+                        header: 'Less than the target time',
                         description: 'I learn which parts of the flow carried them, so I know what to protect in later iterations.',
                       },
                       {
-                        header: 'If over the benchmark.',
+                        header: 'Greater than the target time',
                         description: 'I find where they stalled and whether design can fix it. If it cannot, the barrier is the finding, and the problem statement needs refining rather than the screens.',
                       },
                     ]}

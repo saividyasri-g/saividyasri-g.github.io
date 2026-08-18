@@ -173,7 +173,7 @@ export default function Marketplace() {
             }}
           >
             <img
-              src="/tbm.png"
+              src="/marketplace/thumbnail.png"
               alt="Case study thumbnail — Builder Market onboarding"
               style={{ width: '50%', display: 'block', borderRadius: 'var(--radius-sm)', margin: '0 auto' }}
             />
