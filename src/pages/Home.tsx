@@ -390,8 +390,7 @@ export default function Home() {
             transition: 'var(--transition-theme)',
           }}
         >
-          I'm a Product Designer based in San Francisco.<br />
-          I help make complex, data-heavy tools to be intuitive and effortless to work with.
+          I'm a Product Designer based in San Francisco. I help make complex, data-heavy tools intuitive and effortless to work with.
         </p>
 
         <nav style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2px', margin: 'var(--space-10) 0 0' }}>
