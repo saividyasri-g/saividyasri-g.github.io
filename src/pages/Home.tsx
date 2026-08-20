@@ -18,9 +18,8 @@ interface Project {
   img: string | null
   href: string
   comingSoon?: boolean
+  /** Fill-variant only: pad and object-fit: contain instead of cover — for icons/diagrams that shouldn't bleed to the edges. Ignored by the corner-tile variant. */
   imgContained?: boolean
-  /** Default scale for the thumbnail (e.g. 0.7 = shown 30% smaller); zooms to full size on hover. Omit for the standard fill treatment. */
-  imgScale?: number
   /** When present, clicking the card opens a modal with this content instead of navigating — for projects with no dedicated case-study page yet. */
   modalContent?: ReactNode
 }
@@ -33,7 +32,6 @@ const projects: Project[] = [
     img: '/hmc/hmc-thumbnail.png',
     imgAlt: 'Service manager dashboard on tablet and mobile',
     href: '#/hmc',
-    imgContained: true,
   },
   {
     tags: ['Enterprise', 'Internal Compliance Tool'],
@@ -42,7 +40,6 @@ const projects: Project[] = [
     img: '/fidelity/thumbnail.png',
     imgAlt: 'Fidelity compliance system redesign — dashboard overview',
     href: '#/fidelity',
-    imgContained: true,
   },
   {
     tags: ['Enterprise - SaaS', '100K+ Downloads'],
@@ -51,7 +48,6 @@ const projects: Project[] = [
     img: '/workflow-thumbnail.png',
     imgAlt: 'Multi-stakeholder service workflow across mobile screens',
     href: '#/multi-stakeholder',
-    imgScale: 0.7,
     comingSoon: true,
   },
   {
@@ -61,7 +57,6 @@ const projects: Project[] = [
     img: '/marketplace/tbm.png',
     imgAlt: 'Marketplace supplier activation flow',
     href: '#/marketplace',
-    imgScale: 0.7,
   },
 ]
 
@@ -165,9 +160,12 @@ interface CardProps {
   onMouseEnter: () => void
   onMouseLeave: () => void
   onOpenModal: (project: Project) => void
+  /** 'corner' = bottom-right anchored tile that scales on hover (Work grid).
+      'fill' = image fills the top band, centered, with a subtle CSS hover zoom (Other Projects & Concepts). */
+  thumbVariant?: 'corner' | 'fill'
 }
 
-function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal }: CardProps) {
+function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal, thumbVariant = 'corner' }: CardProps) {
   const [imgLoaded, setImgLoaded] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0, fromRight: false, fromBottom: false })
@@ -188,11 +186,10 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal 
         display: 'flex',
         flexDirection: 'column',
         background: 'var(--color-surface-main)',
-        border: '1px solid var(--color-border-hair)',
         borderRadius: 'var(--radius-project-card)',
         cursor: isClickable ? 'pointer' : 'default',
         opacity: dimmed ? 0.45 : 1,
-        transition: `border-color var(--duration-hover) var(--ease-standard), opacity 0.3s ease-out`,
+        transition: 'opacity 0.3s ease-out',
       }}
       onClick={activate}
       role={isClickable ? (hasModal ? 'button' : 'link') : undefined}
@@ -235,12 +232,12 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal 
       )}
       {/* Thumbnail */}
       <div
+        className="card-thumb-wrap"
         style={{
           position: 'relative',
           aspectRatio: '16 / 10',
           overflow: 'hidden',
           borderRadius: 'var(--radius-project-card) var(--radius-project-card) 0 0',
-          borderBottom: '1px solid var(--color-border-hair)',
           flexShrink: 0,
           transition: 'var(--transition-theme)',
         }}
@@ -251,9 +248,11 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal 
           style={{
             position: 'absolute',
             inset: 0,
-            /* Same themed background on every card's thumbnail — including full-bleed covers whose image is scaled down (imgScale), which otherwise leaves the card's own background showing through the gap around the shrunk image instead of this one. */
+            /* Themed backdrop. In the corner variant the tile never fills the band, so the
+               backdrop is always visible. In the fill variant a full-bleed cover image
+               replaces it entirely (imgContained keeps it visible as a matte around the icon). */
             background: 'var(--color-surface-card)',
-            opacity: project.img && imgLoaded && !project.imgContained && !project.imgScale ? 0 : 1,
+            opacity: thumbVariant === 'fill' && project.img && imgLoaded && !project.imgContained ? 0 : 1,
             transition: 'opacity 0.4s ease-out, background var(--transition-theme)',
             display: 'flex',
             alignItems: 'center',
@@ -267,7 +266,7 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal 
                 fontSize: 'var(--text-xs)',
                 letterSpacing: '.14em',
                 textTransform: 'uppercase' as const,
-                color: 'var(--color-text-meta)',
+                color: 'var(--color-text-eyebrow)',
                 transition: 'var(--transition-theme)',
               }}
             >
@@ -276,7 +275,36 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal 
           )}
         </div>
 
-        {project.img && (
+        {project.img && thumbVariant === 'corner' && (
+          /* Corner-tile pattern: image is pinned flush to the bottom-right of the top
+             band and scales up from its bottom-right origin on hover — growth extends
+             toward the top-left while the anchor stays pinned inside the wrap, so the
+             tile never appears to detach from the card edge. */
+          <img
+            src={project.img}
+            alt={project.imgAlt}
+            className="card-thumb"
+            onLoad={() => setImgLoaded(true)}
+            style={{
+              position: 'absolute',
+              right: 0,
+              bottom: 0,
+              width: '62%',
+              height: '82%',
+              objectFit: 'cover',
+              objectPosition: 'top left',
+              opacity: imgLoaded ? 1 : 0,
+              transform: isHovered ? 'scale(1.2)' : 'scale(1)',
+              transformOrigin: 'bottom right',
+              transition: 'opacity 0.5s ease-out, transform 0.6s var(--ease-standard)',
+            }}
+          />
+        )}
+
+        {project.img && thumbVariant === 'fill' && (
+          /* Fill pattern: image fills the top band (or sits contained with padding for
+             icon-style thumbs). Hover zoom is handled by the shared .card-thumb CSS rule
+             — no inline transform so it doesn't override. */
           <img
             src={project.img}
             alt={project.imgAlt}
@@ -289,7 +317,6 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal 
               height: project.imgContained ? 'calc(100% - 2 * var(--space-5))' : '100%',
               objectFit: project.imgContained ? 'contain' : 'cover',
               opacity: imgLoaded ? 1 : 0,
-              transform: project.imgScale ? `scale(${isHovered ? 0.8 : project.imgScale})` : undefined,
               transition: 'opacity 0.5s ease-out, transform 0.55s var(--ease-standard)',
             }}
           />
@@ -302,14 +329,13 @@ function ProjectCard({ project, dimmed, onMouseEnter, onMouseLeave, onOpenModal 
           {project.tags.map(tag => (
             <span
               key={tag}
+              className="card-tag"
               style={{
                 fontFamily: 'var(--font-sans)',
                 fontSize: 'var(--text-xs)',
                 fontWeight: 500,
                 letterSpacing: '.09em',
                 textTransform: 'uppercase' as const,
-                color: 'var(--color-text-secondary)',
-                transition: 'var(--transition-theme)',
               }}
             >
               {tag}
@@ -419,11 +445,11 @@ export default function Home() {
               display: 'block',
               marginBottom: 'var(--space-6)',
               fontFamily: 'var(--font-eyebrow)',
-              fontSize: '11px',
+              fontSize: 'var(--text-xs)',
               fontWeight: 600,
               letterSpacing: '.12em',
               textTransform: 'uppercase' as const,
-              color: 'var(--color-text-meta)',
+              color: 'var(--color-text-eyebrow)',
               transition: 'var(--transition-theme)',
             }}
           >
@@ -438,6 +464,7 @@ export default function Home() {
                 onMouseEnter={() => setConceptHoveredIndex(i)}
                 onMouseLeave={() => setConceptHoveredIndex(null)}
                 onOpenModal={setModalProject}
+                thumbVariant="fill"
               />
             ))}
           </div>

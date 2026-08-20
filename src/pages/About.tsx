@@ -435,16 +435,17 @@ export default function About() {
                             textDecoration: 'none',
                           }}
                         >
-                          {/* Recolored via CSS mask + currentColor so the glyph follows this link's color — theme-aware at rest. */}
+                          {/* .hover-accent-icon owns background (defaults to currentColor so
+                              the glyph follows this link's text) and the hover→accent transition. */}
                           <span
                             role="img"
                             aria-label=""
+                            className="hover-accent-icon"
                             style={{
                               display: 'block',
                               width: '15px',
                               height: '15px',
                               flexShrink: 0,
-                              background: 'currentColor',
                               maskImage: `url(${contact.icon})`,
                               WebkitMaskImage: `url(${contact.icon})`,
                               maskSize: 'contain',

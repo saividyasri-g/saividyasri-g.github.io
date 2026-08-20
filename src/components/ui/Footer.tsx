@@ -33,7 +33,7 @@ export default function Footer() {
           transition: 'var(--transition-theme)',
         }}
       >
-        © Sai Vidyasri
+        © Sai Vidyasri Giridharan
       </span>
     </footer>
   )

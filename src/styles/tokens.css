@@ -64,9 +64,10 @@
   --primitive-light-card-hover: #fff;
   --primitive-light-text: #191b1e;
   --primitive-light-title: #111316;
-  --primitive-light-secondary: #6a7077;
-  --primitive-light-meta: #9aa0a7;
-  --primitive-light-faint: #b6bbc1;
+  --primitive-light-secondary: #3f454c;
+  --primitive-light-meta: #5f6570;
+  --primitive-light-faint: #9aa0a7;
+  --primitive-light-eyebrow: #9aa0a7;
   --primitive-light-hair: #e6e8eb;
   --primitive-light-hair-hover: #d0d5da;
   --primitive-light-hl-bg: #e5ebf5;
@@ -76,7 +77,7 @@
   --primitive-light-stripe-a: #f0f1f3;
   --primitive-light-stripe-b: #f6f7f8;
   --primitive-light-toggle-track: #e6e8eb;
-  --primitive-light-accent: #46617f;
+  --primitive-light-accent: #6366f1;
 
   /* Dark palette */
   --primitive-dark-page: #0c0f16;
@@ -86,9 +87,10 @@
   --primitive-dark-card-hover: #212840;
   --primitive-dark-text: #eaeef5;
   --primitive-dark-title: #f1f4f9;
-  --primitive-dark-secondary: #96a0b2;
+  --primitive-dark-secondary: #b6bfcc;
   --primitive-dark-meta: #6d7789;
   --primitive-dark-faint: #525c6e;
+  --primitive-dark-eyebrow: #6d7789;
   --primitive-dark-hair: #28303f;
   --primitive-dark-hair-hover: #333d4f;
   --primitive-dark-hl-bg: #1c2c44;
@@ -98,7 +100,7 @@
   --primitive-dark-stripe-a: #252e3d;
   --primitive-dark-stripe-b: #2a3444;
   --primitive-dark-toggle-track: #28303f;
-  --primitive-dark-accent: #8fa6c8;
+  --primitive-dark-accent: #818cf8;
 }
 
 /* ─── Semantics — light mode (default) ───────────────────── */
@@ -117,6 +119,7 @@
   --color-text-secondary: var(--primitive-light-secondary);
   --color-text-meta: var(--primitive-light-meta);
   --color-text-faint: var(--primitive-light-faint);
+  --color-text-eyebrow: var(--primitive-light-eyebrow);
   --color-border-hair: var(--primitive-light-hair);
   --color-border-hair-hover: var(--primitive-light-hair-hover);
   --color-border-tag: var(--primitive-light-tag-border);
@@ -148,6 +151,7 @@
   --color-text-secondary: var(--primitive-dark-secondary);
   --color-text-meta: var(--primitive-dark-meta);
   --color-text-faint: var(--primitive-dark-faint);
+  --color-text-eyebrow: var(--primitive-dark-eyebrow);
   --color-border-hair: var(--primitive-dark-hair);
   --color-border-hair-hover: var(--primitive-dark-hair-hover);
   --color-border-tag: var(--primitive-dark-tag-border);
@@ -226,7 +230,7 @@
   --content-width-media-min: 840px;
   --content-width-media-preferred: 60vw;
   --content-width-media-max: 920px;
-  --content-width-outline: 240px;
+  --content-width-outline: 200px;
 
   /* Badge tracking */
   --tracking-badge-label: var(--primitive-tracking-badge-label);

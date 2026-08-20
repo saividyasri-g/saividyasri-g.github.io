@@ -87,9 +87,11 @@ a { text-decoration: none; }
   --text-on-fill: var(--color-surface-page);
 }
 
-/* Project cards: same sweep, but 10% opacity — keeps text readable at any color */
+/* Project cards & other subtle affordances: same sweep, but very low opacity in
+   the accent tint — the fill reads as a slight color wash, not a grey overlay. */
 .fill-btn--subtle {
-  --fill-opacity-target: 0.1;
+  --fill-color: var(--color-accent);
+  --fill-opacity-target: 0.04;
 }
 
 
@@ -157,10 +159,103 @@ a { text-decoration: none; }
   transform: translateY(-50%) rotate(0deg) scaleX(1);
 }
 
-/* Project card border hover via CSS — no JS needed */
-.fill-btn--card:hover,
-.fill-btn--card:focus-visible {
-  border-color: var(--color-border-hair-hover) !important;
+/* Project card container — border stays a neutral hair on hover; the accent
+   affordance is carried by the tags flipping color, not by border/fill wash.
+   Fill-sweep pseudo is re-tinted to a theme-neutral grey via the --fill-color
+   override below, matching the older subtle-grey wash. */
+.fill-btn--card {
+  --fill-color: var(--color-text-secondary);
+  --fill-opacity-target: 0.04;
+
+  border: 1px solid var(--color-border-hair);
+  transition: var(--transition-theme);
+}
+
+/* Internal divider between the thumbnail and the card text — stays hair on
+   hover (matches the outer border). */
+.fill-btn--card .card-thumb-wrap {
+  border-bottom: 1px solid var(--color-border-hair);
+}
+
+/* Project card tags — base color owned by this class (not inline), so the hover
+   rule wins by simple cascade. */
+.card-tag {
+  color: var(--color-text-secondary);
+  transition: color var(--duration-hover) var(--ease-standard), var(--transition-theme);
+}
+
+.fill-btn--card:hover .card-tag,
+.fill-btn--card:focus-visible .card-tag {
+  color: var(--color-accent);
+}
+
+/* Case-study eyebrow — base color owned here; Outline's IntersectionObserver
+   toggles [data-section-active] on the matching <section>, and this rule catches
+   every eyebrow inside it. */
+.case-study-eyebrow {
+  color: var(--color-text-eyebrow);
+  transition: color var(--duration-hover) var(--ease-standard), var(--transition-theme);
+}
+
+[data-section-active="true"] .case-study-eyebrow {
+  color: var(--color-accent);
+}
+
+/* Case-study block — canonical 48px gap between blocks inside a section.
+   The last block in a section resets its bottom margin so section-to-section
+   spacing is driven entirely by sectionStyle padding, not compounded by a
+   trailing block margin. */
+.case-study-block {
+  margin-bottom: var(--space-16);
+}
+
+.case-study-block:last-child {
+  margin-bottom: 0;
+}
+
+/* Media card — grey-tinted wrapper for images/videos inside a case-study block.
+   The card's border is treated as the block's content edge (like the bottom of
+   a text line in a text-ending block), so section-to-section and block-to-block
+   gaps stay visually consistent regardless of whether a section ends in text
+   or a card. The card's internal 24px padding is breathing room around the
+   media and is not treated as external gap. */
+.media-card {
+  background: var(--color-surface-sidebar);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  transition: var(--transition-theme);
+}
+
+/* Nav arrows inside hoverable elements — inherit resting color from the parent
+   text, flip to accent on parent hover/focus. Consumers add .nav-arrow to the
+   arrow span; no per-instance state needed. */
+.nav-arrow {
+  color: inherit;
+  transition: color var(--duration-hover) var(--ease-standard);
+}
+
+.fill-btn:hover .nav-arrow,
+.fill-btn:focus-visible .nav-arrow,
+.outline-next-project:hover .nav-arrow,
+.outline-next-project:focus-visible .nav-arrow {
+  color: var(--color-accent);
+}
+
+/* Mask-based SVG icons — mask elements can't use `color`, so we pipe the base
+   color through a custom property. The default falls back to `currentColor`
+   (matches links whose text color drives the icon, e.g. About contacts).
+   Consumers wanting a fixed base (e.g. Lab agent icons) set --icon-color on any
+   ancestor; the parent-hover selectors below override --icon-color on the icon
+   itself, which wins by specificity over the inherited value. */
+.hover-accent-icon {
+  background: var(--icon-color, currentColor);
+  transition: background var(--duration-hover) var(--ease-standard);
+}
+
+.fill-btn:hover .hover-accent-icon,
+.fill-btn:focus-visible .hover-accent-icon,
+.fill-btn:focus-within .hover-accent-icon {
+  --icon-color: var(--color-accent);
 }
 
 /* Card fill: cover full height (cards are taller than wide, so the default
@@ -292,6 +387,7 @@ a { text-decoration: none; }
    only safe at 32px because nothing currently uses the wide breakout. */
 .layout-grid-body {
   display: flex;
+  flex-direction: row-reverse;
   justify-content: center;
   align-items: flex-start;
   gap: var(--space-8);

@@ -57,11 +57,11 @@ const findingCardEyebrow: React.CSSProperties = {
   display: 'block',
   marginBottom: 'var(--space-2)',
   fontFamily: 'var(--font-eyebrow)',
-  fontSize: '11px',
+  fontSize: 'var(--text-xs)',
   fontWeight: 600,
   letterSpacing: 'var(--tracking-badge-label)',
   textTransform: 'uppercase',
-  color: 'var(--color-text-meta)',
+  color: 'var(--color-text-eyebrow)',
   transition: 'var(--transition-theme)',
 }
 
@@ -155,7 +155,7 @@ export default function Fidelity() {
             }}
           >
             <img
-              src="/fidelity/thumbnail.png"
+              src="/fidelity/casestudy-thumbnail.png"
               alt="Fidelity compliance system redesign — dashboard overview"
               style={{ width: '50%', display: 'block', borderRadius: 'var(--radius-sm)', margin: '0 auto' }}
             />
@@ -171,10 +171,10 @@ export default function Fidelity() {
           <div className="layout-main-pad" style={{ padding: 'var(--space-10) var(--space-12) 60px' }}>
             <div className="layout-content layout-content--centered layout-content--prose">
 
-            <section id="overview">
+            <section id="overview" style={{ ...sectionStyle, paddingTop: 0 }}>
             <h1
               style={{
-                fontSize: 'var(--text-xl)',
+                fontSize: 'var(--text-2xl)',
                 lineHeight: 1.1,
                 fontWeight: 600,
                 letterSpacing: '-0.025em',
@@ -183,33 +183,33 @@ export default function Fidelity() {
                 transition: 'var(--transition-theme)',
               }}
             >
-              Supervisory Workstation - for Managers and Supervisory Principals reviewing compliance incidents
+              Supervisory Workstation for Managers and Supervisory Principals reviewing compliance incidents
             </h1>
-            <div style={{ marginBottom: 'var(--space-8)' }}>
-              <span style={eyebrowStyle}>Overview</span>
+            <div className="case-study-block">
+              <span className="case-study-eyebrow" style={eyebrowStyle}>Overview</span>
               <p style={{ ...pStyle, margin: 0 }}>
-                Fidelity was migrating its compliance tools off a third-party vendor platform onto Microsoft PowerApps. Supervisory Workstation was one of them, a tool roughly 4,000 employees used daily to review associates and file supervision reports. It had run on the vendor platform for over a decade. I joined as the sole designer on the team and took the associate review workflow from research through to shipped interface, working from the data model rather than the existing design.
+                Fidelity was migrating its compliance tools off a third-party vendor platform onto Microsoft PowerApps. Supervisory Workstation was one of the tools, used for over a decade daily by ~4,000 employees to review associates and file supervision reports. I joined as the sole designer on the team and took the associate review workflow from research through to shipped interface.
               </p>
             </div>
 
-            <div style={{ marginBottom: 'var(--space-8)' }}>
-              <span style={eyebrowStyle}>Impact</span>
+            <div className="case-study-block">
+              <span className="case-study-eyebrow" style={eyebrowStyle}>Impact</span>
               <p style={{ ...pStyle, margin: 0 }}>
-                I redesigned how users reach the associate responsible for a compliance incident, resolving the supervision chain in the query layer instead of the interaction. In concept testing with 5 users, the task completion time dropped from 5–7 minutes to ~2 mins. The design shipped as part of the PowerApps migration.
+                I redesigned how users reach the associate responsible for a compliance incident, resolving the supervision chain in the query layer instead of the interaction. In concept testing with 5 users, the task completion time dropped from 5–7 mins to ~2 mins. The design shipped as part of the PowerApps migration.
               </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-10)', marginBottom: 'var(--space-8)' }}>
+            <div className="case-study-block" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-10)' }}>
               <div>
-                <span style={eyebrowStyle}>Duration</span>
+                <span className="case-study-eyebrow" style={eyebrowStyle}>Duration</span>
                 <p style={{ ...pStyle, margin: 0 }}>6 weeks (2023)</p>
               </div>
               <div>
-                <span style={eyebrowStyle}>My Role</span>
+                <span className="case-study-eyebrow" style={eyebrowStyle}>My Role</span>
                 <p style={{ ...pStyle, margin: 0 }}>Sole UX Designer</p>
               </div>
               <div>
-                <span style={eyebrowStyle}>Team</span>
+                <span className="case-study-eyebrow" style={eyebrowStyle}>Team</span>
                 <p style={{ ...pStyle, margin: 0 }}>Product Manager, Business Analysts, Engineering Team</p>
               </div>
             </div>
@@ -224,10 +224,10 @@ export default function Fidelity() {
                 header="Fidelity moved its compliance tools in-house; Supervisory Workstation was one of them"
               >
                 <p style={pStyle}>
-                  Fidelity Investments was migrating enterprise applications from third-party vendor platforms to Microsoft PowerApps, to reduce licensing costs and keep regulated data on internal infrastructure. Supervisory Workstation was one of these applications. It had been in use for over a decade on the vendor platform.
+                  Fidelity Investments was migrating enterprise applications from third-party vendor platforms to Microsoft PowerApps, to reduce licensing costs and keep regulated data on internal infrastructure. Supervisory Workstation (SPW) was one of these applications.
                 </p>
                 <p style={pStyle}>
-                  The tool supports supervision: the compliance review a designated supervisor performs on an associate after an incident is flagged. Roughly 4,000 employees used it daily.
+                  SPW is used to perform the compliance review where a designated supervisor performs on an associate after an incident is flagged.
                 </p>
                 <div style={{ width: '110%', marginLeft: '-5%' }}>
                   <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)', marginTop: 'var(--space-5)' }}>
@@ -245,11 +245,11 @@ export default function Fidelity() {
                   <span
                     style={{
                       fontFamily: 'var(--font-eyebrow)',
-                      fontSize: '11px',
+                      fontSize: 'var(--text-xs)',
                       fontWeight: 600,
                       letterSpacing: 'var(--tracking-badge-label)',
                       textTransform: 'uppercase',
-                      color: 'var(--color-text-meta)',
+                      color: 'var(--color-text-eyebrow)',
                       display: 'block',
                       marginBottom: '4px',
                       transition: 'var(--transition-theme)',
@@ -271,10 +271,10 @@ export default function Fidelity() {
             <section id="users" style={sectionStyle}>
               <Block
                 eyebrow="Users"
-                header="Managers file reports on their associates. Supervisory Principals do that, and also monitor whether the managers below them are compliant in filing theirs."
+                header="Supervisory Principals and Managers use the tool to review associates' incidents and file supervision reports."
               >
                 <p style={pStyle}>
-                  Frontline managers file supervision reports on the associates they supervise. Supervisory Principals file reports on the associates in their scope and oversee whether the managers below them are completing reviews on schedule.
+                  Managers file supervision reports on the associates they supervise. Supervisory Principals file reports on the associates in their scope and oversee whether the managers below them are completing reviews on schedule.
                 </p>
                 <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)' }}>
                   <ZoomableImage src="/fidelity/users-supervison-hierarchy.png" alt="Supervision hierarchy — managers and Supervisory Principals over associates" style={{ display: 'block', width: '100%' }} />
@@ -310,7 +310,7 @@ export default function Fidelity() {
                 header="Redesign with the existing data structure and no new analysis."
               >
                 <p style={{ ...pStyle, margin: 0 }}>
-                  The timeline was 3 sprints, design through to production. The product manager scoped out new analysis, aggregate tables or data insights. So the redesign had to work with the data as it was already structured. Workflow and layout were open.
+                  The timeline was 3 sprints, design through to production. The product manager scoped out new analysis, aggregate tables or data insights. So the redesign had to work with the data as it was already structured.
                 </p>
               </Block>
             </section>
@@ -321,7 +321,7 @@ export default function Fidelity() {
             <section id="why-it-mattered" style={sectionStyle}>
               <Block
                 eyebrow="Problem discovery"
-                header="The legacy vendor tool had a steep learning curve, and users had built strong habits over the decade they had been using it."
+                header="The legacy vendor tool had a steep learning curve, and users had built strong habits over the decade of usage"
               >
                 <p style={{ ...pStyle, margin: 0 }}>
                   Coming in with the no domain knowledge, I struggled to understand what the tool did. I worked with the business analysts to gather the training modules and documentation, which taught me the functions but not how people actually used them. I asked the product manager for access to users and ran contextual inquiries and semi-structured interviews in person with five participants (both managers and Supervisory Principals) observing them complete real reviews in the vendor tool, alongside a heuristic analysis.
@@ -365,10 +365,9 @@ export default function Fidelity() {
                 stage="before"
                 hideStageLabel
                 diagramBorderRadius="0"
-                title="In both associate and incident reviews, every layer of supervision hierarchy below a Supervisory Principal added a modal or screen to close, a context to hold, and a chance to file against the wrong associate."
+                title="Every layer of supervision hierarchy added a modal or screen to close, a context to hold, and a risk of filing against the wrong associate."
                 description={
                   <>
-                    <p style={{ margin: '0 0 12px' }}>Task length was set by the supervision hierarchy, not by the review itself.</p>
                     <p style={{ margin: '0 0 12px' }}>In the associate-review flow, selecting a person opened their profile, and the incidents under them sat on that page. If that person was a manager, the incidents belonged to the associates below them, so the user opened the next profile down.</p>
                     <p style={{ margin: 0 }}>In the incident-review flow, selecting an incident surfaced the managers in the user's scope who owned it. Selecting one of those managers opened a modal of the reporting managers below them. That repeated until the modals reached the level where associates sat.</p>
                   </>
@@ -403,14 +402,14 @@ export default function Fidelity() {
                 hideStageLabel
                 solutionLabel="Solution - Exploration - 1"
                 title="I explored surfacing the associate directly with review action, at the same level for every user"
-                description="In the incident flow, selecting an incident would surface the responsible associate immediately, without stepping through the managers in between. In the associate flow, selecting an associate or manager would surface the incidents under them the same way. One level for every user, regardless of position in the supervision chain."
+                description="In the incident flow, selecting an incident would surface the responsible associate immediately, without stepping through the managers in between. In the associate flow, selecting an associate or manager would surface the incidents under them the same way."
                 diagramPadding="0"
                 tabs={[
                   {
                     id: 'explored',
                     diagram: (
                       <div>
-                        <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                        <div className="media-card">
                           <video
                             src="/fidelity/exploration.mp4"
                             autoPlay
@@ -423,7 +422,7 @@ export default function Fidelity() {
                             style={{
                               ...proseStyle,
                               fontSize: 'var(--text-base)',
-                              fontWeight: 400,
+                              fontWeight: 500,
                               lineHeight: 1.35,
                               color: 'var(--color-text-title)',
                               margin: '0 auto 12px',
@@ -452,13 +451,13 @@ export default function Fidelity() {
                             ]}
                           />
                         </div>
-                        <div style={{ marginTop: 'var(--space-8)' }}>
-                          <span style={eyebrowStyle}>Solution - Final - 1</span>
+                        <div className="case-study-block" style={{ marginTop: 'var(--space-16)' }}>
+                          <span className="case-study-eyebrow" style={eyebrowStyle}>Solution - Final - 1</span>
                           <h2
                             style={{
-                              fontSize: 'var(--text-lg)',
+                              fontSize: 'var(--text-xl)',
                               lineHeight: 1.22,
-                              fontWeight: 600,
+                              fontWeight: 500,
                               letterSpacing: '-0.02em',
                               color: 'var(--color-text-title)',
                               margin: '0 0 14px',
@@ -466,7 +465,7 @@ export default function Fidelity() {
                               transition: 'var(--transition-theme)',
                             }}
                           >
-                            I designed a new page listing every associate incident, with the accountable managers as columns based on the user selection.
+                            I designed a new page listing every associate incident with the accountable managers
                           </h2>
                           <p style={{ ...pStyle, margin: '0 auto var(--space-8)' }}>
                             Selecting an incident or an associate opens a dedicated page listing the associate incidents within that scope. Each row is one associate: the incident, its severity, the associate who performed it, the reporting manager that associate reports to, the manager accountable for the incident, and the incident count by month across the quarter.
@@ -474,7 +473,7 @@ export default function Fidelity() {
                           <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)', marginBottom: 'var(--space-8)' }}>
                             <ZoomableImage src="/fidelity/after-screen.png" alt="Final userflow screen" style={{ display: 'block', width: '100%' }} />
                           </div>
-                          <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                          <div className="media-card">
                             <video
                               src="/fidelity/solution-1.mp4"
                               autoPlay
@@ -558,7 +557,7 @@ export default function Fidelity() {
                 I ran concept testing with five managers across levels of the supervision chain to test usability, intuitivity and measure the metrics against baseline
               </p>
               <div style={{ marginTop: 'var(--space-8)', background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)' }}>
-                <ZoomableImage src="/fidelity/concept-testing.jpg" alt="Concept testing" style={{ display: 'block', width: '100%' }} />
+                <ZoomableImage src="/fidelity/concept-testing.png" alt="Concept testing" style={{ display: 'block', width: '100%' }} />
               </div>
               <div className="annotation-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-5)', marginTop: 'var(--space-8)' }}>
                 {[

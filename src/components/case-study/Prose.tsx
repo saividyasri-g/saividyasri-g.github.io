@@ -3,14 +3,14 @@ import type { ReactNode, CSSProperties } from 'react'
 /* ── Shared style constants ───────────────────────────── */
 
 export const sectionStyle: CSSProperties = {
-  padding: '52px 0',
+  padding: 'var(--space-10) 0',
   scrollMarginTop: '90px',
 }
 
 export const h2Style: CSSProperties = {
-  fontSize: 'var(--text-lg)',
+  fontSize: 'var(--text-xl)',
   lineHeight: 1.22,
-  fontWeight: 600,
+  fontWeight: 500,
   letterSpacing: '-0.02em',
   color: 'var(--color-text-title)',
   margin: '0 0 18px',
@@ -27,26 +27,25 @@ export const pStyle: CSSProperties = {
   transition: 'var(--transition-theme)',
 }
 
+/* Color is intentionally *not* set here — it lives on the .case-study-eyebrow
+ * CSS class (see index.css), so the active-section accent rule can override
+ * it cleanly without needing !important. */
 export const eyebrowStyle: CSSProperties = {
   fontFamily: 'var(--font-eyebrow)',
-  fontSize: '11px',
+  fontSize: 'var(--text-xs)',
   fontWeight: 600,
   textTransform: 'uppercase',
   letterSpacing: '.12em',
-  color: 'var(--color-text-meta)',
-  marginBottom: '12px',
+  marginBottom: 'var(--space-4)',
   display: 'block',
-  transition: 'var(--transition-theme)',
 }
 
 export const sectionDividerLabelStyle: CSSProperties = {
   fontFamily: 'var(--font-eyebrow)',
-  fontSize: '11px',
+  fontSize: 'var(--text-xs)',
   fontWeight: 700,
   letterSpacing: '.14em',
   textTransform: 'uppercase',
-  color: 'var(--color-text-meta)',
-  transition: 'var(--transition-theme)',
 }
 
 /** Spreadable helper for one-off text blocks that don't go through h2Style/pStyle. */
@@ -58,8 +57,8 @@ export const proseStyle: CSSProperties = {
 
 export function Block({ eyebrow, header, children }: { eyebrow?: string; header: string; children?: ReactNode }) {
   return (
-    <div style={{ marginBottom: '48px' }}>
-      {eyebrow && <span style={eyebrowStyle}>{eyebrow}</span>}
+    <div className="case-study-block">
+      {eyebrow && <span className="case-study-eyebrow" style={eyebrowStyle}>{eyebrow}</span>}
       <h2 style={h2Style}>{header}</h2>
       {children}
     </div>
@@ -69,16 +68,14 @@ export function Block({ eyebrow, header, children }: { eyebrow?: string; header:
 export function ScenarioGroup({ id, label, children }: { id: string; label?: string; children: ReactNode }) {
   return (
     <section id={id} style={sectionStyle}>
-      <div
-        style={{
-          borderTop: '1px solid var(--color-border-hair)',
-          paddingTop: '32px',
-          marginBottom: '40px',
-          transition: 'var(--transition-theme)',
-        }}
-      >
-        {label && <span style={sectionDividerLabelStyle}>{label}</span>}
-      </div>
+      {label && (
+        <span
+          className="case-study-eyebrow"
+          style={{ ...sectionDividerLabelStyle, display: 'block', marginBottom: 'var(--space-4)' }}
+        >
+          {label}
+        </span>
+      )}
       {children}
     </section>
   )
@@ -86,15 +83,11 @@ export function ScenarioGroup({ id, label, children }: { id: string; label?: str
 
 export function SectionDivider({ label }: { label: string }) {
   return (
-    <div
-      style={{
-        borderTop: '1px solid var(--color-border-hair)',
-        paddingTop: '32px',
-        marginBottom: '40px',
-        transition: 'var(--transition-theme)',
-      }}
+    <span
+      className="case-study-eyebrow"
+      style={{ ...sectionDividerLabelStyle, display: 'block', marginBottom: 'var(--space-4)' }}
     >
-      <span style={sectionDividerLabelStyle}>{label}</span>
-    </div>
+      {label}
+    </span>
   )
 }

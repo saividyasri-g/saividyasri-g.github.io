@@ -56,8 +56,10 @@ export default function HoloAvatar() {
   }, [])
 
   // Light mode: use a very light blue so multiply doesn't darken the face.
-  // Dark mode: use the site accent (medium blue) for a luminous glow via screen.
-  const holoColor = theme === 'dark' ? 'var(--color-accent)' : 'var(--color-highlight-bg)'
+  // Dark mode: use a soft cool blue-grey (highlight-text) rather than the
+  // saturated accent, so multiplying the video against it doesn't produce
+  // a heavy accent overcast on the face.
+  const holoColor = theme === 'dark' ? 'var(--primitive-dark-hl-text)' : 'var(--color-highlight-bg)'
 
   const ghostStyle: React.CSSProperties = {
     position: 'absolute', inset: 0,
@@ -123,8 +125,8 @@ export default function HoloAvatar() {
             position: 'absolute', inset: 0,
             zIndex: 20,
             background: holoColor,
-            maskImage: 'radial-gradient(ellipse 75% 55% at 50% 38%, black 28%, transparent 75%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 75% 55% at 50% 38%, black 28%, transparent 75%)',
+            maskImage: 'radial-gradient(ellipse 75% 55% at 50% 48%, black 28%, transparent 75%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 75% 55% at 50% 48%, black 28%, transparent 75%)',
           }}
         >
           <video

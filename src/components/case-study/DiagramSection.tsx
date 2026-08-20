@@ -50,7 +50,7 @@ const stageColors = {
 
 const monoEyebrow: React.CSSProperties = {
   fontFamily: 'var(--font-eyebrow)',
-  fontSize: '11px',
+  fontSize: 'var(--text-xs)',
   fontWeight: 600,
   textTransform: 'uppercase',
   letterSpacing: '.12em',
@@ -81,12 +81,8 @@ export function DiagramSection({
 
   const diagramCard = (
     <div
-      style={{
-        background: card ? 'var(--color-surface-sidebar)' : undefined,
-        borderRadius: card ? cardBorderRadius : undefined,
-        padding: card ? 'var(--space-6)' : undefined,
-        transition: 'var(--transition-theme)',
-      }}
+      className={card ? 'media-card' : undefined}
+      style={card && cardBorderRadius !== 'var(--radius-card)' ? { borderRadius: cardBorderRadius, transition: 'var(--transition-theme)' } : { transition: 'var(--transition-theme)' }}
     >
       {beforeTabs && (
         <div style={{ marginBottom: 'var(--space-5)' }}>
@@ -237,36 +233,40 @@ export function DiagramSection({
   )
 
   return (
-    <div style={{ marginBottom: '48px' }}>
+    <div className="case-study-block">
 
-      {/* Eyebrows */}
-      <div style={{ marginBottom: '12px' }}>
+      {/* Eyebrows — counter/solutionLabel carry `case-study-eyebrow` so they
+          pick up the active-section accent color; the stage badge keeps its
+          semantic red/green and is intentionally excluded. */}
+      <div style={{ marginBottom: 'var(--space-4)' }}>
         {counter && (
-          <span style={{ ...monoEyebrow, color: 'var(--color-text-meta)', marginBottom: '4px' }}>
+          <span className="case-study-eyebrow" style={{ ...monoEyebrow, marginBottom: '4px' }}>
             {counter}
           </span>
         )}
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-          {!hideStageLabel && (
-            <span style={{ ...monoEyebrow, color, marginBottom: 0 }}>
-              {stage === 'before' ? 'Before' : 'After'}
-            </span>
-          )}
-          {solutionLabel && (
-            <span style={{ ...monoEyebrow, color: 'var(--color-text-meta)', marginBottom: 0 }}>
-              {solutionLabel}
-            </span>
-          )}
-        </div>
+        {(!hideStageLabel || solutionLabel) && (
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
+            {!hideStageLabel && (
+              <span style={{ ...monoEyebrow, color, marginBottom: 0 }}>
+                {stage === 'before' ? 'Before' : 'After'}
+              </span>
+            )}
+            {solutionLabel && (
+              <span className="case-study-eyebrow" style={{ ...monoEyebrow, marginBottom: 0 }}>
+                {solutionLabel}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Title */}
       {title && (
         <h2
           style={{
-            fontSize: 'var(--text-lg)',
+            fontSize: 'var(--text-xl)',
             lineHeight: 1.22,
-            fontWeight: 600,
+            fontWeight: 500,
             letterSpacing: '-0.02em',
             color: 'var(--color-text-title)',
             margin: '0 0 14px',

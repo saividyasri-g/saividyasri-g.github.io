@@ -1,13 +1,25 @@
+import { useState } from 'react'
 import { useTheme } from '../../context/ThemeContext'
 
 export default function ThemeToggle() {
   const { theme, toggle } = useTheme()
   const dark = theme === 'dark'
+  const [hovered, setHovered] = useState(false)
+
+  // Sun is the "selected" icon in light mode; moon in dark mode. Selected OR
+  // whole-button hover pulls the icon to the accent so the toggle reads as
+  // active on both hover and current selection.
+  const sunColor = !dark || hovered ? 'var(--color-accent)' : 'var(--color-text-meta)'
+  const moonColor = dark || hovered ? 'var(--color-accent)' : 'var(--color-text-meta)'
 
   return (
     <div style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
     <button
       onClick={toggle}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
       aria-label="Toggle theme"
       style={{
         position: 'relative',
@@ -48,7 +60,7 @@ export default function ThemeToggle() {
           lineHeight: 1,
           width: '24px',
           textAlign: 'center',
-          color: dark ? 'var(--color-text-meta)' : 'var(--color-text-body)',
+          color: sunColor,
           transition: 'color var(--duration-theme)',
         }}
       >
@@ -63,7 +75,7 @@ export default function ThemeToggle() {
           lineHeight: 1,
           width: '24px',
           textAlign: 'center',
-          color: dark ? 'var(--color-text-title)' : 'var(--color-text-meta)',
+          color: moonColor,
           transition: 'color var(--duration-theme)',
         }}
       >

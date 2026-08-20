@@ -3,7 +3,6 @@ import {
   Outline,
   Carousel,
   DiagramSection,
-  CaseBadge,
   ProblemCostAnnotations,
   ConstraintPivotGrid,
   CaseStudyNav,
@@ -49,11 +48,11 @@ const findingCardEyebrow: React.CSSProperties = {
   display: 'block',
   marginBottom: 'var(--space-2)',
   fontFamily: 'var(--font-eyebrow)',
-  fontSize: '11px',
+  fontSize: 'var(--text-xs)',
   fontWeight: 600,
   letterSpacing: 'var(--tracking-badge-label)',
   textTransform: 'uppercase',
-  color: 'var(--color-text-meta)',
+  color: 'var(--color-text-eyebrow)',
   transition: 'var(--transition-theme)',
 }
 
@@ -100,7 +99,7 @@ function ProblemFourTrio() {
   ]
 
   return (
-    <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+    <div className="media-card">
       <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'flex-start' }}>
         {items.map((item, i) => (
           <div key={i} style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
@@ -263,10 +262,10 @@ export default function HeroMotoCorp() {
             {/* ════════════════════════════════════════ */}
             {/* OVERVIEW                                */}
             {/* ════════════════════════════════════════ */}
-            <section id="overview">
+            <section id="overview" style={{ ...sectionStyle, paddingTop: 0 }}>
               <h1
                 style={{
-                  fontSize: 'var(--text-xl)',
+                  fontSize: 'var(--text-2xl)',
                   lineHeight: 1.1,
                   fontWeight: 600,
                   letterSpacing: '-0.025em',
@@ -277,16 +276,16 @@ export default function HeroMotoCorp() {
               >
                 Vehicle Service Management Tools for Service Managers running two-wheeler service centres.
               </h1>
-              <div style={{ marginBottom: 'var(--space-8)' }}>
-                <span style={eyebrowStyle}>Overview</span>
+              <div className="case-study-block">
+                <span className="case-study-eyebrow" style={eyebrowStyle}>Overview</span>
                 <p style={{ ...pStyle, margin: 0 }}>
                   A two-wheeler service centre ran on multiple staff roles working in physically separate zones. One of these roles, the service manager, managed the entire centre's operations. They relied on manually gathering information from each zone, which caused increased waiting times, vehicle idle time, and delayed deliveries.
                 </p>
               </div>
-              <div style={{ marginBottom: 'var(--space-8)' }}>
-                <span style={eyebrowStyle}>Impact</span>
+              <div className="case-study-block">
+                <span className="case-study-eyebrow" style={eyebrowStyle}>Impact</span>
                 <p style={{ ...pStyle, margin: 0 }}>
-                  I led the design of service manager workflows and tools — dashboard, workshop floor visualisation, and documentation. Testing showed the redesigned IA cut documentation completion time by ~54%. The app shipped across Hero MotoCorp's authorised-dealer network, with{' '}
+                  I led the design of service manager workflows and tools — dashboard, workshop floor visualisation, and documentation. Testing showed the redesign cut documentation completion time by ~54%. The app shipped across Hero MotoCorp's authorised-dealer network, with{' '}
                   <a
                     href="https://play.google.com/store/apps/details?id=com.hero.serviceapp&hl=en_US"
                     target="_blank"
@@ -297,17 +296,17 @@ export default function HeroMotoCorp() {
                   </a>.
                 </p>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-10)', marginBottom: 'var(--space-8)' }}>
+              <div className="case-study-block" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-10)' }}>
                 <div>
-                  <span style={eyebrowStyle}>Duration</span>
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>Duration</span>
                   <p style={{ ...pStyle, margin: 0 }}>9 weeks (2023)</p>
                 </div>
                 <div>
-                  <span style={eyebrowStyle}>My Role</span>
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>My Role</span>
                   <p style={{ ...pStyle, margin: 0 }}>UX Designer &amp; Team Lead</p>
                 </div>
                 <div>
-                  <span style={eyebrowStyle}>Team</span>
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>Team</span>
                   <p style={{ ...pStyle, margin: 0 }}>2 UX Designers, 2 Visual Designers</p>
                 </div>
               </div>
@@ -328,7 +327,7 @@ export default function HeroMotoCorp() {
               </Block>
 
               <Block
-                header="The Service Manager is accountable for the service centre's operations starting from vehicle entry to delivery."
+                header="Service Manager is accountable for the service centre's operations starting from vehicle entry to delivery."
               >
                 <p style={pStyle}>
                   The Service Manager's operations span customer engagement, alignment, vehicle-service documentation, estimating service duration, assigning vehicles to technicians' ramps, assessing service quality, and processing payment through to checkout.
@@ -339,7 +338,7 @@ export default function HeroMotoCorp() {
               </Block>
 
               <Block
-                header="Because of siloed operations, the manager relied on manual information gathering & handoffs that caused vehicle-service delays and operational inefficiency."
+                header="Siloed operations caused vehicle-service delays and operational inefficiency."
               >
                 <p style={pStyle}>
                   Each stage of the vehicle's journey happened in a different zone. Service Managers with limited visibility into other zones, physically moved between zones to coordinate the operations.
@@ -356,7 +355,7 @@ export default function HeroMotoCorp() {
             <section id="why-it-mattered" style={sectionStyle}>
               <Block
                 eyebrow="Why it mattered"
-                header="The Service Management Tool was Hero MotoCorp's initiative to improve business operations across 6,000+ service centres."
+                header="This Tool was Hero MotoCorp's initiative to improve business operations across 6,000+ service centres."
               >
                 <p style={{ ...pStyle, margin: 0 }}>
                   Hero MotoCorp's business depends on independent dealership service centres to drive post-sales revenue (parts, service, accessories) and customer loyalty. The Service Management Tool was Hero's initiative to streamline operations across 6,000+ service centres in India, alongside standard operating procedures (SOPs) to improve the numbers each dealership was accountable for.
@@ -389,17 +388,14 @@ export default function HeroMotoCorp() {
                 diagramPadding="0"
                 counter="Problem 1"
                 stage="before"
-                title="To assign a vehicle to a technician's ramp, the manager had to physically walk the workshop floor to find out who was free."
+                title="To assign a vehicle to a technician's ramp, the manager had to walk the workshop floor to find out who was free."
                 description="Once a vehicle's service plan was documented, the service manager had to assign it to a technician's ramp for servicing. But the manager had no data on technician availability or workshop status, so they physically moved to the workshop floor to gather this information manually."
                 tabs={[{
                   id: 'starting',
                   diagram: (
                     <>
                       <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-2)', transition: 'var(--transition-theme)' }}>
-                        <div style={{ position: 'relative' }}>
-                          <ZoomableImage src="/hmc/workflow-before.svg" alt="Starting point: manual technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />
-                          <CaseBadge icon="/hmc/icons/friction.svg" label="Friction in workflow" color="#BD0505" style={{ position: 'absolute', top: 'var(--space-3)', right: 'var(--space-3)' }} />
-                        </div>
+                        <ZoomableImage src="/hmc/workflow-before.png" alt="Starting point: manual technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />
                       </div>
                       <div style={{ marginTop: 'var(--space-6)' }}>
                         <ProblemCostAnnotations columns={[
@@ -432,18 +428,13 @@ export default function HeroMotoCorp() {
                 diagramPadding="0"
                 stage="after"
                 solutionLabel="Solution 1A · Exploration"
-                title="I explored a technician assignment workflow that pulled availability data from external HR and dealer management systems."
+                title="I explored pulling technician availability data from external HR and dealer management systems."
                 description={
                   <>
                     <p style={{ ...pStyle, margin: '0 0 var(--space-4)' }}>
                       I explored existing systems that held workforce data, such as HR systems which held biometric attendance, and the dealer management systems that held rosters and shift information.
                     </p>
-                    <p style={{ ...pStyle, margin: '0 0 var(--space-4)' }}>
-                      However, these systems lacked information on whether the technicians were present on the workshop or available to take a vehicle. This was known only on the day, and hence next-day scheduling had no reliable data.
-                    </p>
-                    <p style={{ ...pStyle, margin: 0 }}>
-                      The systems also differed by centre, and integrating each one was a separate build.
-                    </p>
+                    
                   </>
                 }
                 tabs={[{
@@ -451,7 +442,7 @@ export default function HeroMotoCorp() {
                   diagram: (
                     <div>
                       {/* Grey card: diagram title + image + constraints */}
-                      <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                      <div className="media-card">
                         <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-2)', marginBottom: 'var(--space-8)', transition: 'var(--transition-theme)' }}>
                           <ZoomableImage src="/hmc/explored-workflow.png" alt="Explored workflow: next-day scheduling approach" style={{ display: 'block', width: '100%' }} />
                         </div>
@@ -477,16 +468,18 @@ export default function HeroMotoCorp() {
                         ]} />
                       </div>
 
-                      {/* Final section */}
-                      <div style={{ marginTop: 'var(--space-8)' }}>
-                        <span style={eyebrowStyle}>Solution 1A · Final</span>
-                        <h2 style={{ fontSize: 'var(--text-lg)', lineHeight: 1.22, fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--color-text-title)', margin: '0 0 14px', maxWidth: 'var(--content-width-prose)', transition: 'var(--transition-theme)' }}>
+                      {/* Final section — treated as its own block (64px gap
+                          from the Exploration content above), since it carries
+                          its own eyebrow + title + content. */}
+                      <div className="case-study-block" style={{ marginTop: 'var(--space-16)' }}>
+                        <span className="case-study-eyebrow" style={eyebrowStyle}>Solution 1A · Final</span>
+                        <h2 style={{ fontSize: 'var(--text-xl)', lineHeight: 1.22, fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--color-text-title)', margin: '0 0 14px', maxWidth: 'var(--content-width-prose)', transition: 'var(--transition-theme)' }}>
                           A technician assignment workflow that pulled availability data from the technician's app into the manager's screen.
                         </h2>
                         <p style={{ ...pStyle, margin: '0 0 var(--space-6)' }}>
                           I designed a workflow where the Technicians set availability and ramp at daily login on Technician's app. This login input provides every centre the same input, independent of the systems. Tagging and tracking service statuses such as unassigned, not started, ongoing, delayed provided real-time vehicle status.
                         </p>
-                        <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                        <div className="media-card">
                           <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-2)', transition: 'var(--transition-theme)' }}>
                             <ZoomableImage src="/hmc/final-workflow.png" alt="Final redesigned technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />
                           </div>
@@ -562,7 +555,7 @@ export default function HeroMotoCorp() {
                 diagramPadding="0"
                 counter="Problem 2"
                 stage="before"
-                title="The tool showed the day's plan, and the manager still walked the floor to learn its progress"
+                title="The tool only showed the day's plan and not the real-time state of the workshop floor."
                 description="The ramp plan showed which vehicles were assigned to which ramps, but not whether a service was progressing, delayed, or done. So managers walked the workshop floor to find out the floor's state for that moment, and the state changed through the day."
                 tabs={[{
                   id: 'ramp-before',
@@ -616,7 +609,7 @@ export default function HeroMotoCorp() {
                 <p style={pStyle}>
                   At any point in the day, the service manager had to decide between competing calls on their attention: a technician on the workshop floor needed approval for a newly found issue, a customer was waiting in the lobby, and a vehicle was waiting for payment processing. Without a criticality or urgency signal, decisions were made on anything but real urgency.
                 </p>
-                <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                <div className="media-card">
                   <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-10)', transition: 'var(--transition-theme)' }}>
                     <ZoomableImage src="/hmc/problem-3.png" alt="Problem 3 — real-time operations awareness" style={{ display: 'block', width: '100%' }} />
                   </div>
@@ -686,7 +679,7 @@ export default function HeroMotoCorp() {
                 <p style={pStyle}>
                   Above the tabs, an alert layer stayed visible regardless of which tab the manager had open. Anything that required a prompt decision a waiting inspection, a customer waiting past a threshold were surfaced as alerts so the manager didn't have to be looking at the right tab to see it.
                 </p>
-                <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                <div className="media-card">
                   <ZoomableImage src="/hmc/solution-2b.png" alt="Persistent alert layer, annotated" style={{ display: 'block', width: '70%', margin: '0 auto' }} />
                 </div>
               </Block>
@@ -722,7 +715,7 @@ export default function HeroMotoCorp() {
                   muted
                   playsInline
                   onLoadedMetadata={e => { (e.target as HTMLVideoElement).playbackRate = 1 }}
-                  style={{ display: 'block', width: '68%', margin: '18px auto', borderRadius: 'var(--radius-sm)' }}
+                  style={{ display: 'block', width: '68%', margin: '0 auto', borderRadius: 'var(--radius-sm)' }}
                 />
               </Block>
 
@@ -744,11 +737,11 @@ export default function HeroMotoCorp() {
                   <span
                     style={{
                       fontFamily: 'var(--font-eyebrow)',
-                      fontSize: '11px',
+                      fontSize: 'var(--text-xs)',
                       fontWeight: 600,
                       letterSpacing: 'var(--tracking-badge-label)',
                       textTransform: 'uppercase',
-                      color: 'var(--color-text-meta)',
+                      color: 'var(--color-text-eyebrow)',
                       display: 'block',
                       marginBottom: '4px',
                       transition: 'var(--transition-theme)',
@@ -767,7 +760,7 @@ export default function HeroMotoCorp() {
                   muted
                   playsInline
                   onLoadedMetadata={e => { (e.target as HTMLVideoElement).playbackRate = 1 }}
-                  style={{ display: 'block', width: '68%', margin: '18px auto', borderRadius: 'var(--radius-sm)' }}
+                  style={{ display: 'block', width: '68%', margin: '0 auto', borderRadius: 'var(--radius-sm)' }}
                 />
               </Block>
 

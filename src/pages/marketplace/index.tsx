@@ -15,7 +15,7 @@ import {
 const outlineItems = [
   { id: 'overview',          num: '', label: 'Overview' },
   { id: 'context',           num: '', label: 'Context' },
-  { id: 'problem-discovery', num: '', label: 'Problem Discovery' },
+  { id: 'problem-discovery', num: '', label: 'Problem discovery' },
   { id: 'reframe',           num: '', label: 'Reframe' },
   { id: 'solution',          num: '', label: 'Solution' },
   { id: 'impact',            num: '', label: 'Impact' },
@@ -34,11 +34,11 @@ const findingCardEyebrow: React.CSSProperties = {
   display: 'block',
   marginBottom: 'var(--space-2)',
   fontFamily: 'var(--font-eyebrow)',
-  fontSize: '11px',
+  fontSize: 'var(--text-xs)',
   fontWeight: 600,
   letterSpacing: 'var(--tracking-badge-label)',
   textTransform: 'uppercase',
-  color: 'var(--color-text-meta)',
+  color: 'var(--color-text-eyebrow)',
   transition: 'var(--transition-theme)',
 }
 
@@ -98,11 +98,11 @@ function Note({ label = 'Note', children }: { label?: string; children: ReactNod
       <span
         style={{
           fontFamily: 'var(--font-eyebrow)',
-          fontSize: '11px',
+          fontSize: 'var(--text-xs)',
           fontWeight: 600,
           letterSpacing: 'var(--tracking-badge-label)',
           textTransform: 'uppercase',
-          color: 'var(--color-text-meta)',
+          color: 'var(--color-text-eyebrow)',
           display: 'block',
           marginBottom: '4px',
           transition: 'var(--transition-theme)',
@@ -194,10 +194,10 @@ export default function Marketplace() {
             {/* ════════════════════════════════════════ */}
             {/* OVERVIEW                                */}
             {/* ════════════════════════════════════════ */}
-            <section id="overview">
+            <section id="overview" style={{ ...sectionStyle, paddingTop: 0 }}>
               <h1
                 style={{
-                  fontSize: 'var(--text-xl)',
+                  fontSize: 'var(--text-2xl)',
                   lineHeight: 1.1,
                   fontWeight: 600,
                   letterSpacing: '-0.025em',
@@ -208,33 +208,33 @@ export default function Marketplace() {
               >
                 Home Service Marketplace Onboarding & Activation
               </h1>
-              <div style={{ marginBottom: 'var(--space-8)' }}>
-                <span style={eyebrowStyle}>Overview</span>
+              <div className="case-study-block">
+                <span className="case-study-eyebrow" style={eyebrowStyle}>Overview</span>
                 <p style={{ ...pStyle, margin: 0 }}>
                   Builder Market is an early-stage two-sided marketplace connecting homeowners with home service professionals. The business had asked me to redesign the professional onboarding flow because 71.6% of professionals were dropping off. On investigation, the deeper problem was that the flow required professionals to invest 7–8 minutes completing a full business listing before the platform delivered any value.
                 </p>
               </div>
-              <div style={{ marginBottom: 'var(--space-8)' }}>
-                <span style={eyebrowStyle}>Impact</span>
+              <div className="case-study-block">
+                <span className="case-study-eyebrow" style={eyebrowStyle}>Impact</span>
                 <p style={{ ...pStyle, margin: 0 }}>
                   I proposed and aligned the team on a reframe: surface value first, then ask for commitment. I designed the abbreviated signup flow, the routing to a dashboard, and the flow professionals used to claim their first free suggested leads. Signup bounce dropped from 71.6% to 34% in the two weeks after launch.
                 </p>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-10)', marginBottom: 'var(--space-8)' }}>
+              <div className="case-study-block" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-10)' }}>
                 <div>
-                  <span style={eyebrowStyle}>Duration</span>
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>Duration</span>
                   <p style={{ ...pStyle, margin: 0 }}>9 weeks (2025)</p>
                 </div>
                 <div>
-                  <span style={eyebrowStyle}>My Role</span>
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>My Role</span>
                   <p style={{ ...pStyle, margin: 0 }}>UX Design Intern</p>
                 </div>
                 <div>
-                  <span style={eyebrowStyle}>Team</span>
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>Team</span>
                   <p style={{ ...pStyle, margin: 0 }}>3 UX designers, 2 Visual Designers, CTO, CEO </p>
                 </div>
                 <div>
-                  <span style={eyebrowStyle}>Tools</span>
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>Tools</span>
                   <p style={{ ...pStyle, margin: 0 }}>Web analytics, session recordings, heuristic evaluation, competitor analysis, wireframing, prototyping</p>
                 </div>
               </div>
@@ -330,7 +330,7 @@ export default function Marketplace() {
                 <p style={pStyle}>
                   Pros now pick one service through search instead of scrolling categories; additional services are optional. The business name field matches against the existing directory as they type, so they can claim an existing listing instead of creating a duplicate.
                 </p>
-                <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                <div className="media-card">
                   <video src="/marketplace/solution.mp4" autoPlay loop muted playsInline style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />
                 </div>
               </Block>
@@ -367,7 +367,7 @@ export default function Marketplace() {
                 <p style={{ ...pStyle, margin: 0 }}>
                   The structural changes reduced the major friction, but watching the production build surfaced three problems.
                 </p>
-                <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', margin: '20px 0 0', transition: 'var(--transition-theme)' }}>
+                <div className="media-card" style={{ marginTop: 'var(--space-5)' }}>
                   <video src="/marketplace/review.mp4" autoPlay loop muted playsInline style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />
                   <FindingCards findings={[
                     {

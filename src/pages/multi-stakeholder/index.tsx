@@ -149,10 +149,10 @@ export default function MultiStakeholder() {
             {/* ════════════════════════════════════════ */}
             {/* OVERVIEW                                */}
             {/* ════════════════════════════════════════ */}
-            <section id="overview">
+            <section id="overview" style={{ ...sectionStyle, paddingTop: 0 }}>
               <h1
                 style={{
-                  fontSize: 'var(--text-xl)',
+                  fontSize: 'var(--text-2xl)',
                   lineHeight: 1.1,
                   fontWeight: 600,
                   letterSpacing: '-0.025em',
@@ -163,29 +163,29 @@ export default function MultiStakeholder() {
               >
                 Integrating Complex Multi-Stakeholder Workflows Across a Two-Wheeler Service Centre.
               </h1>
-              <div style={{ marginBottom: 'var(--space-8)' }}>
-                <span style={eyebrowStyle}>Overview</span>
+              <div className="case-study-block">
+                <span className="case-study-eyebrow" style={eyebrowStyle}>Overview</span>
                 <p style={{ ...pStyle, margin: 0 }}>
                   A two-wheeler service centre runs on four distinct roles — Security Guard, Service Manager, Technician, and Checkout — each working in a separate zone with no shared digital layer. Information moved between them verbally and on paper, creating avoidable idle times, delayed handoffs, and service bottlenecks.
                 </p>
               </div>
-              <div style={{ marginBottom: 'var(--space-8)' }}>
-                <span style={eyebrowStyle}>Impact</span>
+              <div className="case-study-block">
+                <span className="case-study-eyebrow" style={eyebrowStyle}>Impact</span>
                 <p style={{ ...pStyle, margin: 0 }}>
                   I designed cross-role digital workflows connecting Security Guard check-in, technician status reporting, and checkout confirmation into a single shared system — removing the verbal handoffs and idle wait times that accumulated across every vehicle's journey.
                 </p>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-10)', marginBottom: 'var(--space-8)' }}>
+              <div className="case-study-block" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-10)' }}>
                 <div>
-                  <span style={eyebrowStyle}>Duration</span>
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>Duration</span>
                   <p style={{ ...pStyle, margin: 0 }}>12 weeks (2023)</p>
                 </div>
                 <div>
-                  <span style={eyebrowStyle}>My Role</span>
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>My Role</span>
                   <p style={{ ...pStyle, margin: 0 }}>UX Designer</p>
                 </div>
                 <div>
-                  <span style={eyebrowStyle}>Team</span>
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>Team</span>
                   <p style={{ ...pStyle, margin: 0 }}>2 UX Designers, 1 Product Manager</p>
                 </div>
               </div>

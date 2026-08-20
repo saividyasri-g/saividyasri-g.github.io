@@ -12,11 +12,11 @@ const cardEyebrow: React.CSSProperties = {
   display: 'block',
   marginBottom: 'var(--space-2)',
   fontFamily: 'var(--font-eyebrow)',
-  fontSize: '11px',
+  fontSize: 'var(--text-xs)',
   fontWeight: 600,
   letterSpacing: 'var(--tracking-badge-label)',
   textTransform: 'uppercase',
-  color: 'var(--color-text-meta)',
+  color: 'var(--color-text-eyebrow)',
   transition: 'var(--transition-theme)',
 }
 

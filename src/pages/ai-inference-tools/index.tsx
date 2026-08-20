@@ -28,11 +28,11 @@ const findingCardEyebrow: React.CSSProperties = {
   display: 'block',
   marginBottom: 'var(--space-2)',
   fontFamily: 'var(--font-eyebrow)',
-  fontSize: '11px',
+  fontSize: 'var(--text-xs)',
   fontWeight: 600,
   letterSpacing: 'var(--tracking-badge-label)',
   textTransform: 'uppercase',
-  color: 'var(--color-text-meta)',
+  color: 'var(--color-text-eyebrow)',
   transition: 'var(--transition-theme)',
 }
 
@@ -107,11 +107,11 @@ function Note({ label = 'Note', children }: { label?: string; children: ReactNod
       <span
         style={{
           fontFamily: 'var(--font-eyebrow)',
-          fontSize: '11px',
+          fontSize: 'var(--text-xs)',
           fontWeight: 600,
           letterSpacing: 'var(--tracking-badge-label)',
           textTransform: 'uppercase',
-          color: 'var(--color-text-meta)',
+          color: 'var(--color-text-eyebrow)',
           display: 'block',
           marginBottom: '4px',
           transition: 'var(--transition-theme)',
@@ -175,10 +175,10 @@ export default function AiInferenceTools() {
               {/* ════════════════════════════════════════ */}
               {/* OVERVIEW                                */}
               {/* ════════════════════════════════════════ */}
-              <section id="overview">
+              <section id="overview" style={{ ...sectionStyle, paddingTop: 0 }}>
                 <h1
                   style={{
-                    fontSize: 'var(--text-xl)',
+                    fontSize: 'var(--text-2xl)',
                     lineHeight: 1.1,
                     fontWeight: 600,
                     letterSpacing: '-0.025em',
@@ -207,26 +207,26 @@ export default function AiInferenceTools() {
                     Research log
                   </a>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-10)', marginBottom: 'var(--space-8)' }}>
+                <div className="case-study-block" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-10)' }}>
                   <div>
-                    <span style={eyebrowStyle}>Status</span>
+                    <span className="case-study-eyebrow" style={eyebrowStyle}>Status</span>
                     <p style={{ ...pStyle, margin: 0 }}>Concept Exploration • 2026</p>
                   </div>
                   <div>
-                    <span style={eyebrowStyle}>Duration</span>
+                    <span className="case-study-eyebrow" style={eyebrowStyle}>Duration</span>
                     <p style={{ ...pStyle, margin: 0 }}>3 nights</p>
                   </div>
                   <div>
-                    <span style={eyebrowStyle}>Skills</span>
+                    <span className="case-study-eyebrow" style={eyebrowStyle}>Skills</span>
                     <p style={{ ...pStyle, margin: 0 }}>Market Research, Competitor Research, Journey Mapping</p>
                   </div>
                   <div>
-                    <span style={eyebrowStyle}>Tools</span>
+                    <span className="case-study-eyebrow" style={eyebrowStyle}>Tools</span>
                     <p style={{ ...pStyle, margin: 0 }}>Claude - Projects, Paper</p>
                   </div>
                 </div>
-                <div style={{ marginBottom: 'var(--space-8)' }}>
-                  <span style={eyebrowStyle}>Overview</span>
+                <div className="case-study-block">
+                  <span className="case-study-eyebrow" style={eyebrowStyle}>Overview</span>
                   <p style={{ ...pStyle, margin: '8px 0 16px' }}>
                     I started with no knowledge of this domain. I set out to find where an unsolved problem sits in AI infrastructure and design against it.
                   </p>
@@ -253,7 +253,7 @@ export default function AiInferenceTools() {
                   <p style={{ ...pStyle, margin: 0 }}>
                     I mapped the buying process for a mid-size company, 500 to 5,000 employees, across six stages. An engineer hits a trigger, searches community forums, trials the tool alone, then escalates through a manager, a VP, and finally security, legal, and procurement.
                   </p>
-                  <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', margin: '20px 0 0', transition: 'var(--transition-theme)' }}>
+                  <div className="media-card" style={{ marginTop: 'var(--space-5)' }}>
                     <ZoomableImage
                       src="/ai_inference/buying-journey.png"
                       alt="Buying journey map for a mid-size company — six stages from awareness to procurement, with what moves each stage forward and what kills it"
@@ -326,7 +326,7 @@ export default function AiInferenceTools() {
                   <p style={{ ...pStyle, margin: 0 }}>
                     I audited Groq, Together.ai, and Fireworks AI, annotating how each handles the first interaction after sign-in.
                   </p>
-                  <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', margin: '20px 0 0', transition: 'var(--transition-theme)' }}>
+                  <div className="media-card" style={{ marginTop: 'var(--space-5)' }}>
                     <ZoomableImage
                       src="/ai_inference/market-positioning.png"
                       alt="Competitive positioning quadrant — configuration burden vs. cost predictability across Groq, Together.ai, and Fireworks AI"
@@ -366,7 +366,7 @@ export default function AiInferenceTools() {
                   <p style={{ ...pStyle, margin: 0 }}>
                     The flow runs in four steps: select or upload a model, describe the workload, choose what to improve, test.
                   </p>
-                  <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', margin: '20px 0 0', transition: 'var(--transition-theme)' }}>
+                  <div className="media-card" style={{ marginTop: 'var(--space-5)' }}>
                     <video
                       src="/ai_inference/ai-inference-intake-flow.mp4"
                       autoPlay
@@ -420,25 +420,27 @@ export default function AiInferenceTools() {
                     <strong style={{ color: 'var(--color-text-title)', fontWeight: 600 }}>Hypothesis: </strong>
                     ML engineers configuring an inference tool think in terms of what they are running (model, workload type, request volume, latency tolerance) rather than hardware requirements.
                   </p>
-                  <span style={{ ...eyebrowStyle, display: 'block', margin: '20px 0 0' }}>Testing results and strategy</span>
-                  <FindingCards
-                    columns={3}
-                    showLabels={false}
-                    findings={[
-                      {
-                        header: '3/3 participants validate workload-first mental model.',
-                        description: 'The assumption holds. I learn what else they consider beyond model, latency, and volume, and why. Anything that changes the design goes into the wireframes before the next phase.',
-                      },
-                      {
-                        header: 'At least 1/3 participant validate hardware-first mental model.',
-                        description: 'The design does not serve them, and I need to know why GPU configuration feels right. I map what those engineers have in common and survey a wider group to segment by preference.',
-                      },
-                      {
-                        header: 'At least 1/3 participant describe a different approach.',
-                        description: 'The most useful outcome and the one I have least prepared for. I learn what they are actually thinking about, then segment the same way.',
-                      },
-                    ]}
-                  />
+                  <div className="case-study-block" style={{ marginTop: 'var(--space-16)' }}>
+                    <span className="case-study-eyebrow" style={eyebrowStyle}>Testing results and strategy</span>
+                    <FindingCards
+                      columns={3}
+                      showLabels={false}
+                      findings={[
+                        {
+                          header: '3/3 participants validate workload-first mental model.',
+                          description: 'The assumption holds. I learn what else they consider beyond model, latency, and volume, and why. Anything that changes the design goes into the wireframes before the next phase.',
+                        },
+                        {
+                          header: 'At least 1/3 participant validate hardware-first mental model.',
+                          description: 'The design does not serve them, and I need to know why GPU configuration feels right. I map what those engineers have in common and survey a wider group to segment by preference.',
+                        },
+                        {
+                          header: 'At least 1/3 participant describe a different approach.',
+                          description: 'The most useful outcome and the one I have least prepared for. I learn what they are actually thinking about, then segment the same way.',
+                        },
+                      ]}
+                    />
+                  </div>
                 </Block>
 
                 <Block header="Phase 2: I would test the concept only if all three interviews support the hypothesis">
@@ -449,21 +451,23 @@ export default function AiInferenceTools() {
                     <strong style={{ color: 'var(--color-text-title)', fontWeight: 600 }}>What I validate: </strong>
                     time from sign-in to first output is less than {'<target time>'}. I would benchmark Groq, Fireworks, and Together first and use a real target value.
                   </p>
-                  <span style={{ ...eyebrowStyle, display: 'block', margin: '20px 0 0' }}>Testing results and strategy</span>
-                  <FindingCards
-                    columns={2}
-                    showLabels={false}
-                    findings={[
-                      {
-                        header: 'Less than the target time',
-                        description: 'I learn which parts of the flow carried them, so I know what to protect in later iterations.',
-                      },
-                      {
-                        header: 'Greater than the target time',
-                        description: 'I find where they stalled and whether design can fix it. If it cannot, the barrier is the finding, and the problem statement needs refining rather than the screens.',
-                      },
-                    ]}
-                  />
+                  <div className="case-study-block" style={{ marginTop: 'var(--space-16)' }}>
+                    <span className="case-study-eyebrow" style={eyebrowStyle}>Testing results and strategy</span>
+                    <FindingCards
+                      columns={2}
+                      showLabels={false}
+                      findings={[
+                        {
+                          header: 'Less than the target time',
+                          description: 'I learn which parts of the flow carried them, so I know what to protect in later iterations.',
+                        },
+                        {
+                          header: 'Greater than the target time',
+                          description: 'I find where they stalled and whether design can fix it. If it cannot, the barrier is the finding, and the problem statement needs refining rather than the screens.',
+                        },
+                      ]}
+                    />
+                  </div>
                 </Block>
               </section>
 

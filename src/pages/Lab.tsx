@@ -15,14 +15,18 @@ interface LabTile {
   icon?: string
 }
 
-const cardBg = 'var(--color-surface-sidebar)'
+const cardBg = 'var(--color-surface-main)'
 
-/** Flat grey card — no border, matches the Lab mockup's look (distinct from Work's white bordered ProjectCard). */
+/** Grey card matching Work's ProjectCard structure — same radius and 1px hair border,
+    picks up the accent-on-hover border via .fill-btn--card. */
 function LabCard({ tile }: { tile: LabTile }) {
   const [imgLoaded, setImgLoaded] = useState(false)
   const hasThumb = !!(tile.thumbNode || tile.thumb)
   const clickable = !!tile.href
 
+  /* Border + border-color transition live on the .fill-btn--card class (see
+     index.css). Non-clickable tiles don't get that class, so we set a matching
+     resting border here to keep them visually consistent. */
   const cardStyle: React.CSSProperties = {
     position: 'relative',
     overflow: 'hidden',
@@ -33,12 +37,14 @@ function LabCard({ tile }: { tile: LabTile }) {
     textDecoration: 'none',
     cursor: clickable ? 'pointer' : 'default',
     transition: 'var(--transition-theme)',
+    ...(clickable ? {} : { border: '1px solid var(--color-border-hair)' }),
   }
 
   const content = (
     <>
       {hasThumb && (
         <div
+          className="card-thumb-wrap"
           style={{
             position: 'relative',
             aspectRatio: tile.thumbAspect ?? '1 / 1',
@@ -70,6 +76,8 @@ function LabCard({ tile }: { tile: LabTile }) {
 
       <div style={{ padding: '20px 24px 24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
         {tile.icon && (
+          /* --icon-color set on the wrapper feeds .hover-accent-icon's background,
+             which lets the card-level hover selector override it with the accent. */
           <div
             style={{
               width: '40px',
@@ -81,16 +89,16 @@ function LabCard({ tile }: { tile: LabTile }) {
               justifyContent: 'center',
               marginBottom: '16px',
               transition: 'var(--transition-theme)',
+              ['--icon-color' as string]: 'var(--color-text-title)',
             }}
           >
-            {/* Recolored via CSS mask (not <img>) so the glyph follows the theme's text color instead of the SVG's hardcoded dark fill. */}
             <div
               role="img"
               aria-label=""
+              className="hover-accent-icon"
               style={{
                 width: '22px',
                 height: '22px',
-                background: 'var(--color-text-title)',
                 maskImage: `url(${tile.icon})`,
                 WebkitMaskImage: `url(${tile.icon})`,
                 maskSize: 'contain',
@@ -99,7 +107,6 @@ function LabCard({ tile }: { tile: LabTile }) {
                 WebkitMaskRepeat: 'no-repeat',
                 maskPosition: 'center',
                 WebkitMaskPosition: 'center',
-                transition: 'var(--transition-theme)',
               }}
             />
           </div>
@@ -108,14 +115,13 @@ function LabCard({ tile }: { tile: LabTile }) {
           {tile.tags.map(tag => (
             <span
               key={tag}
+              className="card-tag"
               style={{
                 fontFamily: 'var(--font-sans)',
                 fontSize: 'var(--text-xs)',
                 fontWeight: 500,
                 letterSpacing: '.09em',
                 textTransform: 'uppercase' as const,
-                color: 'var(--color-text-secondary)',
-                transition: 'var(--transition-theme)',
               }}
             >
               {tag}

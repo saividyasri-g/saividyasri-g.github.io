@@ -10,6 +10,77 @@ Living record of reusable UI components and design tokens for this portfolio, ke
 
 ## Components
 
+### Case-study vertical rhythm (eyebrow / block / section gaps)
+**Status:** Committed — 2026-08-19
+
+**Where used:** every case study (`src/pages/hmc/`, `fidelity/`, `marketplace/`, `multi-stakeholder/`, `ai-inference-tools/`) via the shared case-study components.
+
+**Files:**
+- `src/styles/index.css` — new `.case-study-block` class (with `:last-child` reset).
+- `src/components/case-study/Prose.tsx` — `sectionStyle`, `eyebrowStyle`, `Block`, `SectionDivider`, `ScenarioGroup`.
+- `src/components/case-study/DiagramSection.tsx` — outer wrapper uses `.case-study-block`; empty stage/solution row no longer renders so the counter's 4px marginBottom doesn't leak into the eyebrow→title gap.
+- Per-page Overview sections — first `<section id="overview">` in each case study takes `{ ...sectionStyle, paddingTop: 0 }` so Overview→Context participates in the section-gap rule while `layout-main-pad` still controls the page's top offset.
+
+**Canonical gaps (all on the 4/8 grid, via `--space-*` tokens):**
+
+| Boundary | Gap | Token | Where it lives |
+|---|---|---|---|
+| Eyebrow → title / next content | **16px** | `--space-4` | `eyebrowStyle.marginBottom`; `sectionDividerLabelStyle` gets it inline when used inside `SectionDivider` / `ScenarioGroup` |
+| Block → Block (within a section) | **64px** | `--space-16` | `.case-study-block { margin-bottom }` |
+| Section → Section (sidebar-linked `<section>`) | **80px** | 2 × `--space-10` | `sectionStyle.padding: 'var(--space-10) 0'` |
+| Last block in section → next section | **80px** | — | `.case-study-block:last-child { margin-bottom: 0 }` prevents the trailing 64px from compounding on top of section padding |
+
+**Why the `:last-child` reset:** without it, the last Block/DiagramSection's 64px `margin-bottom` would add on top of the section's 40px bottom padding + next section's 40px top padding, producing a 144px gap between sections instead of 80px. The reset makes section-to-section spacing driven entirely by `sectionStyle` padding — one lever, one source of truth.
+
+**What counts as a "section" vs a "block":**
+- **Section** = a top-level `<section>` element that the sidebar Outline links to (Overview, Context, Why-it-mattered, Scope, each Scenario group, Impact, Learnings). `ScenarioGroup` renders a `<section>` too, so a plain `<section>` followed by a `<ScenarioGroup>` (e.g., Scope → Problem 1 in HMC) is a section→section boundary at 80px, *not* block→block.
+- **Block** = anything with the `.case-study-block` class. That includes `<Block>`, `<DiagramSection>`, Overview inner divs, and any **nested eyebrow + content sub-structure** — e.g., "Solution 1A · Final" inside a DiagramSection tab (`hmc/index.tsx`), "Solution - Final - 1" in `fidelity/index.tsx`, "Testing results and strategy" inside Phase 1/2 in `ai-inference-tools/index.tsx`. Any sibling with its own eyebrow + title/content is a block and gets the 64px gap above via `<div className="case-study-block" style={{ marginTop: 'var(--space-16)' }}>` on the wrapper.
+
+**Removed:** the `border-top` rule + 32px paddingTop that `SectionDivider` and `ScenarioGroup` used to render above their labels. Section boundaries are now signalled purely by spacing, not by horizontal rules.
+
+**Card-internal eyebrows left at 8px** (`--space-2`) — `ConstraintPivotGrid`, `ProblemCostAnnotations`, and page-local dashed-card patterns (`findingCardEyebrow` in `hmc/`, `marketplace/`) use tag-within-a-card typography and would look loose at 16px. These are intentionally exempt from the 16px eyebrow→content rule.
+
+**Type scale used in case studies (updated 2026-08-20):**
+
+| Element | Token | Value | Extras |
+|---|---|---|---|
+| Page title (h1, Overview) | `var(--text-2xl)` | 32px | `line-height: 1.1`, `letter-spacing: -0.025em`, weight 600. Bumped from `text-xl` (28px) to preserve h1 > h2 hierarchy after h2 was bumped up. |
+| Section header (h2, Block/DiagramSection titles + inline sub-block h2s) | `var(--text-xl)` | 28px | `line-height: 1.22`, `letter-spacing: -0.02em`, weight 600. Bumped from `text-lg` (20px). |
+| Subhead (h3, `subHeadStyle` in ai-inference-tools, fidelity's constraint h3) | `var(--text-base)` | 16px | `line-height: 1.35` |
+| Eyebrow (case-study eyebrows, findings labels, cost labels, constraint labels, spec-note labels — everything using `var(--font-eyebrow)`) | `var(--text-xs)` | 12px | uppercase, `letter-spacing: .12em`, weight 600 or 700 depending on variant. Bumped from `11px`. |
+| Badge pill (`CaseBadge`), IterationTabs mono label, IterationDiagram annotations | `11px` inline | 11px | Left at 11px — different type role (sans-serif badge pill / mono tab label / dense diagram annotations), not part of the eyebrow family. |
+
+---
+
+### Media card (case-study media wrapper)
+**Status:** Committed — 2026-08-19
+
+**Where used:** every grey-tinted wrapper around images/videos in a case-study page, plus the outer card of every `DiagramSection` with `card={true}` (the default). 11 direct-inline uses across `hmc/`, `fidelity/`, `marketplace/`, `ai-inference-tools/` + the shared `DiagramSection` component.
+
+**File:** `src/styles/index.css` (`.media-card` rule).
+
+**Class only — no component.** The wrapper is a plain `<div className="media-card">` (or `className={card ? 'media-card' : undefined}` in `DiagramSection`). Kept as a class rather than a component because callers frequently need to compose with additional inline styles (marginTop, custom borderRadius for edge-to-edge diagrams).
+
+**Styling:**
+```css
+.media-card {
+  background: var(--color-surface-sidebar);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);          /* 24px */
+  transition: var(--transition-theme);
+}
+```
+
+**Visual-consistency rule (deliberately no bottom-margin compensation):**
+The card's border is treated as the block's content edge, exactly like a text line's baseline is the content edge in a text-ending block. So a section ending with a media card and a section ending with a paragraph both produce **80px** from card/text bottom to the next section's eyebrow — matching what the eye reads between adjacent text-ending sections like "why it mattered" → "scope". The card's own 24px inner padding is treated as breathing room around the media, *not* as external gap. Consequence: the actual image/video pixel sits 24px inside the card, so media-pixel-to-next-eyebrow is 24px larger than the canonical section/block gap. This is by design.
+
+**Top-margin normalization done in the same pass:** replaced ad-hoc `margin: '20px 0 0'` / `margin: '18px 0 0'` on card wrappers with `marginTop: 'var(--space-5)'` (20px, token). Two HMC videos with `margin: '18px auto'` were changed to `margin: '0 auto'` — the preceding `pStyle` marginBottom (16px) supplies the top gap, and the wrapping block's marginBottom supplies the bottom.
+
+**Not included in this class** (left as its own variant, tracked separately if it comes up again):
+- Bordered callout card in `marketplace/index.tsx:319` — uses `--color-surface-card` + `border: 1px solid var(--color-border-hair)` instead of the sidebar tint. Different visual language (callout, not media container).
+
+---
+
 ### Project case-study card
 **Status:** Proposed — 2026-07-14, pending confirmation
 

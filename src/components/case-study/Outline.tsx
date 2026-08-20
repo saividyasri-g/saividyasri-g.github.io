@@ -43,6 +43,18 @@ export default function Outline({ items, nextProject }: OutlineProps) {
     return () => window.removeEventListener('resize', measure)
   }, [active])
 
+  /*
+   * Mirror the active section id onto a data attribute so CSS can style content
+   * inside that section (e.g. its eyebrow) as the reader scrolls, without every
+   * eyebrow having to subscribe to the active state through React.
+   */
+  useEffect(() => {
+    const el = document.getElementById(active)
+    if (!el) return
+    el.setAttribute('data-section-active', 'true')
+    return () => el.removeAttribute('data-section-active')
+  }, [active])
+
   return (
     <aside
       className="layout-sidebar"
@@ -57,12 +69,12 @@ export default function Outline({ items, nextProject }: OutlineProps) {
       }}
     >
       <div>
-        <nav ref={navRef} style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginTop: 'var(--space-2)' }}>
+        <nav ref={navRef} style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginTop: 'var(--space-2)' }}>
           <span
             aria-hidden
             style={{
               position: 'absolute',
-              right: 0,
+              left: 0,
               top: 0,
               width: '2px',
               height: `${indicator.height}px`,
@@ -79,7 +91,7 @@ export default function Outline({ items, nextProject }: OutlineProps) {
                 key={item.id}
                 ref={el => { linkRefs.current[item.id] = el }}
                 href={`#${item.id}`}
-                className="fill-btn fill-btn--subtle fill-btn--right"
+                className="fill-btn fill-btn--subtle fill-btn--left"
                 onClick={e => {
                   e.preventDefault()
                   document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -89,8 +101,8 @@ export default function Outline({ items, nextProject }: OutlineProps) {
                   overflow: 'hidden',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'flex-end',
-                  textAlign: 'right',
+                  justifyContent: 'flex-start',
+                  textAlign: 'left',
                   gap: '8px',
                   padding: 'var(--space-2) var(--space-4)',
                   borderRadius: 'var(--radius-lg)',
@@ -125,6 +137,7 @@ export default function Outline({ items, nextProject }: OutlineProps) {
       {nextProject && (
         <a
           href={nextProject.href}
+          className="outline-next-project"
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -158,7 +171,7 @@ export default function Outline({ items, nextProject }: OutlineProps) {
               transition: 'var(--transition-theme)',
             }}
           >
-            {nextProject.label} →
+            {nextProject.label} <span className="nav-arrow">→</span>
           </span>
         </a>
       )}
