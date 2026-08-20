@@ -12,6 +12,7 @@ import {
   Block,
   ScenarioGroup,
   SectionDivider,
+  ZoomableImage,
 } from '../../components/case-study'
 
 const outlineItems = [
@@ -230,7 +231,7 @@ export default function Fidelity() {
                 </p>
                 <div style={{ width: '110%', marginLeft: '-5%' }}>
                   <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)', marginTop: 'var(--space-5)' }}>
-                    <img src="/fidelity/vendor-tool.png" alt="Supervisory Workstation on the legacy vendor platform" style={{ display: 'block', width: '100%' }} />
+                    <ZoomableImage src="/fidelity/vendor-tool.png" alt="Supervisory Workstation on the legacy vendor platform" style={{ display: 'block', width: '100%' }} />
                   </div>
                 </div>
                 <div
@@ -276,7 +277,7 @@ export default function Fidelity() {
                   Frontline managers file supervision reports on the associates they supervise. Supervisory Principals file reports on the associates in their scope and oversee whether the managers below them are completing reviews on schedule.
                 </p>
                 <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)' }}>
-                  <img src="/fidelity/users-supervison-hierarchy.png" alt="Supervision hierarchy — managers and Supervisory Principals over associates" style={{ display: 'block', width: '100%' }} />
+                  <ZoomableImage src="/fidelity/users-supervison-hierarchy.png" alt="Supervision hierarchy — managers and Supervisory Principals over associates" style={{ display: 'block', width: '100%' }} />
                 </div>
                 <h3
                   style={{
@@ -295,7 +296,7 @@ export default function Fidelity() {
                   Both flows were designed to supervise associates based on incident frequency, trends and severity.
                 </p>
                 <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)' }}>
-                  <img src="/fidelity/review-task-flow.png" alt="Incident-review and associate-review task flows" style={{ display: 'block', width: '100%' }} />
+                  <ZoomableImage src="/fidelity/review-task-flow.png" alt="Incident-review and associate-review task flows" style={{ display: 'block', width: '100%' }} />
                 </div>
               </Block>
             </section>
@@ -337,14 +338,14 @@ export default function Fidelity() {
                         id: 'manager-userflow',
                         label: 'Manager',
                         diagramTitle: 'Manager Incident-review User Flow',
-                        diagram: <img src="/fidelity/manager-userflow.png" alt="Manager userflow" style={{ display: 'block', width: '100%' }} />,
+                        diagram: <ZoomableImage src="/fidelity/manager-userflow.png" alt="Manager userflow" style={{ display: 'block', width: '100%' }} />,
                         annotations: <Problem1Annotations />,
                       },
                       {
                         id: 'sp-userflow',
                         label: 'Supervisory Principal',
                         diagramTitle: 'Supervisory Principal Incident-review User Flow',
-                        diagram: <img src="/fidelity/sp-userflow.png" alt="Supervisory Principal userflow" style={{ display: 'block', width: '100%' }} />,
+                        diagram: <ZoomableImage src="/fidelity/sp-userflow.png" alt="Supervisory Principal userflow" style={{ display: 'block', width: '100%' }} />,
                         annotations: <Problem1Annotations />,
                       },
                     ]}
@@ -363,6 +364,7 @@ export default function Fidelity() {
                 counter="Problem 1"
                 stage="before"
                 hideStageLabel
+                diagramBorderRadius="0"
                 title="In both associate and incident reviews, every layer of supervision hierarchy below a Supervisory Principal added a modal or screen to close, a context to hold, and a chance to file against the wrong associate."
                 description={
                   <>
@@ -383,7 +385,7 @@ export default function Fidelity() {
                           loop
                           muted
                           playsInline
-                          style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }}
+                          style={{ display: 'block', width: '100%' }}
                         />
                         <div style={{ marginTop: 'var(--space-8)' }}>
                           <Problem1Findings />
@@ -470,16 +472,18 @@ export default function Fidelity() {
                             Selecting an incident or an associate opens a dedicated page listing the associate incidents within that scope. Each row is one associate: the incident, its severity, the associate who performed it, the reporting manager that associate reports to, the manager accountable for the incident, and the incident count by month across the quarter.
                           </p>
                           <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)', marginBottom: 'var(--space-8)' }}>
-                            <img src="/fidelity/after-screen.png" alt="Final userflow screen" style={{ display: 'block', width: '100%' }} />
+                            <ZoomableImage src="/fidelity/after-screen.png" alt="Final userflow screen" style={{ display: 'block', width: '100%' }} />
                           </div>
-                          <video
-                            src="/fidelity/solution-1.mp4"
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }}
-                          />
+                          <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
+                            <video
+                              src="/fidelity/solution-1.mp4"
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              style={{ display: 'block', width: '100%' }}
+                            />
+                          </div>
                         </div>
                       </div>
                     ),
@@ -500,6 +504,7 @@ export default function Fidelity() {
                 stage="before"
                 hideStageLabel
                 diagramPadding="0"
+                diagramBorderRadius="0"
                 title="Identical triggers resulted in different outcomes (modal, expansion, navigation), requiring reliance on recall"
                 description="Users learned the behavior of each table separately and relied on recall to know what a click would do."
                 tabs={[{
@@ -511,7 +516,7 @@ export default function Fidelity() {
                       loop
                       muted
                       playsInline
-                      style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }}
+                      style={{ display: 'block', width: '100%' }}
                     />
                   ),
                 }]}
@@ -523,6 +528,7 @@ export default function Fidelity() {
                 hideStageLabel
                 solutionLabel="Solution 2"
                 diagramPadding="0"
+                diagramBorderRadius="0"
                 title = "One overview-to-detail pattern across both the incident and associate views"
                 description="Both the incident overview and the associate overview follow the same structure: a summary table where selecting a row opens its detail."
                 tabs={[{
@@ -534,7 +540,7 @@ export default function Fidelity() {
                       loop
                       muted
                       playsInline
-                      style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }}
+                      style={{ display: 'block', width: '100%' }}
                     />
                   ),
                 }]}
@@ -552,7 +558,7 @@ export default function Fidelity() {
                 I ran concept testing with five managers across levels of the supervision chain to test usability, intuitivity and measure the metrics against baseline
               </p>
               <div style={{ marginTop: 'var(--space-8)', background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)' }}>
-                <img src="/fidelity/concept-testing.jpg" alt="Concept testing" style={{ display: 'block', width: '100%' }} />
+                <ZoomableImage src="/fidelity/concept-testing.jpg" alt="Concept testing" style={{ display: 'block', width: '100%' }} />
               </div>
               <div className="annotation-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-5)', marginTop: 'var(--space-8)' }}>
                 {[

@@ -14,6 +14,7 @@ import {
   Block,
   ScenarioGroup,
   SectionDivider,
+  ZoomableImage,
 } from '../../components/case-study'
 
 const outlineItems = [
@@ -105,7 +106,7 @@ function ProblemFourTrio() {
           <div key={i} style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
             {/* Fixed-height slot shared by all three columns, image bottom-anchored — keeps captions aligned regardless of each image's own height. */}
             <div style={{ height: `${rowHeight}px`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end' }}>
-              <img src={item.src} alt={item.alt} style={{ display: 'block', maxWidth: '100%', height: `${item.imgHeight}px`, maxHeight: '100%', objectFit: 'contain', objectPosition: 'center bottom' }} />
+              <ZoomableImage src={item.src} alt={item.alt} style={{ display: 'block', maxWidth: '100%', height: `${item.imgHeight}px`, maxHeight: '100%', objectFit: 'contain', objectPosition: 'center bottom' }} />
             </div>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-sm)', fontWeight: 400, lineHeight: 1.5, color: 'var(--color-text-secondary)', margin: 0, transition: 'var(--transition-theme)' }}>
               {item.caption}
@@ -396,7 +397,7 @@ export default function HeroMotoCorp() {
                     <>
                       <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-2)', transition: 'var(--transition-theme)' }}>
                         <div style={{ position: 'relative' }}>
-                          <img src="/hmc/workflow-before.svg" alt="Starting point: manual technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />
+                          <ZoomableImage src="/hmc/workflow-before.svg" alt="Starting point: manual technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />
                           <CaseBadge icon="/hmc/icons/friction.svg" label="Friction in workflow" color="#BD0505" style={{ position: 'absolute', top: 'var(--space-3)', right: 'var(--space-3)' }} />
                         </div>
                       </div>
@@ -452,7 +453,7 @@ export default function HeroMotoCorp() {
                       {/* Grey card: diagram title + image + constraints */}
                       <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
                         <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-2)', marginBottom: 'var(--space-8)', transition: 'var(--transition-theme)' }}>
-                          <img src="/hmc/explored-workflow.png" alt="Explored workflow: next-day scheduling approach" style={{ display: 'block', width: '100%' }} />
+                          <ZoomableImage src="/hmc/explored-workflow.png" alt="Explored workflow: next-day scheduling approach" style={{ display: 'block', width: '100%' }} />
                         </div>
                         <p style={{ ...pStyle, margin: '0 0 var(--space-5)', maxWidth: 'none' }}>
                           Two constraints came out of the feasibility discussion with the SMEs and service managers: external system reliability and integration cost.
@@ -487,7 +488,7 @@ export default function HeroMotoCorp() {
                         </p>
                         <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
                           <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-2)', transition: 'var(--transition-theme)' }}>
-                            <img src="/hmc/final-workflow.png" alt="Final redesigned technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />
+                            <ZoomableImage src="/hmc/final-workflow.png" alt="Final redesigned technician assignment workflow" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />
                           </div>
                         </div>
                       </div>
@@ -506,7 +507,7 @@ export default function HeroMotoCorp() {
                 description="Assignment happened inside vehicle-service planning."
                 tabs={[{
                   id: '1b-i',
-                  diagram: <img src="/hmc/technician_available.png" alt="Technician available — assignment flow annotated" style={{ display: 'block', width: '100%' }} />,
+                  diagram: <ZoomableImage src="/hmc/technician_available.png" alt="Technician available — assignment flow annotated" style={{ display: 'block', width: '100%' }} />,
                 }]}
               />
 
@@ -520,7 +521,7 @@ export default function HeroMotoCorp() {
                 description="The vehicle stayed unassigned and the count stayed visible on the dashboard as 'parking bay'."
                 tabs={[{
                   id: '1b-ii',
-                  diagram: <img src="/hmc/dashboard_count.png" alt="Unassigned vehicles surfaced on the dashboard" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />,
+                  diagram: <ZoomableImage src="/hmc/dashboard_count.png" alt="Unassigned vehicles surfaced on the dashboard" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />,
                 }]}
               />
 
@@ -567,7 +568,7 @@ export default function HeroMotoCorp() {
                   id: 'ramp-before',
                   diagram: (
                     <>
-                      <img src="/hmc/problem-2.png" alt="Ramp plan before — assignments only, no progress visibility" style={{ display: 'block', width: '70%', margin: '0 auto' }} />
+                      <ZoomableImage src="/hmc/problem-2.png" alt="Ramp plan before — assignments only, no progress visibility" style={{ display: 'block', width: '70%', margin: '0 auto' }} />
                       <div style={{ marginTop: 'var(--space-6)' }}>
                         <ProblemCostAnnotations columns={[
                           {
@@ -597,7 +598,7 @@ export default function HeroMotoCorp() {
                 description="When vehicles needed to move between ramps mid-service, or when unassigned vehicles built up in the parking bay, the manager could open a live view of the workshop floor."
                 tabs={[{
                   id: 'ramp-after',
-                  diagram: <img src="/hmc/ramp-plan.png" alt="Ramp plan redesign — live service progress and reassignment" style={{ display: 'block', width: '100%' }} />,
+                  diagram: <ZoomableImage src="/hmc/ramp-plan.png" alt="Ramp plan redesign — live service progress and reassignment" style={{ display: 'block', width: '100%' }} />,
                 }]}
               />
 
@@ -617,7 +618,7 @@ export default function HeroMotoCorp() {
                 </p>
                 <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
                   <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-10)', transition: 'var(--transition-theme)' }}>
-                    <img src="/hmc/problem-3.png" alt="Problem 3 — real-time operations awareness" style={{ display: 'block', width: '100%' }} />
+                    <ZoomableImage src="/hmc/problem-3.png" alt="Problem 3 — real-time operations awareness" style={{ display: 'block', width: '100%' }} />
                   </div>
                   <div style={{ marginTop: 'var(--space-6)' }}>
                     <ProblemCostAnnotations columns={[
@@ -644,12 +645,13 @@ export default function HeroMotoCorp() {
                 title="I explored a dashboard surfacing touchpoints where any delay costs the business."
                 description="Working with SMEs, I mapped the delay points across the service journey and set out to surface them on a dashboard. Each widget is a point where a delay has a cost such as customer satisfaction at intake, idle technicians at approvals, held ramps at inspection, and promised deliveries in the parking bay."
                 diagramPadding="0"
+                diagramBorderRadius="0"
                 tabs={[
                   {
                     id: 'starting',
                     diagram: (
                       <>
-                        <img src="/hmc/solution3-iteration.png" alt="Starting concept wireframe — fixed widget dashboard" style={{ display: 'block', width: '100%' }} />
+                        <ZoomableImage src="/hmc/solution3-iteration.png" alt="Starting concept wireframe — fixed widget dashboard" style={{ display: 'block', width: '100%' }} />
                         <p style={{ ...pStyle, margin: 'var(--space-6) 0 var(--space-5)' }}>
                           Testing revealed three sources of variance the layout could not hold: time of day, service type, and service centre format.
                         </p>
@@ -668,10 +670,11 @@ export default function HeroMotoCorp() {
                 title="The final iteration made each category a tab with its own count."
                 description="Each category — tokens, ongoing jobs, billing, ramp plan, parking bay — became a tab carrying its own count. The tabs held the same order and position through the day, so the manager read where the load was from the numbers and moved to it. This system solved for the operational and service centre variance."
                 diagramPadding="0"
+                diagramBorderRadius="0"
                 tabs={[
                   {
                     id: 'final',
-                    diagram: <img src="/hmc/solution-3-final.png" alt="Final dashboard — tabs per category with counts" style={{ display: 'block', width: '100%' }} />,
+                    diagram: <ZoomableImage src="/hmc/solution-3-final.png" alt="Final dashboard — tabs per category with counts" style={{ display: 'block', width: '100%' }} />,
                   },
                 ]}
               />
@@ -684,7 +687,7 @@ export default function HeroMotoCorp() {
                   Above the tabs, an alert layer stayed visible regardless of which tab the manager had open. Anything that required a prompt decision a waiting inspection, a customer waiting past a threshold were surfaced as alerts so the manager didn't have to be looking at the right tab to see it.
                 </p>
                 <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', transition: 'var(--transition-theme)' }}>
-                  <img src="/hmc/solution-2b.png" alt="Persistent alert layer, annotated" style={{ display: 'block', width: '70%', margin: '0 auto' }} />
+                  <ZoomableImage src="/hmc/solution-2b.png" alt="Persistent alert layer, annotated" style={{ display: 'block', width: '70%', margin: '0 auto' }} />
                 </div>
               </Block>
 

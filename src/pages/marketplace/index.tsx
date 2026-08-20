@@ -9,6 +9,7 @@ import {
   Block,
   ScenarioGroup,
   SectionDivider,
+  ZoomableImage,
 } from '../../components/case-study'
 
 const outlineItems = [
@@ -316,7 +317,7 @@ export default function Marketplace() {
                   Part-way through, the business surfaced that they were sourcing leads externally and the first few would be free (new value unlocked!). I redefined success again around claiming that free lead. This moved listing creation, betting that a pro who has seen a real lead completes the listing more readily than one asked upfront.
                 </p>
                 <div style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-border-hair)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', margin: '18px 0 0', transition: 'var(--transition-theme)' }}>
-                  <img src="/marketplace/reframe.png" alt="Reframed success metric — listing creation moved after first free lead" style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />
+                  <ZoomableImage src="/marketplace/reframe.png" alt="Reframed success metric — listing creation moved after first free lead" style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }} />
                 </div>
               </Block>
             </section>

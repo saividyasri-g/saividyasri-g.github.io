@@ -7,6 +7,7 @@ import {
   eyebrowStyle,
   h2Style,
   Block,
+  ZoomableImage,
 } from '../../components/case-study'
 
 const outlineItems = [
@@ -253,7 +254,7 @@ export default function AiInferenceTools() {
                     I mapped the buying process for a mid-size company, 500 to 5,000 employees, across six stages. An engineer hits a trigger, searches community forums, trials the tool alone, then escalates through a manager, a VP, and finally security, legal, and procurement.
                   </p>
                   <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', margin: '20px 0 0', transition: 'var(--transition-theme)' }}>
-                    <img
+                    <ZoomableImage
                       src="/ai_inference/buying-journey.png"
                       alt="Buying journey map for a mid-size company — six stages from awareness to procurement, with what moves each stage forward and what kills it"
                       style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }}
@@ -326,7 +327,7 @@ export default function AiInferenceTools() {
                     I audited Groq, Together.ai, and Fireworks AI, annotating how each handles the first interaction after sign-in.
                   </p>
                   <div style={{ background: 'var(--color-surface-sidebar)', borderRadius: 'var(--radius-card)', padding: 'var(--space-6)', margin: '20px 0 0', transition: 'var(--transition-theme)' }}>
-                    <img
+                    <ZoomableImage
                       src="/ai_inference/market-positioning.png"
                       alt="Competitive positioning quadrant — configuration burden vs. cost predictability across Groq, Together.ai, and Fireworks AI"
                       style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)' }}

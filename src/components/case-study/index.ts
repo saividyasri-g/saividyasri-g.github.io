@@ -16,6 +16,7 @@ export { IterationDiagram, FlowNode, FlowDecision, FlowArrow, ScopeBadge } from 
 export { DiagramSection } from './DiagramSection'
 export type { DiagramTab } from './DiagramSection'
 export { Media } from './Media'
+export { ZoomableImage } from './ZoomableImage'
 export {
   sectionStyle,
   h2Style,

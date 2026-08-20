@@ -128,6 +128,7 @@
   --color-toggle-track: var(--primitive-light-toggle-track);
   --color-stripe-a: var(--primitive-light-stripe-a);
   --color-stripe-b: var(--primitive-light-stripe-b);
+  --color-scrim-lightbox: rgb(20 22 26 / 55%);
 
   /* REPLACE-ME accent — deliberately loud so accidental ship is impossible */
 
@@ -158,6 +159,7 @@
   --color-toggle-track: var(--primitive-dark-toggle-track);
   --color-stripe-a: var(--primitive-dark-stripe-a);
   --color-stripe-b: var(--primitive-dark-stripe-b);
+  --color-scrim-lightbox: rgb(0 0 0 / 82%);
 }
 
 /* ─── Semantic aliases (spacing, type, radius, motion) ────── */
