@@ -74,6 +74,15 @@ const findingCardDesc: React.CSSProperties = {
   transition: 'var(--transition-theme)',
 }
 
+/* Sub-header rendered above the image/video inside a tab's diagram slot — used by Solution 1B's fullWidthTabs. Kept page-local since it is not yet a shared component. */
+const tabSubheaderStyle: React.CSSProperties = {
+  fontSize: 'var(--text-base)',
+  lineHeight: 1.65,
+  color: 'var(--color-text-secondary)',
+  margin: '0 0 var(--space-4)',
+  transition: 'var(--transition-theme)',
+}
+
 /** Three same-height, horizontally aligned images with captions, in a grey card — used in Problem 4. */
 function ProblemFourTrio() {
   const rowHeight = 420
@@ -121,9 +130,9 @@ function ProblemFourTrio() {
             cost: 'Time spent documenting, and errors in what was documented',
           },
           {
-            problem: 'Context that did not fit any form field was verbally relayed.',
-            description: "Notes about the vehicle's history or past incidents could not be captured in the form. Typing them took longer than talking, so managers relayed them to the technician on the workshop floor instead. SMEs estimated this happened for about a third of vehicles.",
-            cost: 'Managers held the context, walked to workshop floors',
+            problem: 'Additional vehicle context was verbally relayed to technicians',
+            description: "Notes about the vehicle's history or past incidents was verbally relayed to technicians because typing them took longer than talking. SMEs estimated this happened for about a third of vehicles.",
+            cost: 'Managers manually holding context',
           },
         ]} />
       </div>
@@ -177,8 +186,16 @@ function Solution2AFindings() {
 function ImpactCards() {
   const cards: { title: ReactNode; description: string }[] = [
     {
-      title: '15 min → ~7 min',
-      description: 'Documentation time cut by roughly 50%.',
+      title: (
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden style={{ flexShrink: 0 }}>
+            <circle cx="10" cy="10" r="7" stroke="var(--color-text-title)" strokeWidth="1.5" />
+            <path d="M10 6v4l2.5 2.5" stroke="var(--color-text-title)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          15 min → ~7 min
+        </span>
+      ),
+      description: 'Documentation time cut by ~54%.',
     },
     {
       title: (
@@ -190,7 +207,7 @@ function ImpactCards() {
           100K+ downloads
         </span>
       ),
-      description: "App shipped and live across Hero MotoCorp's authorised-dealer network.",
+      description: "Shipped and live across dealer network.",
     },
   ]
 
@@ -327,24 +344,21 @@ export default function HeroMotoCorp() {
               </Block>
 
               <Block
-                header="Service Manager is accountable for the service centre's operations starting from vehicle entry to delivery."
+                header="Service Manager orchestrates the service centre's operations from vehicle entry to delivery."
               >
-                <p style={pStyle}>
-                  The Service Manager's operations span customer engagement, alignment, vehicle-service documentation, estimating service duration, assigning vehicles to technicians' ramps, assessing service quality, and processing payment through to checkout.
-                </p>
                 <p style={{ ...pStyle, margin: 0 }}>
-                  Top three most important business goals were increasing the number of vehicles serviced, improving on-time vehicle-service delivery, and driving overall customer satisfaction.
+                  The Service Manager's operations span customer engagement, alignment, vehicle-service documentation, estimating service duration, assigning vehicles to technicians' ramps, assessing service quality, and processing payment through to checkout.
                 </p>
               </Block>
 
               <Block
-                header="Siloed operations caused vehicle-service delays and operational inefficiency."
+                header="Managers relied on manual information gathering & handoffs, which caused service delays and operational inefficiency."
               >
                 <p style={pStyle}>
                   Each stage of the vehicle's journey happened in a different zone. Service Managers with limited visibility into other zones, physically moved between zones to coordinate the operations.
                 </p>
                 <p style={{ ...pStyle, margin: 0 }}>
-                  They walked the workshop floor to find out which technicians were free, and relayed information verbally to technicians. They walked back to the lobby to update customers. This manual information gathering and handoff led to inefficient ramp utilization, increased customer waiting times, vehicle idle times, vehicle-service delays, and reduced customer satisfaction.
+                  The manual information gathering and handoff led to inefficient ramp utilization, increased customer waiting times, vehicle idle times, vehicle-service delays, and reduced customer satisfaction.
                 </p>
               </Block>
             </section>
@@ -355,10 +369,13 @@ export default function HeroMotoCorp() {
             <section id="why-it-mattered" style={sectionStyle}>
               <Block
                 eyebrow="Why it mattered"
-                header="This Tool was Hero MotoCorp's initiative to improve business operations across 6,000+ service centres."
+                header="Hero MotoCorp's business depends on service centres to drive post-sales revenue and customer loyalty."
               >
+                <p style={pStyle}>
+                  Hero MotoCorp's business depends on independent dealership service centres to drive post-sales revenue (parts, service, accessories) and customer loyalty. The Service Management Tool was Hero's initiative to streamline operations across 6,000+ service centres in India, alongside standard operating procedures (SOPs).
+                </p>
                 <p style={{ ...pStyle, margin: 0 }}>
-                  Hero MotoCorp's business depends on independent dealership service centres to drive post-sales revenue (parts, service, accessories) and customer loyalty. The Service Management Tool was Hero's initiative to streamline operations across 6,000+ service centres in India, alongside standard operating procedures (SOPs) to improve the numbers each dealership was accountable for.
+                  Three most important business goals were increasing the number of vehicles serviced, improving on-time vehicle-service delivery, and driving overall customer satisfaction.
                 </p>
               </Block>
             </section>
@@ -369,10 +386,10 @@ export default function HeroMotoCorp() {
             <section id="scope" style={sectionStyle}>
               <Block
                 eyebrow="Scope"
-                header="An agency engagement with no direct research access"
+                header="The engagement ran remotely, without direct access to the service centres"
               >
                 <p style={{ ...pStyle, margin: 0 }}>
-                  This project with Hero MotoCorp (client) ran remotely through COVID. Primary research at the service centres was not in scope, so we worked from stakeholder interviews and concept testing with four service executives and a product manager who were the SMEs engaged throughout the project. They were the source for how centres actually ran, and concept testing was how I checked design decisions against that.
+                  Primary research at the service centres was not in scope. We worked with 4 service executives and 1 product manager, engaged throughout the project. They were the source for how centres ran, and I validated design decisions through concept testing.
                 </p>
               </Block>
             </section>
@@ -400,7 +417,7 @@ export default function HeroMotoCorp() {
                       <div style={{ marginTop: 'var(--space-6)' }}>
                         <ProblemCostAnnotations columns={[
                           {
-                            problem: "Limited visibility into Technician's availability",
+                            problem: "Unassigned vehicles were queued",
                             description: 'Managers planned the vehicle-service first and checked workshop availability afterward, resulting in queued vehicles without an assigned technician.',
                             cost: 'Assignment overhead on every vehicle',
                           },
@@ -474,7 +491,7 @@ export default function HeroMotoCorp() {
                       <div className="case-study-block" style={{ marginTop: 'var(--space-16)' }}>
                         <span className="case-study-eyebrow" style={eyebrowStyle}>Solution 1A · Final</span>
                         <h2 style={{ fontSize: 'var(--text-xl)', lineHeight: 1.22, fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--color-text-title)', margin: '0 0 14px', maxWidth: 'var(--content-width-prose)', transition: 'var(--transition-theme)' }}>
-                          A technician assignment workflow that pulled availability data from the technician's app into the manager's screen.
+                          I pivoted to collecting availability in the technician app and feeding it to the manager's screen.
                         </h2>
                         <p style={{ ...pStyle, margin: '0 0 var(--space-6)' }}>
                           I designed a workflow where the Technicians set availability and ramp at daily login on Technician's app. This login input provides every centre the same input, independent of the systems. Tagging and tracking service statuses such as unassigned, not started, ongoing, delayed provided real-time vehicle status.
@@ -495,51 +512,49 @@ export default function HeroMotoCorp() {
                 hideStageLabel
                 diagramPadding="0"
                 stage="after"
-                solutionLabel="Solution 1B · i"
-                title="When a technician was available"
-                description="Assignment happened inside vehicle-service planning."
-                tabs={[{
-                  id: '1b-i',
-                  diagram: <ZoomableImage src="/hmc/technician_available.png" alt="Technician available — assignment flow annotated" style={{ display: 'block', width: '100%' }} />,
-                }]}
-              />
-
-              <DiagramSection
-                wide={false}
-                hideStageLabel
-                diagramPadding="0"
-                stage="after"
-                solutionLabel="Solution 1B · ii"
-                title="When no technician was available"
-                description="The vehicle stayed unassigned and the count stayed visible on the dashboard as 'parking bay'."
-                tabs={[{
-                  id: '1b-ii',
-                  diagram: <ZoomableImage src="/hmc/dashboard_count.png" alt="Unassigned vehicles surfaced on the dashboard" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />,
-                }]}
-              />
-
-              <DiagramSection
-                wide={false}
-                hideStageLabel
-                diagramPadding="0"
-                stage="after"
-                solutionLabel="Solution 1B · iii"
-                title="When a technician freed up"
-                description="Reassignment happened from the ramp plan view, where waiting vehicles sat alongside the ramps."
-                tabs={[{
-                  id: '1b-iii',
-                  diagram: (
-                    <video
-                      src="/hmc/ramp-plan.mp4"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      onLoadedMetadata={e => { (e.target as HTMLVideoElement).playbackRate = 1 }}
-                      style={{ display: 'block', width: '85%', margin: '0 auto', borderRadius: 'var(--radius-sm)' }}
-                    />
-                  ),
-                }]}
+                solutionLabel="Solution 1B · Final"
+                title="I designed for three states of technician availability."
+                fullWidthTabs
+                tabs={[
+                  {
+                    id: '1b-available',
+                    label: 'Technician is available',
+                    diagram: (
+                      <>
+                        <h3 style={tabSubheaderStyle}>Assignment happened inside vehicle-service planning.</h3>
+                        <ZoomableImage src="/hmc/technician_available.png" alt="Technician available — assignment flow annotated" style={{ display: 'block', width: '100%' }} />
+                      </>
+                    ),
+                  },
+                  {
+                    id: '1b-none',
+                    label: 'Technician is unavailable',
+                    diagram: (
+                      <>
+                        <h3 style={tabSubheaderStyle}>The vehicle stayed unassigned and the count stayed visible on the dashboard as &lsquo;parking bay&rsquo;.</h3>
+                        <ZoomableImage src="/hmc/dashboard_count.png" alt="Unassigned vehicles surfaced on the dashboard" style={{ display: 'block', margin: '0 auto', maxWidth: '100%' }} />
+                      </>
+                    ),
+                  },
+                  {
+                    id: '1b-becomes',
+                    label: 'Technician becomes available',
+                    diagram: (
+                      <>
+                        <h3 style={tabSubheaderStyle}>Reassignment happened from the ramp plan view, where waiting vehicles sat alongside the ramps.</h3>
+                        <video
+                          src="/hmc/ramp-plan.mp4"
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          onLoadedMetadata={e => { (e.target as HTMLVideoElement).playbackRate = 1 }}
+                          style={{ display: 'block', width: '85%', margin: '0 auto', borderRadius: 'var(--radius-sm)' }}
+                        />
+                      </>
+                    ),
+                  },
+                ]}
               />
 
             </ScenarioGroup>
@@ -565,12 +580,12 @@ export default function HeroMotoCorp() {
                       <div style={{ marginTop: 'var(--space-6)' }}>
                         <ProblemCostAnnotations columns={[
                           {
-                            problem: 'The ramp plan showed assignments, and not progress',
-                            description: 'The view showed the planned assignments but service progress and delays were not captured, so the manager learned them by walking the floor.',
+                            problem: 'Service progress and delays were not captured',
+                            description: 'Manager manually gathered information about delays and progress.',
                             cost: 'Late discoveries of delays',
                           },
                           {
-                            problem: 'The ramp plan could not be changed from the tool',
+                            problem: 'The vehicle could not be reassigned',
                             description: 'When a service ran over or a ramp freed up, reassignment of vehicle-services happened verbally on the floor.',
                             cost: 'Manual verbal hand-off hours',
                           },
@@ -587,7 +602,7 @@ export default function HeroMotoCorp() {
                 diagramPadding="0"
                 stage="after"
                 solutionLabel="Solution 2"
-                title="A ramp and workshop view for mid-service tracking and reassignment."
+                title="I designed a workshop view for mid-service tracking and reassignment."
                 description="When vehicles needed to move between ramps mid-service, or when unassigned vehicles built up in the parking bay, the manager could open a live view of the workshop floor."
                 tabs={[{
                   id: 'ramp-after',
@@ -604,7 +619,7 @@ export default function HeroMotoCorp() {
 
               <Block
                 eyebrow="Problem 3"
-                header="Without full awareness of real-time operations, the manager couldn't make operational decisions based on actual priority."
+                header="Managers made operational decisions without any urgency/criticality signals."
               >
                 <p style={pStyle}>
                   At any point in the day, the service manager had to decide between competing calls on their attention: a technician on the workshop floor needed approval for a newly found issue, a customer was waiting in the lobby, and a vehicle was waiting for payment processing. Without a criticality or urgency signal, decisions were made on anything but real urgency.
@@ -617,7 +632,7 @@ export default function HeroMotoCorp() {
                     <ProblemCostAnnotations columns={[
                       {
                         problem: 'No data ranked the demands',
-                        description: "Waiting durations, stalled services, and finished-vehicle counts weren't captured anywhere. The manager responded to demands that were visible while the critical demands waited behind.",
+                        description: "Waiting durations, stalled services, and finished-vehicle counts weren't captured anywhere.",
                         cost: 'Turnaround time increased',
                       },
                       {
@@ -660,8 +675,8 @@ export default function HeroMotoCorp() {
                 hideStageLabel
                 stage="after"
                 solutionLabel="Solution · 3a · Final"
-                title="The final iteration made each category a tab with its own count."
-                description="Each category — tokens, ongoing jobs, billing, ramp plan, parking bay — became a tab carrying its own count. The tabs held the same order and position through the day, so the manager read where the load was from the numbers and moved to it. This system solved for the operational and service centre variance."
+                title="I pivoted to a dashboard that solves for the service centre variance and alerts to signal criticality."
+                description="The tabs tokens, ongoing jobs, billing, ramp plan, parking bay held the same order and position through the day, so the manager read where the load was from the numbers and moved to it. The alert layer stayed visible regardless of which tab the manager had open. "
                 diagramPadding="0"
                 diagramBorderRadius="0"
                 tabs={[
@@ -672,18 +687,6 @@ export default function HeroMotoCorp() {
                 ]}
               />
 
-              <Block
-                eyebrow="Solution · 3b"
-                header="A persistent alert layer for anything that needed a prompt decision, regardless of which tab was open."
-              >
-                <p style={pStyle}>
-                  Above the tabs, an alert layer stayed visible regardless of which tab the manager had open. Anything that required a prompt decision a waiting inspection, a customer waiting past a threshold were surfaced as alerts so the manager didn't have to be looking at the right tab to see it.
-                </p>
-                <div className="media-card">
-                  <ZoomableImage src="/hmc/solution-2b.png" alt="Persistent alert layer, annotated" style={{ display: 'block', width: '70%', margin: '0 auto' }} />
-                </div>
-              </Block>
-
             </ScenarioGroup>
 
             {/* ════════════════════════════════════════ */}
@@ -693,7 +696,7 @@ export default function HeroMotoCorp() {
 
               <Block
                 eyebrow="Problem 4"
-                header="The vehicle-service plan documentation flow forced the manager to scroll back and forth while the customer talked, and some context did not fit the form at all."
+                header="The current documentation flow forced the manager to scroll back and forth while planning the vehicle-service."
               >
                 <p style={pStyle}>
                   The documentation served two audiences. It aligned the customer and the centre on what was being serviced and how long it would take, and it told the technician what needed to be done on the vehicle.
@@ -703,10 +706,10 @@ export default function HeroMotoCorp() {
 
               <Block
                 eyebrow="Solution · 4a"
-                header="I redesigned the documentation IA with a sidebar to jump between sections, a preview of what was filled, and sticky quick-access fields."
+                header="I redesigned the IA and documentation flow with a sidebar to jump between sections."
               >
                 <p style={pStyle}>
-                  I restructured the form into a sidebar of sections the manager could jump between quickly. A preview of what was filled in each section gave the manager awareness of what was documented and what was missing, and gave the customer awareness of what was being captured. Frequently-edited fields like supervisor and service criticality were pulled out as sticky, quick-access items so the manager could change them from any section without navigating away.
+                  The sidebar sections allowed the manager to jump between quickly. A preview of what was filled in each section gave the manager awareness of what was documented and what was missing, and gave the customer awareness of what was being captured. Frequently-edited fields like supervisor and service criticality were pulled out as sticky, quick-access items so the manager could change them from any section without navigating away.
                 </p>
                 <video
                   src="/hmc/solution-4.mp4"
@@ -721,10 +724,10 @@ export default function HeroMotoCorp() {
 
               <Block
                 eyebrow="Solution · 4b"
-                header="I introduced voice recording against complaints to capture the context that couldn't be typed, without having to walk to the workshop."
+                header="I introduced voice recording against complaints to capture the context that couldn't be typed."
               >
                 <p style={pStyle}>
-                  To avoid the physical trip and the manual handoff, I proposed a voice-recording option against individual complaints and the overall notes section. Instead of walking to the technician to relay context verbally, the manager could record it once and the technician could listen to it on the workshop floor.
+                  Instead of relaying context verbally to the technician, the manager could record it once and the technician could listen to it on the workshop floor.
                 </p>
                 <div
                   style={{
@@ -750,7 +753,7 @@ export default function HeroMotoCorp() {
                     Specification Note
                   </span>
                   <p style={{ ...pStyle, margin: 0, maxWidth: 'none' }}>
-                    The recording needed to cut through ambient workshop noise so the manager could speak at normal volume. And the technician needed to hear the recorded note clearly on a noisy workshop floor, so I proposed pairing the feature with earphones on the tablets.
+                    The recording needed to cut through ambient workshop noise so the manager could speak at normal volume. For playback, I proposed pairing the feature with earphones on the tablets so the technician could hear the note clearly.
                   </p>
                 </div>
                 <video
@@ -772,9 +775,6 @@ export default function HeroMotoCorp() {
             <section id="impact" style={sectionStyle}>
               <SectionDivider label="Impact" />
               <h2 style={h2Style}>I tested the documentation redesign, the one flow I could test before handing off to development.</h2>
-              <p style={pStyle}>
-                This was an agency engagement, so testing happened before the specification was handed off to the client's development team, and there was no research resource for post-launch measurement. Documentation was the one flow I could test in a session: it's a bounded task, repeated for every vehicle, with a clear before and after.
-              </p>
               <p style={{ ...pStyle, margin: 0 }}>
                 I ran task-based testing with 3 service managers, comparing the original form against the redesigned IA on the same set of complaints.
               </p>

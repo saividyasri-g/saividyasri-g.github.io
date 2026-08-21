@@ -43,6 +43,8 @@ export interface DiagramSectionProps {
   cardBorderRadius?: string
   /** Background of the outer card (only applies when `card` is true). Defaults to the .media-card grey tint; pass '#fff' etc. to override for images that need a white matte. */
   cardBackground?: string
+  /** Render the tab bar as a full-width segmented control across the container instead of the default right-aligned pill nav. Uses the shared section title/description above; the per-tab diagramTitle row is skipped. */
+  fullWidthTabs?: boolean
 }
 
 const stageColors = {
@@ -77,6 +79,7 @@ export function DiagramSection({
   card = true,
   cardBorderRadius = 'var(--radius-card)',
   cardBackground,
+  fullWidthTabs = false,
 }: DiagramSectionProps) {
   const [activeId, setActiveId] = useState(defaultTabId ?? tabs[0]?.id)
   const multiTab = tabs.length > 1
@@ -96,8 +99,10 @@ export function DiagramSection({
           {beforeTabs}
         </div>
       )}
-      {/* Tab bar — only when multiple tabs */}
-      {multiTab && (
+      {/* Tab bar — only when multiple tabs. Two variants:
+          - default: left-aligned diagramTitle + right-aligned compact pill nav
+          - fullWidthTabs: single row of equal-width tab buttons spanning the container */}
+      {multiTab && !fullWidthTabs && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-5)' }}>
           <span
             style={{
@@ -150,6 +155,55 @@ export function DiagramSection({
             ))}
           </nav>
         </div>
+      )}
+      {multiTab && fullWidthTabs && (
+        <nav
+          role="tablist"
+          style={{
+            display: 'flex',
+            width: '100%',
+            background: 'var(--color-surface-card)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '4px',
+            gap: '4px',
+            border: '1px solid var(--color-border-hair)',
+            marginBottom: 'var(--space-5)',
+            transition: 'var(--transition-theme)',
+          }}
+        >
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              role="tab"
+              aria-selected={activeId === tab.id}
+              onClick={() => setActiveId(tab.id)}
+              className={`fill-btn fill-btn--subtle nav-link${activeId === tab.id ? ' nav--active' : ''}`}
+              style={{
+                flex: 1,
+                position: 'relative',
+                overflow: 'hidden',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                height: '32px',
+                padding: '0 var(--space-2)',
+                fontFamily: 'var(--font-sans)',
+                fontSize: 'var(--text-sm)',
+                fontWeight: activeId === tab.id ? 500 : 400,
+                color: activeId === tab.id ? 'var(--color-text-title)' : 'var(--color-text-secondary)',
+                background: 'transparent',
+                border: 'none',
+                borderRadius: 'var(--radius-md)',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                transition: 'var(--transition-theme)',
+              }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </nav>
       )}
       {/* Diagram card */}
       <div
@@ -215,25 +269,36 @@ export function DiagramSection({
           </div>
         )}
 
-        {/* Zone 2 — Diagram stack: always starts at same Y regardless of header */}
-        <div style={{ position: multiTab ? 'relative' : undefined, padding: diagramPadding }}>
-          {tabs.map((tab, i) => (
-            <div
-              key={`dgm-${tab.id}`}
-              aria-hidden={activeId !== tab.id}
-              style={{
-                position: i === 0 ? 'relative' : 'absolute',
-                inset: i === 0 ? undefined : 0,
-                /* Mirror parent padding so absolute tabs don't start at the padding edge */
-                padding: i > 0 ? diagramPadding : undefined,
-                opacity: activeId === tab.id ? 1 : 0,
-                pointerEvents: activeId === tab.id ? 'auto' : 'none',
-                transition: 'opacity 0.35s ease',
-              }}
-            >
-              {tab.diagram}
-            </div>
-          ))}
+        {/* Zone 2 — Diagram stack.
+            Default multi-tab: all tabs stacked (first relative, rest absolute) so Y-position
+            stays put while the header row above swaps.
+            fullWidthTabs: only the active tab is rendered, so the container fits the visible
+            content and doesn't overflow when tabs have different heights. */}
+        <div style={{ position: multiTab && !fullWidthTabs ? 'relative' : undefined, padding: diagramPadding }}>
+          {multiTab && fullWidthTabs ? (
+            (() => {
+              const activeTab = tabs.find(t => t.id === activeId)
+              return activeTab ? <div key={`dgm-${activeTab.id}`}>{activeTab.diagram}</div> : null
+            })()
+          ) : (
+            tabs.map((tab, i) => (
+              <div
+                key={`dgm-${tab.id}`}
+                aria-hidden={activeId !== tab.id}
+                style={{
+                  position: i === 0 ? 'relative' : 'absolute',
+                  inset: i === 0 ? undefined : 0,
+                  /* Mirror parent padding so absolute tabs don't start at the padding edge */
+                  padding: i > 0 ? diagramPadding : undefined,
+                  opacity: activeId === tab.id ? 1 : 0,
+                  pointerEvents: activeId === tab.id ? 'auto' : 'none',
+                  transition: 'opacity 0.35s ease',
+                }}
+              >
+                {tab.diagram}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
