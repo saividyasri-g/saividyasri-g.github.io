@@ -35,7 +35,7 @@ export default function Carousel({ slides, autoPlayMs = 3500, width, imgWidth }:
 
   return (
     <div
-      style={{ width: width ?? '100%', margin: width ? '0 auto' : undefined, background: '#fff', borderRadius: 'var(--radius-card)', border: '1px solid var(--color-border-hair)', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}
+      style={{ width: width ?? '100%', margin: width ? '0 auto' : undefined, background: '#fff', borderRadius: 'var(--radius-card)', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}
       onMouseEnter={() => { pausedRef.current = true }}
       onMouseLeave={() => { pausedRef.current = false }}
     >

@@ -1,6 +1,6 @@
 export interface ConstraintPivotEntry {
   title: string
-  description: string
+  description?: string
   pivot: string
 }
 
@@ -51,12 +51,8 @@ const dashedCard: React.CSSProperties = {
 }
 
 const pivotCardWidth = '240px'
-const pivotColor = '#6B7280'
-const pivotFill = '#F1F2F4'
 
 export function ConstraintPivotGrid({ entries }: ConstraintPivotGridProps) {
-  const pivotLabelColor = `${pivotColor}e6`
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
       {entries.map((entry, i) => (
@@ -64,11 +60,11 @@ export function ConstraintPivotGrid({ entries }: ConstraintPivotGridProps) {
           <div style={{ flex: 1 }}>
             <span style={cardEyebrow}>Constraint #{i + 1}</span>
             <p style={cardHeader}>{entry.title}</p>
-            <p style={cardDesc}>{entry.description}</p>
+            {entry.description && <p style={cardDesc}>{entry.description}</p>}
           </div>
-          <div className="finding-cost-panel" style={{ width: pivotCardWidth, flexShrink: 0, background: pivotFill, borderRadius: 'var(--radius-card)', padding: 'var(--space-4) var(--space-5)', transition: 'var(--transition-theme)' }}>
-            <span style={{ ...cardEyebrow, marginBottom: 'var(--space-2)', color: pivotLabelColor }}>Pivot</span>
-            {/* Fixed dark text — this panel's fill (pivotFill) stays light in both themes, so text must not follow the theme-swapping body-text token. */}
+          <div className="finding-cost-panel" style={{ width: pivotCardWidth, flexShrink: 0, background: 'var(--color-pivot-fill)', borderRadius: 'var(--radius-card)', padding: 'var(--space-4) var(--space-5)' }}>
+            <span style={{ ...cardEyebrow, marginBottom: 'var(--space-2)', color: 'var(--color-pivot-text)' }}>Pivot</span>
+            {/* Fixed dark text — the pivot fill stays light in both themes (mirrors the business-cost card), so text must not follow the theme-swapping body-text token. */}
             <span style={{ fontSize: 'var(--text-base)', fontWeight: 400, lineHeight: 1.35, color: 'var(--primitive-light-title)' }}>
               {entry.pivot}
             </span>

@@ -41,6 +41,8 @@ export interface DiagramSectionProps {
   card?: boolean
   /** Border radius on the outer tinted card (only applies when `card` is true). Defaults to 'var(--radius-card)'. Pass '0' to remove. */
   cardBorderRadius?: string
+  /** Background of the outer card (only applies when `card` is true). Defaults to the .media-card grey tint; pass '#fff' etc. to override for images that need a white matte. */
+  cardBackground?: string
 }
 
 const stageColors = {
@@ -74,6 +76,7 @@ export function DiagramSection({
   wide = true,
   card = true,
   cardBorderRadius = 'var(--radius-card)',
+  cardBackground,
 }: DiagramSectionProps) {
   const [activeId, setActiveId] = useState(defaultTabId ?? tabs[0]?.id)
   const multiTab = tabs.length > 1
@@ -82,7 +85,11 @@ export function DiagramSection({
   const diagramCard = (
     <div
       className={card ? 'media-card' : undefined}
-      style={card && cardBorderRadius !== 'var(--radius-card)' ? { borderRadius: cardBorderRadius, transition: 'var(--transition-theme)' } : { transition: 'var(--transition-theme)' }}
+      style={{
+        transition: 'var(--transition-theme)',
+        ...(card && cardBorderRadius !== 'var(--radius-card)' ? { borderRadius: cardBorderRadius } : null),
+        ...(card && cardBackground ? { background: cardBackground } : null),
+      }}
     >
       {beforeTabs && (
         <div style={{ marginBottom: 'var(--space-5)' }}>

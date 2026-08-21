@@ -34,8 +34,8 @@ function Problem1Annotations() {
     <ProblemCostAnnotations
       columns={[
         {
-          problem: 'Users with deep supervision hierarchies took the longest to complete a review, and they were the most senior',
-          description: 'Every level of supervision below the user added a navigation step or another modal to the path.',
+          problem: 'Users with deep supervision hierarchies took the longest to complete a review',
+          description: 'Every level of supervision below the user added a screen to the path.',
           cost: 'Senior compliance staff spending review time on navigation',
         },
         {
@@ -87,23 +87,18 @@ function Problem1Findings() {
   const findings: { label: string; header: string; description: React.ReactNode }[] = [
     {
       label: '#1',
-      header: 'Each click loaded one table, so reaching the associate meant loading one per manager',
-      description: 'Selecting a manager returned the associates or incidents linked to that manager alone. The path down the hierarchy was one query per layer, surfaced as one screen per layer.',
+      header: 'No screen said where the user was',
+      description: 'Modals and pages loaded without a title or breadcrumb, so checking a name meant opening that modal again.',
     },
     {
       label: '#2',
-      header: 'Each table and page loaded with no title or breadcrumb to show whose table the user was viewing, or which path they took to arrive.',
-      description: 'Recollecting a name meant opening the same modal again.',
+      header: "The review button sat on the associate's profile, not in the review",
+      description: 'Start Review was built into the associate profile, so users copied the associate ID across to find it, leaving the incident behind.',
     },
     {
       label: '#3',
-      header: 'The review action was attached to the associate, not to the incident-review',
-      description: '"Start review" was built on the associate profile, so it opened from the associate and not from the review analysis. While an associate and incident are related in the data and unrelated in the interface.',
-    },
-    {
-      label: '#4',
-      header: 'The tables labelled managers and associates the same way',
-      description: 'Both roles appeared as "Associate," with a person icon and a headcount as the only distinction. The copy was confusing to me and my team as we were understanding the tool.',
+      header: 'Managers and associates were labelled the same',
+      description: 'Both appeared as "Associate," with a person icon and a headcount as the only difference. It confused me and the team while we were learning the tool.',
     },
   ]
 
@@ -221,18 +216,13 @@ export default function Fidelity() {
             <section id="context" style={sectionStyle}>
               <Block
                 eyebrow="Context"
-                header="Fidelity moved its compliance tools in-house; Supervisory Workstation was one of them"
+                header="Supervisory Workstation is a legacy vendor tool used to review associates and file supervision reports."
               >
                 <p style={pStyle}>
-                  Fidelity Investments was migrating enterprise applications from third-party vendor platforms to Microsoft PowerApps, to reduce licensing costs and keep regulated data on internal infrastructure. Supervisory Workstation (SPW) was one of these applications.
+                  Supervisory Workstation is an enterprise tool hosted on third-party platforms and is used to perform the compliance review where a designated supervisor (or manager) performs on an associate after an incident is flagged.
                 </p>
-                <p style={pStyle}>
-                  SPW is used to perform the compliance review where a designated supervisor performs on an associate after an incident is flagged.
-                </p>
-                <div style={{ width: '110%', marginLeft: '-5%' }}>
-                  <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)', marginTop: 'var(--space-5)' }}>
-                    <ZoomableImage src="/fidelity/vendor-tool.png" alt="Supervisory Workstation on the legacy vendor platform" style={{ display: 'block', width: '100%' }} />
-                  </div>
+                <div style={{ background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)', marginTop: 'var(--space-5)' }}>
+                  <ZoomableImage src="/fidelity/vendor-tool.png" alt="Supervisory Workstation on the legacy vendor platform" style={{ display: 'block', width: '100%' }} />
                 </div>
                 <div
                   style={{
@@ -271,7 +261,7 @@ export default function Fidelity() {
             <section id="users" style={sectionStyle}>
               <Block
                 eyebrow="Users"
-                header="Supervisory Principals and Managers use the tool to review associates' incidents and file supervision reports."
+                header="Supervisory Principals and Managers supervise based on hierarchy."
               >
                 <p style={pStyle}>
                   Managers file supervision reports on the associates they supervise. Supervisory Principals file reports on the associates in their scope and oversee whether the managers below them are completing reviews on schedule.
@@ -307,7 +297,7 @@ export default function Fidelity() {
             <section id="scope" style={sectionStyle}>
               <Block
                 eyebrow="Scope"
-                header="Redesign with the existing data structure and no new analysis."
+                header="The scope was a redesign within the existing data structure, with no new analysis."
               >
                 <p style={{ ...pStyle, margin: 0 }}>
                   The timeline was 3 sprints, design through to production. The product manager scoped out new analysis, aggregate tables or data insights. So the redesign had to work with the data as it was already structured.
@@ -321,10 +311,10 @@ export default function Fidelity() {
             <section id="why-it-mattered" style={sectionStyle}>
               <Block
                 eyebrow="Problem discovery"
-                header="The legacy vendor tool had a steep learning curve, and users had built strong habits over the decade of usage"
+                header=" I ran contextual inquiries to learn the user behaviour and pain points of this legacy vendor tool."
               >
                 <p style={{ ...pStyle, margin: 0 }}>
-                  Coming in with the no domain knowledge, I struggled to understand what the tool did. I worked with the business analysts to gather the training modules and documentation, which taught me the functions but not how people actually used them. I asked the product manager for access to users and ran contextual inquiries and semi-structured interviews in person with five participants (both managers and Supervisory Principals) observing them complete real reviews in the vendor tool, alongside a heuristic analysis.
+                  Coming in with the no domain knowledge, I struggled to understand what the tool did. I worked with the business analysts to gather the training modules and documentation, which taught me the functions but not how people actually used them. I ran interviews in person with 5 participants (Managers and Supervisory Principals) observing them complete real reviews in the vendor tool.
                 </p>
                 <div style={{ marginTop: 'var(--space-8)' }}>
                   <DiagramSection
@@ -333,6 +323,7 @@ export default function Fidelity() {
                     hideStageLabel
                     diagramPadding="0"
                     diagramBorderRadius="0"
+                    cardBackground="#fff"
                     tabs={[
                       {
                         id: 'manager-userflow',
@@ -365,11 +356,10 @@ export default function Fidelity() {
                 stage="before"
                 hideStageLabel
                 diagramBorderRadius="0"
-                title="Every layer of supervision hierarchy added a modal or screen to close, a context to hold, and a risk of filing against the wrong associate."
+                title="The number of screens to reach the associate and the review action increased with the user's position in the hierarchy."
                 description={
                   <>
-                    <p style={{ margin: '0 0 12px' }}>In the associate-review flow, selecting a person opened their profile, and the incidents under them sat on that page. If that person was a manager, the incidents belonged to the associates below them, so the user opened the next profile down.</p>
-                    <p style={{ margin: 0 }}>In the incident-review flow, selecting an incident surfaced the managers in the user's scope who owned it. Selecting one of those managers opened a modal of the reporting managers below them. That repeated until the modals reached the level where associates sat.</p>
+                    <p style={{ margin: '0 0 12px' }}>Selecting a manager returned the associates or incidents linked to that manager alone. The path down the hierarchy was one query per layer, surfaced as one screen per layer.</p>
                   </>
                 }
                 diagramPadding="0"
@@ -401,7 +391,7 @@ export default function Fidelity() {
                 stage="after"
                 hideStageLabel
                 solutionLabel="Solution - Exploration - 1"
-                title="I explored surfacing the associate directly with review action, at the same level for every user"
+                title="I explored surfacing the associate directly with review action, at the same level for every user."
                 description="In the incident flow, selecting an incident would surface the responsible associate immediately, without stepping through the managers in between. In the associate flow, selecting an associate or manager would surface the incidents under them the same way."
                 diagramPadding="0"
                 tabs={[
@@ -418,34 +408,21 @@ export default function Fidelity() {
                             playsInline
                             style={{ display: 'block', width: '100%', borderRadius: 'var(--radius-sm)', marginBottom: 'var(--space-8)' }}
                           />
-                          <h3
-                            style={{
-                              ...proseStyle,
-                              fontSize: 'var(--text-base)',
-                              fontWeight: 500,
-                              lineHeight: 1.35,
-                              color: 'var(--color-text-title)',
-                              margin: '0 auto 12px',
-                              transition: 'var(--transition-theme)',
-                            }}
-                          >
-                            Two constraints came out of the feasibility discussion with the developer: the supervision record, and the volume of data behind one click
-                          </h3>
+                          <p style={{ ...pStyle, margin: '0 auto 12px' }}>
+                            Three constraints came out of the feasibility discussion with the developer: the supervision record, and the volume of data behind one click
+                          </p>
                           <ConstraintPivotGrid
                             entries={[
                               {
-                                title: 'A supervision report has to document who was accountable for reviewing the associate',
-                                description: 'The managers, who owned the incident and who the associate reports to are part of the report record. Removing them would violate the compliance requirement.',
+                                title: 'A supervision report must include the managers who owned the incident and who the associate reports to. Removing them would violate the compliance requirement.',
                                 pivot: 'Show associate records with reporting manager and owning manager',
                               },
                               {
-                                title: "A Supervisory Principal's first click would return hundreds of rows of associate data",
-                                description: 'I had not accounted for the 100-200s of associates under the scope of a Supervisory Principal. PowerApps loads that data in the browser, so the concept would trade the clicks it removed for load time.',
+                                title: "A Supervisory Principal's first click would return 100s of associate records, which would increase the page loading time.",
                                 pivot: 'Group the incidents by owning manager',
                               },
                               {
                                 title: 'Renaming a column from Associate to Manager meant updating the compliance documentation that references it',
-                                description: 'I proposed labelling "Associate" and "Managers" based on who the user is monitoring. This label appears throughout the supervisory procedures and training material, so the naming stayed as the vendor tool had it.',
                                 pivot: 'Not prioritized for this release',
                               },
                             ]}
@@ -465,7 +442,7 @@ export default function Fidelity() {
                               transition: 'var(--transition-theme)',
                             }}
                           >
-                            I designed a new page listing every associate incident with the accountable managers
+                            I designed a new page listing every associate incident with the accountable managers.
                           </h2>
                           <p style={{ ...pStyle, margin: '0 auto var(--space-8)' }}>
                             Selecting an incident or an associate opens a dedicated page listing the associate incidents within that scope. Each row is one associate: the incident, its severity, the associate who performed it, the reporting manager that associate reports to, the manager accountable for the incident, and the incident count by month across the quarter.
@@ -504,7 +481,7 @@ export default function Fidelity() {
                 hideStageLabel
                 diagramPadding="0"
                 diagramBorderRadius="0"
-                title="Identical triggers resulted in different outcomes (modal, expansion, navigation), requiring reliance on recall"
+                title="Identical triggers resulted in different outcomes (modal, expansion, navigation), requiring reliance on recall."
                 description="Users learned the behavior of each table separately and relied on recall to know what a click would do."
                 tabs={[{
                   id: 's2-before',
@@ -528,7 +505,7 @@ export default function Fidelity() {
                 solutionLabel="Solution 2"
                 diagramPadding="0"
                 diagramBorderRadius="0"
-                title = "One overview-to-detail pattern across both the incident and associate views"
+                title = "One overview-to-detail pattern across both the incident and associate views."
                 description="Both the incident overview and the associate overview follow the same structure: a summary table where selecting a row opens its detail."
                 tabs={[{
                   id: 's2-solution',
@@ -552,9 +529,9 @@ export default function Fidelity() {
             {/* ════════════════════════════════════════ */}
             <section id="impact" style={sectionStyle}>
               <SectionDivider label="Impact" />
-              <h2 style={h2Style}>I tested the concept before development, because rebuilding a legacy tool meant users already had habits</h2>
+              <h2 style={h2Style}>I tested the concept before development, because rebuilding a legacy tool meant users already had habits.</h2>
               <p style={{ ...pStyle, marginTop: '-8px' }}>
-                I ran concept testing with five managers across levels of the supervision chain to test usability, intuitivity and measure the metrics against baseline
+                I ran concept testing with five managers across levels of the supervision chain to test usability, intuitivity and measure the metrics against baseline.
               </p>
               <div style={{ marginTop: 'var(--space-8)', background: '#fff', borderRadius: 'var(--radius-card)', padding: 'var(--space-5)' }}>
                 <ZoomableImage src="/fidelity/concept-testing.png" alt="Concept testing" style={{ display: 'block', width: '100%' }} />

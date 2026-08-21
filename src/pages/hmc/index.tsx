@@ -30,10 +30,10 @@ const outlineItems = [
 ]
 
 const contextSlides = [
-  { src: '/hmc/context-1.png', alt: 'Security guard at reception identifying customers', caption: '1. Security Guard at reception - identifying customers as they arrive.' },
-  { src: '/hmc/context-2.png', alt: 'Service manager in the customer waiting lobby', caption: '2. Service Manager in the customer waiting lobby - engaging with customers.' },
-  { src: '/hmc/context-3.png', alt: 'Service technician servicing vehicle on ramp', caption: '3. Service Technician on the workshop floor - repairing vehicles on ramps.' },
-  { src: '/hmc/context-4.png', alt: 'Service manager processing payment and delivery', caption: '4. Service Manager at the checkout area - processing payment and delivery.' },
+  { src: '/hmc/context-1.png', alt: 'Security guard at reception identifying customers' },
+  { src: '/hmc/context-2.png', alt: 'Service manager in the customer waiting lobby' },
+  { src: '/hmc/context-3.png', alt: 'Service technician servicing vehicle on ramp' },
+  { src: '/hmc/context-4.png', alt: 'Service manager processing payment and delivery' },
 ]
 
 /* ── Inline helpers ───────────────────────────────────── */
@@ -321,9 +321,9 @@ export default function HeroMotoCorp() {
                 header="A two-wheeler service centre runs on multiple roles working across separate zones."
               >
                 <p style={pStyle}>
-                  A two-wheeler service centre is where customers bring their motorbikes and scooters for routine service and repairs. A typical centre runs on multiple staff roles working across physically separate zones:
+                  A two-wheeler service centre is where customers bring their motorbikes and scooters for routine service and repairs. A typical centre runs on multiple staff roles working across physically separate zones: Entry gate, Waiting lobby, Workshop floor, and Payment & delivery.
                 </p>
-                <Carousel slides={contextSlides} autoPlayMs={3500} imgWidth="55%" />
+                <Carousel slides={contextSlides} autoPlayMs={3500} />
               </Block>
 
               <Block

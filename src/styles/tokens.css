@@ -14,6 +14,7 @@
   --primitive-size-14: 14px; /* deliberate exception to the 4px grid — see --text-sm */
   --primitive-size-16: 16px;
   --primitive-size-20: 20px;
+  --primitive-size-24: 24px;
   --primitive-size-28: 28px;
   --primitive-size-32: 32px;
   --primitive-size-36: 36px;
@@ -78,6 +79,8 @@
   --primitive-light-stripe-b: #f6f7f8;
   --primitive-light-toggle-track: #e6e8eb;
   --primitive-light-accent: #6366f1;
+  --primitive-light-pivot-fill: #e6f4eb;
+  --primitive-light-pivot-text: #1e6b3d;
 
   /* Dark palette */
   --primitive-dark-page: #0c0f16;
@@ -126,6 +129,8 @@
   --color-highlight-bg: var(--primitive-light-hl-bg);
   --color-highlight-text: var(--primitive-light-hl-text);
   --color-accent: var(--primitive-light-accent);
+  --color-pivot-fill: var(--primitive-light-pivot-fill);
+  --color-pivot-text: var(--primitive-light-pivot-text);
   --color-diagram-title: var(--primitive-light-title);
   --color-knob: var(--primitive-light-knob);
   --color-toggle-track: var(--primitive-light-toggle-track);
@@ -176,7 +181,7 @@
   --text-sm: var(--primitive-size-14);
   --text-base: var(--primitive-size-16);
   --text-lg: var(--primitive-size-20);
-  --text-xl: var(--primitive-size-28);
+  --text-xl: var(--primitive-size-24);
   --text-2xl: var(--primitive-size-32);
   --text-3xl: var(--primitive-size-36);
   --text-4xl: var(--primitive-size-40);
