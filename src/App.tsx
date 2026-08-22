@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import FloatingNav from './components/layout/FloatingNav'
+import ReturnScreensaver from './components/effects/ReturnScreensaver'
 import Home from './pages/Home'
 import Lab from './pages/Lab'
 import HeroMotoCorp from './pages/hmc'
@@ -39,6 +40,7 @@ export default function App() {
         <ScrollbarGutter />
         <ScrollToTop />
         <FloatingNav />
+        <ReturnScreensaver />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/lab" element={<Lab />} />

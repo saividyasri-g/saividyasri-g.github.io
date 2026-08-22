@@ -315,6 +315,21 @@ a { text-decoration: none; }
   }
 }
 
+/* Return-screensaver edge/corner impact flash — radial-gradient burst that grows
+   outward and fades. Consumed by ReturnScreensaver.tsx per bounce; the size
+   difference between edge and corner variants is set inline on each instance. */
+@keyframes rss-edge-flash {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.55);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
 /* ─── Responsive layout ──────────────────────────────────── */
 
 /* Inner content constraint — caps readable width on large screens.
