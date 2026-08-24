@@ -88,7 +88,7 @@ function Problem1Findings() {
     {
       label: '#1',
       header: 'No screen said where the user was',
-      description: 'Modals and pages loaded without a title or breadcrumb, so checking a name meant opening that modal again.',
+      description: 'Modals and pages loaded with generic title and no breadcrumbs. Modal titled as "Associate Details" is less useful than "John Smith Associate Details"',
     },
     {
       label: '#2',
@@ -356,7 +356,7 @@ export default function Fidelity() {
                 stage="before"
                 hideStageLabel
                 diagramBorderRadius="0"
-                title="The number of screens to reach the associate and the review action increased with the user's position in the hierarchy."
+                title="The effort to reach the associate and the review action increased with the user's position in the hierarchy."
                 description={
                   <>
                     <p style={{ margin: '0 0 12px' }}>Selecting a manager returned the associates or incidents linked to that manager alone. The path down the hierarchy was one query per layer, surfaced as one screen per layer.</p>
@@ -369,7 +369,7 @@ export default function Fidelity() {
                     diagram: (
                       <>
                         <video
-                          src="/fidelity/before-flow.mp4"
+                          src="/fidelity/problem-1.mp4"
                           autoPlay
                           loop
                           muted
