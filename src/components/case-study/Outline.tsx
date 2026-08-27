@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { ArrowIcon } from '../ui/ArrowIcon'
 
 interface OutlineItem {
   id: string
@@ -171,7 +172,10 @@ export default function Outline({ items, nextProject }: OutlineProps) {
               transition: 'var(--transition-theme)',
             }}
           >
-            {nextProject.label} <span className="nav-arrow">→</span>
+            {nextProject.label}{' '}
+            <span className="nav-arrow" style={{ display: 'inline-flex', alignItems: 'center' }}>
+              <ArrowIcon direction="right" />
+            </span>
           </span>
         </a>
       )}

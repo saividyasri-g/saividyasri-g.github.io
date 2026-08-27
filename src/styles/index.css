@@ -241,6 +241,41 @@ a { text-decoration: none; }
   color: var(--color-accent);
 }
 
+/* Arrow-icon glide — on parent hover/focus each ArrowIcon shifts a few pixels
+   in the direction it points (Claude-style icon micro-motion). Resting
+   transition lives on the icon; the transforms below are triggered by the
+   same parent selectors that flip the arrow color to accent. */
+.arrow-icon {
+  transition: transform 160ms var(--ease-standard);
+}
+
+.fill-btn:hover .arrow-icon--left,
+.fill-btn:focus-visible .arrow-icon--left,
+.outline-next-project:hover .arrow-icon--left,
+.outline-next-project:focus-visible .arrow-icon--left {
+  transform: translateX(-1px);
+}
+
+.fill-btn:hover .arrow-icon--right,
+.fill-btn:focus-visible .arrow-icon--right,
+.outline-next-project:hover .arrow-icon--right,
+.outline-next-project:focus-visible .arrow-icon--right {
+  transform: translateX(1px);
+}
+
+.fill-btn:hover .arrow-icon--up-right,
+.fill-btn:focus-visible .arrow-icon--up-right,
+.outline-next-project:hover .arrow-icon--up-right,
+.outline-next-project:focus-visible .arrow-icon--up-right {
+  transform: translate(0.8px, -0.8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow-icon {
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Mask-based SVG icons — mask elements can't use `color`, so we pipe the base
    color through a custom property. The default falls back to `currentColor`
    (matches links whose text color drives the icon, e.g. About contacts).

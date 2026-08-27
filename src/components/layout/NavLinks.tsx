@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { ArrowIcon } from '../ui/ArrowIcon'
 
 interface NavItem {
   label: string
@@ -42,9 +43,13 @@ export default function NavLinks() {
               rel="noopener noreferrer"
               className={baseClass}
               style={linkStyle}
+              aria-label={`${item.label} (opens in a new tab)`}
             >
-              <span className="fill-btn-label" style={{ position: 'relative', zIndex: 1 }}>
+              <span className="fill-btn-label" style={{ position: 'relative', zIndex: 1, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                 {item.label}
+                <span className="nav-arrow" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                  <ArrowIcon direction="up-right" />
+                </span>
               </span>
             </a>
           )

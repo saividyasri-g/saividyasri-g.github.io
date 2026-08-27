@@ -1,3 +1,5 @@
+import { ArrowIcon } from '../ui/ArrowIcon'
+
 interface CaseStudyNavProps {
   next: {
     title: string
@@ -43,11 +45,17 @@ export function CaseStudyNav({ next }: CaseStudyNavProps) {
       }}
     >
       <a href="#/" className="fill-btn fill-btn--subtle" style={linkStyle}>
-        <span className="nav-arrow">←</span> All work
+        <span className="nav-arrow" style={{ display: 'inline-flex', alignItems: 'center' }}>
+          <ArrowIcon direction="left" />
+        </span>
+        All work
       </a>
 
       <a href={next.href} className="fill-btn fill-btn--subtle" style={linkStyle}>
-        Next case study <span className="nav-arrow">→</span>
+        Next case study
+        <span className="nav-arrow" style={{ display: 'inline-flex', alignItems: 'center' }}>
+          <ArrowIcon direction="right" />
+        </span>
       </a>
     </div>
   )
